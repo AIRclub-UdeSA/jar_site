@@ -1,0 +1,105 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import Sidebar from '../components/Sidebar.astro';
+import { DOC_SECTIONS, SITE, withBase } from '../config/site';
+import Base from './Base.astro';
+
+interface Props {
+  entry: CollectionEntry<'docs'>;
+}
+
+const { entry } = Astro.props;
+const { title, description, status } = entry.data;
+
+const allDocs = await getCollection('docs');
+const weeks = allDocs
+  .filter((d) => d.id.startsWith('workshops/semana-'))
+  .sort((a, b) => a.id.localeCompare(b.id));
+
+const flat = [
+  ...DOC_SECTIONS.flatMap((s) => s.items),
+  { label: 'Sobre los workshops', href: '/workshops/' },
+  ...weeks.map((w) => ({ label: w.data.title, href: `/${w.id}/` })),
+];
+
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const normalized = flat.map((item) => ({
+  ...item,
+  url: withBase(item.href).replace(/\/+$/, '') || '/',
+}));
+const index = normalized.findIndex((item) => item.url === currentPath);
+const prev = index > 0 ? normalized[index - 1] : undefined;
+const next = index >= 0 && index < normalized.length - 1 ? normalized[index + 1] : undefined;
+
+const editUrl = `${SITE.editBaseUrl}${entry.id}.md`;
+---
+
+<Base title={title} description={description}>
+  <div class="doc-shell">
+    <aside class="doc-side">
+      <Sidebar />
+    </aside>
+    <main class="doc-main">
+      <details class="mobile-doc-nav">
+        <summary>Navegación</summary>
+        <Sidebar />
+      </details>
+      <article class="prose">
+        <header class="doc-head">
+          {status === 'proximamente' && <span class="tag tag-muted">Próximamente</span>}
+          <h1 class="doc-title">{title}</h1>
+          {description && <p class="doc-desc">{description}</p>}
+        </header>
+        <slot />
+      </article>
+      {
+        (prev || next) && (
+          <nav class="pager">
+            {prev ? (
+              <a href={prev.url} rel="prev">
+                <span class="pager-label">← Anterior</span>
+                <span class="pager-title">{prev.label}</span>
+              </a>
+            ) : (
+              <span />
+            )}
+            {next && (
+              <a href={next.url} rel="next" style="text-align:right">
+                <span class="pager-label">Siguiente →</span>
+                <span class="pager-title">{next.label}</span>
+              </a>
+            )}
+          </nav>
+        )
+      }
+      <a class="edit-link" href={editUrl} target="_blank" rel="noopener">
+        Editar esta página en GitHub ↗
+      </a>
+    </main>
+  </div>
+</Base>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.prose pre').forEach((pre) => {
+    if (!pre.querySelector('code')) return;
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'copiar';
+    btn.addEventListener('click', async () => {
+      const code = pre.querySelector('code')?.innerText ?? '';
+      try {
+        await navigator.clipboard.writeText(code);
+      } catch {
+        return;
+      }
+      btn.textContent = '¡copiado!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'copiar';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+    pre.appendChild(btn);
+  });
+</script>

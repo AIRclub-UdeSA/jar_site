@@ -1,0 +1,53 @@
+---
+import { NAV_LINKS, SITE, withBase } from '../config/site';
+
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+
+const isActive = (href: string): boolean => {
+  const target = withBase(href).replace(/\/+$/, '') || '/';
+  return path === target || (target !== '/' && path.startsWith(`${target}/`));
+};
+---
+
+<nav class="site-nav" id="site-nav">
+  <a class="nav-logo" href={withBase('/')} aria-label="Inicio">
+    <svg class="nav-mark" viewBox="0 0 128 128" aria-hidden="true">
+      <rect width="128" height="128" rx="28" fill="#a40c4c"></rect>
+      <circle cx="56" cy="56" r="28" fill="none" stroke="#fff" stroke-width="10"></circle>
+      <circle cx="56" cy="56" r="7" fill="#ddaabc"></circle>
+      <line x1="78" y1="78" x2="102" y2="102" stroke="#fff" stroke-width="12" stroke-linecap="round"></line>
+    </svg>
+    <span class="nav-wordmark">AIR Club</span>
+  </a>
+  <ul class="nav-links" id="nav-links">
+    {
+      NAV_LINKS.map((link) => (
+        <li>
+          <a href={withBase(link.href)} class:list={[{ active: isActive(link.href) }]}>
+            {link.label}
+          </a>
+        </li>
+      ))
+    }
+    <li>
+      <a href={SITE.githubOrg} target="_blank" rel="noopener">GitHub</a>
+    </li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Abrir menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<script>
+  const nav = document.getElementById('site-nav');
+  const links = document.getElementById('nav-links');
+  const burger = document.getElementById('hamburger');
+
+  const onScroll = () => nav?.classList.toggle('scrolled', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  burger?.addEventListener('click', () => links?.classList.toggle('open'));
+  links?.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).tagName === 'A') links.classList.remove('open');
+  });
+</script>

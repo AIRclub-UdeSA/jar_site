@@ -1,0 +1,32 @@
+---
+import { SITE } from '../config/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <svg class="nav-mark" viewBox="0 0 128 128" aria-hidden="true">
+        <rect width="128" height="128" rx="28" fill="#a40c4c"></rect>
+        <circle cx="56" cy="56" r="28" fill="none" stroke="#fff" stroke-width="10"></circle>
+        <circle cx="56" cy="56" r="7" fill="#ddaabc"></circle>
+        <line x1="78" y1="78" x2="102" y2="102" stroke="#fff" stroke-width="12" stroke-linecap="round"></line>
+      </svg>
+      <div class="footer-brand-text">
+        <h3>{SITE.org}</h3>
+        <p>{SITE.orgSubtitle}</p>
+      </div>
+    </div>
+    <div class="footer-contact">
+      <p>Ecosistema del desafío</p>
+      <a href={SITE.simRepo} target="_blank" rel="noopener">Simulador · yahboom_rosmaster</a>
+      <a href={SITE.workshopsRepo} target="_blank" rel="noopener">Workshops · jar_workshops</a>
+      <a href={SITE.orgUrl} target="_blank" rel="noopener">{SITE.orgUrl.replace('https://', '')}</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© {year} {SITE.org} · Jornadas Argentinas de Robótica</span>
+    <span>Ubuntu 22.04 · ROS 2 Humble · Gazebo Fortress</span>
+  </div>
+</footer>
