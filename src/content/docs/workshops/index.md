@@ -20,6 +20,6 @@ El código de cada workshop vive en el repo [jar_workshops](https://github.com/A
 
 | Semana | Tema | Estado |
 | --- | --- | --- |
-| [01](./semana-01-talkers-listeners/) | Talkers y listeners | Próximamente |
-| [02](./semana-02-zigzag-mecanum/) | Zigzag mecanum | Próximamente |
+| [01](./semana-01-talkers-listeners/) | Talkers y listeners | Listo |
+| [02](./semana-02-zigzag-mecanum/) | Zigzag mecanum | Listo |
 | [03](./semana-03-slam-mapeo/) | SLAM y mapeo | Próximamente |
