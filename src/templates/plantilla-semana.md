@@ -9,8 +9,6 @@ description: "..."
 status: proximamente
 ---
 
-# Semana NN · Título
-
 ## Objetivo
 
 Una línea con lo que va a aprender a hacer quien complete el workshop.

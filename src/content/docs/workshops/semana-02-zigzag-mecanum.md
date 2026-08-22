@@ -4,15 +4,13 @@ description: "Hacé que el robot zigzaguee usando velocidad lateral."
 status: listo
 ---
 
-# Semana 02 · Zigzag mecanum
-
 ## Objetivo
 
 Publicar mensajes `Twist` a `/cmd_vel` alternando `linear.x` y `linear.y` para que el robot zigzaguee, aprovechando el movimiento lateral de las ruedas mecanum.
 
 ## Antes de empezar
 
-Tené el simulador levantado antes de arrancar: seguí la guía de [levantar el simulador](../setup/simulador/). No hace falta instalar nada extra esta semana: `rclpy` y `geometry_msgs` ya vienen con `ros-humble-desktop`.
+Tené el simulador levantado antes de arrancar: seguí la guía de [levantar el simulador](../../setup/simulador/). No hace falta instalar nada extra esta semana: `rclpy` y `geometry_msgs` ya vienen con `ros-humble-desktop`.
 
 ## Mini-proyecto
 

@@ -10,7 +10,8 @@ Backlog compartido para quienes sigan trabajando en el sitio. Antes de arrancar:
 - [ ] **Setup family-friendly** — repasar `src/content/docs/setup/`: explicar cada concepto la primera vez que aparece, capturas de pantalla por paso, no asumir experiencia previa con ROS ni Linux.
 - [ ] **Guía opcional con Docker** — página nueva en `setup/` para quien no tenga Ubuntu 22.04 nativo. Validar que el simulador funcione dentro del contenedor antes de documentar los comandos.
 - [ ] **Reestructurar workshops** — hoy el sidebar ordena por nombre de archivo (`semana-NN-*`). Si se suelta esa convención: agregar campo `order` al schema de `src/content.config.ts`, usarlo en `Sidebar.astro` y actualizar `AGENTS.md` para que quede documentado.
-- [ ] **Escribir los dos primeros workshops** — talkers/listeners y zigzag mecanum. Estructura sugerida en `src/templates/plantilla-semana.md` (renombra el template si cambia la convención).
+- [x] **Escribir los dos primeros workshops** — talkers/listeners y zigzag mecanum. Hechos y marcados como `listo`; el código vive en [`jar_workshops`](https://github.com/AIRclub-UdeSA/jar_workshops).
+- [ ] **Escribir el workshop de la semana 03 (SLAM y mapeo)** — `src/content/docs/workshops/semana-03-slam-mapeo.md` sigue en `proximamente` con tres bloques `> TODO:` abiertos: dependencias de la semana, mini-proyecto con `slam_toolbox` sobre los datos del LiDAR y qué mirar en RViz mientras se arma el mapa. Estructura sugerida en `src/templates/plantilla-semana.md`; el código va al repo `jar_workshops` como en las semanas 01 y 02.
 - [ ] **Cuando se revele la temática** — volver a agregar `docs/competencia/` (reglas, robot y mapa, puntuación) y conectarlo al landing. Hasta entonces, nada público: ver Confidencialidad en `AGENTS.md`.
 
 ## Diseño

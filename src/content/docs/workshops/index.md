@@ -4,8 +4,6 @@ description: "Programa semanal de mini-proyectos para aprender ROS 2 con el simu
 status: listo
 ---
 
-# Workshops asincrónicos
-
 Los workshops son mini-proyectos pensados para hacer a tu ritmo: uno por semana hasta la JAR. Cada uno trae un mini-proyecto con código para correr contra el simulador y ver cómo se comporta el robot en tiempo real.
 
 Van de simple a complejo: arrancás publicando tu primer mensaje en un topic y terminás armando una solución completa del desafío de comportamiento robótico.

@@ -9,9 +9,11 @@ const weeks = allDocs
 
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
 
+// Coincidencia exacta: cada página del sidebar tiene su propia entrada, así que
+// un prefijo dejaría el índice de la sección marcado también en sus subpáginas.
 const isActive = (href: string): boolean => {
   const target = withBase(href).replace(/\/+$/, '') || '/';
-  return path === target || path.startsWith(`${target}/`);
+  return path === target;
 };
 ---
 

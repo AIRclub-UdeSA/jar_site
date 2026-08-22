@@ -4,8 +4,6 @@ description: "Instalación de ROS 2 Humble en Ubuntu 22.04 paso a paso."
 status: listo
 ---
 
-# Instalar ROS 2 Humble
-
 En esta página instalamos ROS 2 Humble siguiendo los pasos canónicos de la [documentación oficial de ROS 2](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html). Abrí una terminal y ejecutá cada bloque antes de pasar al siguiente.
 
 ## 1. Habilitar universe y configurar el locale
@@ -85,5 +83,7 @@ ros2 run demo_nodes_cpp listener
 ```
 
 Deberías ver al *talker* publicando mensajes `Hello world: N` con el número incrementando, y al *listener* imprimiendo `I heard: [Hello world: N]` por cada mensaje recibido. Si eso pasa, tu instalación de ROS 2 está funcionando y los nodos se comunican correctamente.
+
+> Si querés saber cómo funcionan el talker y el listener por adentro, lo vas a poder ver en el [workshop 1](../../workshops/semana-01-talkers-listeners/).
 
 > Para este desafío no hace falta configurar `ROS_DOMAIN_ID`: el valor por defecto funciona sin problemas para simular todo en tu máquina local.
