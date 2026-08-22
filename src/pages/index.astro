@@ -5,25 +5,25 @@ import { SITE, withBase } from '../config/site';
 
 <Base>
   <section class="page-hero hero-home">
-    <div class="hero-grid">
-      <div class="hero-copy">
-        <p class="sys-label">[ challenge jar · rosario · nov 2026 ]</p>
-        <h1 class="hero-title">Un robot.<br />Una tarea.<br /><span class="grad-text">Tu código.</span></h1>
-        <p class="hero-sub">
-          El AIR Club UdeSA construyó una flota de ROSMASTER X3 y su propio simulador.
-          Los equipos programan su comportamiento autónomo contra el gemelo digital —
-          y la tarea exacta se revela en la JAR<span class="tw-cursor"></span>
+    <div class="hero-stage-full">
+      <div id="robot-stage">
+        <p class="stage-loading">inicializando…</p>
+        <p class="stage-readout">
+          <span class="pulse-dot"></span>rosmaster x3 · gazebo fortress · arrastrá para orbitar
         </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href={withBase('/setup/')}>Preparar el entorno</a>
-          <a class="btn" href="#participar">Cómo participar</a>
-        </div>
       </div>
-      <div class="hero-stage">
-        <div id="robot-stage">
-          <p class="stage-loading">inicializando…</p>
-          <p class="stage-readout"><span class="pulse-dot"></span>rosmaster x3 · gazebo fortress</p>
-        </div>
+    </div>
+    <div class="wrap hero-copy-below">
+      <p class="sys-label">[ challenge jar · rosario · nov 2026 ]</p>
+      <h1 class="hero-title">Un robot.<br />Una tarea.<br /><span class="grad-text">Tu código.</span></h1>
+      <p class="hero-sub">
+        El AIR Club UdeSA construyó una flota de ROSMASTER X3 y su propio simulador.
+        Los equipos programan su comportamiento autónomo contra el gemelo digital —
+        y la tarea exacta se revela en la JAR<span class="tw-cursor"></span>
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href={withBase('/setup/')}>Preparar el entorno</a>
+        <a class="btn" href="#participar">Cómo participar</a>
       </div>
     </div>
   </section>
@@ -161,6 +161,7 @@ import { SITE, withBase } from '../config/site';
   import * as THREE from 'three';
   import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
   import URDFLoader from 'urdf-loader';
+  import type { URDFRobot } from 'urdf-loader';
 
   const stage = document.getElementById('robot-stage');
   const hint = stage?.querySelector<HTMLElement>('.stage-loading') ?? null;
@@ -205,6 +206,7 @@ import { SITE, withBase } from '../config/site';
 
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(36, 1, 0.05, 50);
+      camera.position.set(1.25, 0.75, 1.6);
 
       scene.add(new THREE.HemisphereLight(0xffffff, 0x334455, 2.2));
       const key = new THREE.DirectionalLight(0xffffff, 2.4);
@@ -233,6 +235,53 @@ import { SITE, withBase } from '../config/site';
       resize();
       new ResizeObserver(resize).observe(stage);
 
+      let fitted = false;
+      let prevMaxDim = -1;
+      let stableFrames = 0;
+      let robotModel: URDFRobot | null = null;
+
+      function updateFit() {
+        if (fitted || !robotModel) return;
+
+        const prevScale = robotModel.scale.x;
+        const prevPos = robotModel.position.clone();
+        robotModel.scale.setScalar(1);
+        robotModel.position.set(0, 0, 0);
+        robotModel.updateMatrixWorld(true);
+
+        const box = new THREE.Box3().setFromObject(robotModel);
+        const size = box.getSize(new THREE.Vector3());
+        const center = box.getCenter(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+
+        if (box.isEmpty() || !isFinite(maxDim) || maxDim <= 0.01) {
+          robotModel.scale.setScalar(prevScale);
+          robotModel.position.copy(prevPos);
+          return;
+        }
+
+        const scale = 1.3 / maxDim;
+        robotModel.scale.setScalar(scale);
+        robotModel.position.copy(center).multiplyScalar(-scale);
+
+        const allLoaded =
+          manager.itemsTotal > 0 && manager.itemsLoaded.length === manager.itemsTotal;
+        const changed = prevMaxDim <= 0 || Math.abs(maxDim - prevMaxDim) / prevMaxDim > 0.01;
+        prevMaxDim = maxDim;
+        if (changed || !allLoaded) {
+          stableFrames = 0;
+          return;
+        }
+
+        stableFrames += 1;
+        if (stableFrames < 10) return;
+
+        fitted = true;
+        controls.target.set(0, -0.05, 0);
+        camera.position.set(1.45, 0.9, 1.85);
+        controls.update();
+      }
+
       const manager = new THREE.LoadingManager();
       manager.onError = (url) => reportError(`no se pudo cargar ${url.split('/').pop()}`);
 
@@ -242,16 +291,9 @@ import { SITE, withBase } from '../config/site';
       loader.load(
         `${base}/models/rosmaster/rosmaster_x3.urdf`,
         (robot) => {
+          robotModel = robot;
+          robot.rotation.x = -Math.PI / 2;
           scene.add(robot);
-
-          const box = new THREE.Box3().setFromObject(robot);
-          const size = box.getSize(new THREE.Vector3());
-          const center = box.getCenter(new THREE.Vector3());
-          robot.position.sub(center);
-          robot.scale.setScalar(1.15 / Math.max(size.x, size.y, size.z));
-
-          camera.position.set(0.95, 0.55, 1.15);
-          controls.update();
 
           if (hint) {
             hint.classList.add('done');
@@ -268,6 +310,7 @@ import { SITE, withBase } from '../config/site';
           const clock = new THREE.Clock();
 
           renderer.setAnimationLoop(() => {
+            updateFit();
             if (wheels.length === wheelNames.length && !reducedMotion) {
               const angle = clock.getElapsedTime() * 2.5;
               wheels.forEach((joint) => joint.setJointValue(angle));

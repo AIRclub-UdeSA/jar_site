@@ -10,7 +10,7 @@ Ecosistema de 3 repos de la org [AIRclub-UdeSA](https://github.com/AIRclub-UdeSA
 
 # Stack y decisiones tomadas
 
-- Astro puro, sin framework de UI ni Tailwind ni Starlight: decisión deliberada para tener control total del diseño. Identidad visual propia dark-first estilo "mission control": fondo casi negro con grilla sutil, acento primario crimson `#a40c4c`, verde `#4ade80` como acento funcional (estados live, prompts, indicadores del robot), JetBrains Mono protagónico, tarjetas oscuras con spotlight al cursor y borde con glow al hover, bloques de código con chrome de terminal (barra de título + puntos). Tema único oscuro: no hay toggle ni tema claro. Ver `src/styles/global.css` — los tokens CSS variables están al inicio del archivo.
+- Astro puro, sin framework de UI ni Tailwind ni Starlight: decisión deliberada para tener control total del diseño. Identidad visual propia dark-first estilo "mission control", deliberadamente DISTINTA a la del sitio del club: fondo casi negro con matiz verdoso y grilla sutil, verde `#4ade80` como acento primario (es el color del ROSMASTER), ámbar `#fbbf24` como secundario, JetBrains Mono protagónico, tarjetas oscuras con spotlight al cursor y borde con glow al hover, bloques de código con chrome de terminal (barra de título + puntos). Tipografías: Space Grotesk (display) + Archivo (body). Tema único oscuro: no hay toggle ni tema claro. Ver `src/styles/global.css` — los tokens CSS variables están al inicio del archivo.
 - Contenido 100% markdown vía la colección `docs`. El shell (nav, sidebar, footer) son componentes propios en `src/components/`.
 - Solo español rioplatense con voseo. Sin emojis.
 

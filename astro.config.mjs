@@ -6,7 +6,7 @@ export default defineConfig({
   base: '/jar_site',
   markdown: {
     shikiConfig: {
-      theme: 'material-theme-darker',
+      theme: 'vesper',
     },
   },
 });
