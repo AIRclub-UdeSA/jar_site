@@ -1,6 +1,6 @@
 # Contexto
 
-Sitio web del Desafío SAR (búsqueda y rescate autónomo) para la JAR 2026 — Jornada Argentina de Robótica (Rosario, 3 al 6 de noviembre), organizado por el AIR Club UdeSA. Es un sitio estático en Astro con información de la competencia, guía de setup y workshops asincrónicos, deployeado a GitHub Pages.
+Sitio web del Challenge JAR (desafío de comportamiento robótico con una tarea a revelar) para la JAR 2026 — Jornada Argentina de Robótica (Rosario, 3 al 6 de noviembre), organizado por el AIR Club UdeSA. Es un sitio estático en Astro con información del desafío, guía de setup y workshops asincrónicos, deployeado a GitHub Pages.
 
 Ecosistema de 3 repos de la org [AIRclub-UdeSA](https://github.com/AIRclub-UdeSA):
 
@@ -10,7 +10,7 @@ Ecosistema de 3 repos de la org [AIRclub-UdeSA](https://github.com/AIRclub-UdeSA
 
 # Stack y decisiones tomadas
 
-- Astro puro, sin framework de UI ni Tailwind ni Starlight: decisión deliberada para tener control total del diseño. El look replica el sistema del sitio del club: paleta crimson `#a40c4c`, Syne para display, Outfit para body, JetBrains Mono para código. Ver `src/styles/global.css` — los tokens CSS variables están al inicio del archivo; dark mode vía `html[data-theme='dark']`.
+- Astro puro, sin framework de UI ni Tailwind ni Starlight: decisión deliberada para tener control total del diseño. Identidad visual propia dark-first estilo "mission control": fondo casi negro con grilla sutil, acento primario crimson `#a40c4c`, verde `#4ade80` como acento funcional (estados live, prompts, indicadores del robot), JetBrains Mono protagónico, tarjetas oscuras con spotlight al cursor y borde con glow al hover, bloques de código con chrome de terminal (barra de título + puntos). Tema único oscuro: no hay toggle ni tema claro. Ver `src/styles/global.css` — los tokens CSS variables están al inicio del archivo.
 - Contenido 100% markdown vía la colección `docs`. El shell (nav, sidebar, footer) son componentes propios en `src/components/`.
 - Solo español rioplatense con voseo. Sin emojis.
 
@@ -20,11 +20,15 @@ Ecosistema de 3 repos de la org [AIRclub-UdeSA](https://github.com/AIRclub-UdeSA
 - `src/layouts/`: layouts Base y Doc.
 - `src/components/`: Nav, Footer, Sidebar.
 - `src/config/site.ts`: navegación del sidebar (secciones fijas; los workshops se autogeneran desde archivos `semana-*.md`) y metadatos.
-- `src/content/docs/`: contenido markdown en subcarpetas `competencia/`, `setup/`, `workshops/`.
+- `src/content/docs/`: contenido markdown en subcarpetas `setup/`, `workshops/`.
 - `src/templates/`: plantillas fuera de la colección (ej.: `plantilla-semana.md` para nuevas semanas).
 - `src/styles/global.css`: design system.
 - `public/models/rosmaster/`: URDF + meshes para el visor 3D.
 - `scripts/sync-robot.sh`: regenera el modelo 3D desde un workspace ROS local.
+
+# Confidencialidad
+
+**No revelar la temática del desafío (búsqueda y rescate, víctimas, conos) en ningún contenido público hasta que el club lo anuncie oficialmente.** Usar lenguaje genérico: "desafío de comportamiento robótico", "una tarea que se revelará en la JAR". La carpeta `src/content/docs/competencia/` se volverá a agregar cuando se revele la temática.
 
 # Convenciones de contenido
 
@@ -32,7 +36,7 @@ Ecosistema de 3 repos de la org [AIRclub-UdeSA](https://github.com/AIRclub-UdeSA
 - Links entre páginas markdown SIEMPRE relativos (`./x/` o `../seccion/x/`), porque el sitio vive bajo `/jar_site`.
 - Archivos nuevos de workshop: prefijo `semana-NN-` con dos dígitos → entran solos al sidebar, ordenados alfabéticamente.
 - Comandos de código siempre probados para Ubuntu 22.04 + ROS 2 Humble + Gazebo Fortress.
-- Si agregás estilos, respetá los tokens existentes de `src/styles/global.css` y probá ambos temas (claro y oscuro).
+- Si agregás estilos, respetá los tokens existentes de `src/styles/global.css`. El sitio es dark-only: no hay tema claro que probar.
 
 # Modelo 3D del hero
 

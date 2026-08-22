@@ -1,8 +1,8 @@
 export const SITE = {
-  name: 'Desafío SAR',
-  tagline: 'Challenge JAR 2026',
+  name: 'Challenge JAR',
+  tagline: 'JAR 2026 · AIR Club UdeSA',
   description:
-    'Desafío de búsqueda y rescate autónomo para las Jornadas Argentinas de Robótica. Robots ROSMASTER X3 con ROS 2 Humble, simulación en Gazebo y workshops asincrónicos. Organiza AIR Club UdeSA.',
+    'El AIR Club UdeSA presenta un desafío de comportamiento robótico con robots ROSMASTER X3 en la Jornada Argentina de Robótica 2026. Simulación en Gazebo, workshops asincrónicos y una tarea a revelar.',
   org: 'AIR Club UdeSA',
   orgSubtitle: 'Artificial Intelligence & Robotics Club',
   orgUrl: 'https://clubroboticaudesa.netlify.app',
@@ -29,20 +29,11 @@ export interface NavSection {
 
 export const NAV_LINKS: NavItem[] = [
   { label: 'Inicio', href: '/' },
-  { label: 'La competencia', href: '/competencia/reglas/' },
   { label: 'Setup', href: '/setup/' },
   { label: 'Workshops', href: '/workshops/' },
 ];
 
 export const DOC_SECTIONS: NavSection[] = [
-  {
-    label: 'Competencia',
-    items: [
-      { label: 'Reglas', href: '/competencia/reglas/' },
-      { label: 'Robot y mapa', href: '/competencia/robot-y-mapa/' },
-      { label: 'Puntuación', href: '/competencia/puntuacion/' },
-    ],
-  },
   {
     label: 'Setup',
     items: [

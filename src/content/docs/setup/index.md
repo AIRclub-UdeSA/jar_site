@@ -6,7 +6,7 @@ status: listo
 
 # Guía de instalación
 
-Al final de esta guía vas a tener un entorno completo de simulación corriendo en tu máquina: ROS 2 Humble instalado, Gazebo Fortress con RViz funcionando y el robot ROSMASTER X3 navegando por el mundo del desafío SAR, listo para que lo controles desde tu teclado.
+Al final de esta guía vas a tener un entorno completo de simulación corriendo en tu máquina: ROS 2 Humble instalado, Gazebo Fortress con RViz funcionando y el robot ROSMASTER X3 navegando por el mundo del desafío de comportamiento robótico, listo para que lo controles desde tu teclado.
 
 ## Requisitos
 

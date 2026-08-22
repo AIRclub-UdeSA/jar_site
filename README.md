@@ -5,7 +5,7 @@
 [![Gazebo Fortress](https://img.shields.io/badge/Gazebo-Fortress-informational)](https://gazebosim.org)
 [![Astro](https://img.shields.io/badge/Astro-7-purple?logo=astro&logoColor=white)](https://astro.build)
 
-Sitio oficial del Desafío SAR (búsqueda y rescate autónomo) del AIR Club UdeSA para la JAR 2026 — Jornada Argentina de Robótica, Rosario, 3 al 6 de noviembre. Acá vas a encontrar toda la información de la competencia, la guía de setup para dejar tu entorno listo y los workshops asincrónicos semanales.
+Sitio oficial del **Challenge JAR**, el desafío de comportamiento robótico con una tarea a revelar del AIR Club UdeSA para la JAR 2026 — Jornada Argentina de Robótica, Rosario, 3 al 6 de noviembre. Cada equipo programa el comportamiento de un ROSMASTER X3 con ruedas mecanum provisto por el club, apoyándose en el simulador propio en Gazebo y en los workshops asincrónicos semanales. Acá vas a encontrar toda la información del desafío, la guía de setup para dejar tu entorno listo y los workshops.
 
 ## Ecosistema del desafío
 
@@ -24,7 +24,7 @@ jar_site/
 │   ├── layouts/                # Layouts Base y Doc
 │   ├── components/             # Nav, Footer, Sidebar
 │   ├── config/site.ts          # Navegación del sidebar y metadatos del sitio
-│   ├── content/docs/           # Contenido en markdown: competencia/, setup/, workshops/
+│   ├── content/docs/           # Contenido en markdown: setup/, workshops/
 │   ├── templates/              # plantilla-semana.md para crear nuevas semanas
 │   └── styles/global.css       # Design system: tokens, tipografías y temas
 ├── public/models/rosmaster/    # URDF + meshes del robot para el visor 3D del landing

@@ -7,66 +7,97 @@ import { SITE, withBase } from '../config/site';
   <section class="page-hero hero-home">
     <div class="hero-grid">
       <div class="hero-copy">
-        <p class="s-label">// JAR 2026 · Rosario</p>
-        <h1 class="hero-title">Desafío <span class="grad-text">SAR</span></h1>
+        <p class="sys-label">[ challenge jar · rosario · nov 2026 ]</p>
+        <h1 class="hero-title">Un robot.<br />Una tarea.<br /><span class="grad-text">Tu código.</span></h1>
         <p class="hero-sub">
-          Búsqueda y rescate autónomo interuniversitario. Explorá un entorno desconocido,
-          detectá víctimas y reportá su posición con ROS 2 — todo desde el simulador,
-          sin tocar un solo tornillo.
+          El AIR Club UdeSA construyó una flota de ROSMASTER X3 y su propio simulador.
+          Los equipos programan su comportamiento autónomo contra el gemelo digital —
+          y la tarea exacta se revela en la JAR<span class="tw-cursor"></span>
         </p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href={withBase('/setup/')}>Empezar con el setup</a>
-          <a class="btn" href={withBase('/workshops/')}>Ver workshops</a>
+          <a class="btn btn-primary" href={withBase('/setup/')}>Preparar el entorno</a>
+          <a class="btn" href="#participar">Cómo participar</a>
         </div>
       </div>
       <div class="hero-stage">
         <div id="robot-stage">
-          <p class="stage-loading">cargando modelo…</p>
+          <p class="stage-loading">inicializando…</p>
+          <p class="stage-readout"><span class="pulse-dot"></span>rosmaster x3 · gazebo fortress</p>
         </div>
       </div>
     </div>
   </section>
 
   <div class="strip">
-    <div>
-      <div class="strip-label">Próximo evento</div>
-      <div class="strip-event">JAR 2026 · Rosario · 3 al 6 de noviembre</div>
-    </div>
-    <a class="strip-link" href={withBase('/competencia/reglas/')}>Detalles de la competencia →</a>
+    <span class="strip-label"><span class="pulse-dot"></span>próximo evento</span>
+    <span class="strip-event">JAR 2026 · Rosario · 03–06 NOV</span>
+    <a class="strip-link" href="#participar">cómo participar ↓</a>
   </div>
 
   <section class="sec">
     <div class="wrap">
       <div class="reveal">
-        <p class="s-label">// La propuesta</p>
-        <h2 class="s-title">Búsqueda y rescate autónomo</h2>
+        <p class="sys-label">[ 01 // el desafío ]</p>
+        <h2 class="s-title">Comportamiento autónomo,<br />de verdad.</h2>
         <p class="s-desc">
-          Los equipos programan robots que deben explorar sin intervención humana un entorno
-          tipo laberinto, encontrar "víctimas" y comunicar dónde están. El challenge es abierto:
-          cada equipo decide su estrategia.
+          No hay control remoto: los robots tienen que decidir solos. Cada universidad inscribe
+          un equipo que desarrolla software contra nuestro simulador y compite en Rosario
+          ejecutando ese mismo código en los robots reales.
         </p>
       </div>
       <div class="grid-3">
         <div class="card reveal reveal-d1">
-          <div class="icon-box crimson">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+          <div class="icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3m6-3v3M9 20v3m6-3v3M1 9h3m-3 6h3m16-6h3m-3 6h3"/></svg>
           </div>
-          <h3>Explorar y mapear</h3>
-          <p>Navegación autónoma de un entorno cerrado con obstáculos. SLAM y planificación de trayectorias con ROS 2 Humble.</p>
+          <h3>El robot lo pone el club</h3>
+          <p>ROSMASTER X3 con ruedas mecanum de movimiento omnidireccional, LiDAR 2D, cámara RGB-D e IMU. Vos solo traés el software.</p>
         </div>
         <div class="card reveal reveal-d2">
-          <div class="icon-box mauve">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <div class="icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
           </div>
-          <h3>Detectar víctimas</h3>
-          <p>Localización de objetos de colores en zonas de difícil acceso mediante visión por computadora e IA.</p>
+          <h3>Gemelo digital público</h3>
+          <p>Simulador propio sobre Gazebo Fortress con física real de contactos. Mismos sensores, mismos topics que el robot físico: desarrollás a distancia contra el mismo entorno.</p>
         </div>
         <div class="card reveal reveal-d3">
-          <div class="icon-box dusty">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 3.07 9.79 19.79 19.79 0 0 1 0 1.16 2 2 0 0 1 2 0h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L6.91 7.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 14.92v2z"/></svg>
+          <div class="icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           </div>
-          <h3>Reportar posiciones</h3>
-          <p>Comunicación precisa de las ubicaciones encontradas al operador. Cada víctima confirmada suma puntos.</p>
+          <h3>La tarea es secreta</h3>
+          <p>Qué tiene que hacer el robot se revela en la JAR. Los workshops te preparan con las herramientas base para resolver cualquier comportamiento.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="sec" id="participar">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="sys-label">[ 02 // participación ]</p>
+        <h2 class="s-title">De cero a competir</h2>
+        <p class="s-desc">
+          Bajamos la barrera de entrada al mínimo: no hace falta hardware propio ni experiencia
+          previa en robótica. Seguí el camino y llegás.
+        </p>
+      </div>
+      <div class="grid-3">
+        <div class="card reveal reveal-d1">
+          <div class="step-n">$ 01</div>
+          <h3>Montá tu entorno</h3>
+          <p>Ubuntu 22.04 + ROS 2 Humble + Gazebo Fortress con nuestra guía paso a paso, y el simulador corriendo en tu compu.</p>
+        </div>
+        <div class="card reveal reveal-d2">
+          <div class="step-n">$ 02</div>
+          <h3>Seguí los workshops</h3>
+          <p>Uno por semana, asincrónicos: desde un talker y un listener hasta SLAM y navegación. Código listo para correr en el sim.</p>
+        </div>
+        <div class="card reveal reveal-d3">
+          <div class="step-n">$ 03</div>
+          <h3>Competí en Rosario</h3>
+          <p>Nos enviás tu repositorio antes del evento, lo verificamos y lo ejecutamos en los robots reales durante la JAR.</p>
         </div>
       </div>
     </div>
@@ -77,58 +108,25 @@ import { SITE, withBase } from '../config/site';
   <section class="sec">
     <div class="wrap">
       <div class="reveal">
-        <p class="s-label">// Participación</p>
-        <h2 class="s-title">Cómo se participa</h2>
-        <p class="s-desc">
-          Los robots los pone el club; el código es de los equipos. No hace falta hardware propio
-          ni viajar con nada: desarrollás a distancia contra el mismo simulador con el que
-          competimos en Rosario.
-        </p>
-      </div>
-      <div class="grid-3">
-        <div class="card reveal reveal-d1">
-          <div class="step-n">01</div>
-          <h3>Desarrollá en el simulador</h3>
-          <p>Cloná el gemelo digital público en GitHub y construí tu solución de exploración, detección y reporte contra el mismo entorno de la competencia.</p>
-        </div>
-        <div class="card reveal reveal-d2">
-          <div class="step-n">02</div>
-          <h3>Envianos tu código</h3>
-          <p>Unos días antes de la JAR, los equipos envían su repositorio. Lo verificamos y lo dejamos listo para correr en los robots reales.</p>
-        </div>
-        <div class="card reveal reveal-d3">
-          <div class="step-n">03</div>
-          <h3>Mirá tu robot competir</h3>
-          <p>Durante la JAR ejecutamos tu código en los ROSMASTER X3. Vos ves a tu robot competir en vivo, sin tocar hardware.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <section class="sec">
-    <div class="wrap">
-      <div class="reveal">
-        <p class="s-label">// Recursos</p>
-        <h2 class="s-title">Todo lo que necesitás</h2>
-        <p class="s-desc">Arrancá por el setup y seguí los workshops semana a semana hasta tener una solución completa.</p>
+        <p class="sys-label">[ 03 // recursos ]</p>
+        <h2 class="s-title">Empezá por acá</h2>
+        <p class="s-desc">Todo lo que necesitás para llegar listo a noviembre.</p>
       </div>
       <div class="grid-3">
         <a class="card reveal reveal-d1" href={withBase('/setup/')}>
-          <span class="tag">Guía</span>
-          <h3 style="margin-top:12px">Setup</h3>
-          <p>Instalá Ubuntu 22.04, ROS 2 Humble, Gazebo Fortress y levantá el simulador paso a paso.</p>
+          <span class="tag">guía</span>
+          <h3 style="margin-top:14px">Setup</h3>
+          <p>Instalá ROS 2 Humble, Gazebo Fortress y RViz, y levantá el simulador del ROSMASTER paso a paso.</p>
         </a>
         <a class="card reveal reveal-d2" href={withBase('/workshops/')}>
-          <span class="tag">Semanal</span>
-          <h3 style="margin-top:12px">Workshops asincrónicos</h3>
-          <p>De talkers y listeners a SLAM: mini-proyectos con código para correr en el sim, uno por semana.</p>
+          <span class="tag">semanal</span>
+          <h3 style="margin-top:14px">Workshops</h3>
+          <p>Talkers, listeners, movimiento mecanum, SLAM: mini-proyectos asincrónicos para dominar las bases.</p>
         </a>
         <a class="card reveal reveal-d3" href={SITE.simRepo} target="_blank" rel="noopener">
-          <span class="tag tag-muted">Open source</span>
-          <h3 style="margin-top:12px">Simulador</h3>
-          <p>Gemelo digital del ROSMASTER X3 con física real en Gazebo. Clonalo y mirá adentro.</p>
+          <span class="tag tag-muted">open source</span>
+          <h3 style="margin-top:14px">Simulador</h3>
+          <p>El gemelo digital completo está en GitHub. Mirá el código, abrí issues, metete adentro.</p>
         </a>
       </div>
     </div>
@@ -149,6 +147,14 @@ import { SITE, withBase } from '../config/site';
     { threshold: 0.12 }
   );
   els.forEach((el) => io.observe(el));
+
+  document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
+    card.addEventListener('pointermove', (e) => {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+      card.style.setProperty('--my', `${e.clientY - rect.top}px`);
+    });
+  });
 </script>
 
 <script>
@@ -157,9 +163,18 @@ import { SITE, withBase } from '../config/site';
   import URDFLoader from 'urdf-loader';
 
   const stage = document.getElementById('robot-stage');
+  const hint = stage?.querySelector<HTMLElement>('.stage-loading') ?? null;
 
-  if (stage) {
-    const hint = stage.querySelector<HTMLElement>('.stage-loading');
+  function reportError(msg: string) {
+    if (!hint) return;
+    hint.classList.remove('done');
+    hint.textContent = `error: ${msg}`;
+  }
+
+  if (stage && hint) {
+    window.addEventListener('error', (e) => reportError(e.message));
+    window.addEventListener('unhandledrejection', () => reportError('promesa rechazada'));
+
     const base = import.meta.env.BASE_URL.replace(/\/+$/, '');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let started = false;
@@ -168,8 +183,12 @@ import { SITE, withBase } from '../config/site';
       (entries) => {
         if (!started && entries.some((entry) => entry.isIntersecting)) {
           started = true;
-          initViewer();
           lazyLoad.disconnect();
+          try {
+            initViewer();
+          } catch (err) {
+            reportError(err instanceof Error ? err.message : String(err));
+          }
         }
       },
       { rootMargin: '300px' }
@@ -187,11 +206,11 @@ import { SITE, withBase } from '../config/site';
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(36, 1, 0.05, 50);
 
-      scene.add(new THREE.HemisphereLight(0xffffff, 0x663344, 2.2));
+      scene.add(new THREE.HemisphereLight(0xffffff, 0x334455, 2.2));
       const key = new THREE.DirectionalLight(0xffffff, 2.4);
       key.position.set(2, 4, 3);
       scene.add(key);
-      const rim = new THREE.DirectionalLight(0xddaabc, 0.9);
+      const rim = new THREE.DirectionalLight(0xa40c4c, 1.1);
       rim.position.set(-3, 1.5, -2.5);
       scene.add(rim);
 
@@ -214,7 +233,10 @@ import { SITE, withBase } from '../config/site';
       resize();
       new ResizeObserver(resize).observe(stage);
 
-      const loader = new URDFLoader();
+      const manager = new THREE.LoadingManager();
+      manager.onError = (url) => reportError(`no se pudo cargar ${url.split('/').pop()}`);
+
+      const loader = new URDFLoader(manager);
       loader.workingPath = `${base}/models/rosmaster/`;
 
       loader.load(
@@ -230,7 +252,11 @@ import { SITE, withBase } from '../config/site';
 
           camera.position.set(0.95, 0.55, 1.15);
           controls.update();
-          hint?.classList.add('done');
+
+          if (hint) {
+            hint.classList.add('done');
+            setTimeout(() => hint.remove(), 600);
+          }
 
           const wheelNames = [
             'front_left_wheel_joint',
@@ -238,9 +264,7 @@ import { SITE, withBase } from '../config/site';
             'back_left_wheel_joint',
             'back_right_wheel_joint',
           ];
-          const wheels = wheelNames
-            .map((name) => robot.joints[name])
-            .filter((joint): joint is NonNullable<(typeof robot.joints)[string]> => Boolean(joint));
+          const wheels = wheelNames.map((name) => robot.joints[name]).filter(Boolean);
           const clock = new THREE.Clock();
 
           renderer.setAnimationLoop(() => {
@@ -253,16 +277,12 @@ import { SITE, withBase } from '../config/site';
           });
         },
         (progress) => {
-          if (!hint || !progress.total) return;
-          const pct = Math.round((progress.loaded / progress.total) * 100);
-          hint.textContent = `cargando modelo… ${pct}%`;
+          if (!hint || !progress || !progress.loaded) return;
+          const mb = (progress.loaded / 1048576).toFixed(0);
+          hint.textContent = `cargando modelo · ${mb} MB`;
         },
-        () => {
-          if (hint) {
-            hint.classList.remove('done');
-            hint.textContent = 'no se pudo cargar el modelo';
-          }
-        }
+        (err) =>
+          reportError(err instanceof ErrorEvent ? err.message : 'no se pudo cargar el modelo')
       );
     }
   }

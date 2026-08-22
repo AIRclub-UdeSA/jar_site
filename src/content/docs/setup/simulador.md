@@ -6,7 +6,7 @@ status: listo
 
 # Levantar el simulador
 
-Con ROS 2 y Gazebo listos, en esta página vas a clonar el repositorio del simulador, compilarlo con colcon y lanzar el ROSMASTER X3 en el mundo del desafío SAR.
+Con ROS 2 y Gazebo listos, en esta página vas a clonar el repositorio del simulador, compilarlo con colcon y lanzar el ROSMASTER X3 en el mundo del desafío de comportamiento robótico.
 
 ## 1. Crear el workspace
 
