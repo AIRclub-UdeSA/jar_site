@@ -264,8 +264,7 @@ import { SITE, withBase } from '../config/site';
         robotModel.scale.setScalar(scale);
         robotModel.position.copy(center).multiplyScalar(-scale);
 
-        const allLoaded =
-          manager.itemsTotal > 0 && manager.itemsLoaded.length === manager.itemsTotal;
+        const allLoaded = totalCount > 0 && loadedCount >= totalCount;
         const changed = prevMaxDim <= 0 || Math.abs(maxDim - prevMaxDim) / prevMaxDim > 0.01;
         prevMaxDim = maxDim;
         if (changed || !allLoaded) {
@@ -283,6 +282,12 @@ import { SITE, withBase } from '../config/site';
       }
 
       const manager = new THREE.LoadingManager();
+      let loadedCount = 0;
+      let totalCount = 0;
+      manager.onProgress = (_url, loaded, total) => {
+        loadedCount = loaded;
+        totalCount = total;
+      };
       manager.onError = (url) => reportError(`no se pudo cargar ${url.split('/').pop()}`);
 
       const loader = new URDFLoader(manager);
