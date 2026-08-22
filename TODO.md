@@ -25,7 +25,7 @@ Backlog compartido para quienes sigan trabajando en el sitio. Antes de arrancar:
 - [ ] **Revisar la estructura superior del URDF** — en el visor sobresale un mástil con caños sobre el chasis. Confirmar que es parte real del xacro y no algo que convenga ocultar para la web (el loader permite ocultar links puntuales).
 - [ ] **Página 404** — crear `src/pages/404.astro` amigable; GitHub Pages la sirve automáticamente si está en el build.
 - [ ] **sitemap + robots.txt** — integración `@astrojs/sitemap` y `robots.txt` en `public/`.
-- [ ] **Warning de THREE.Clock** — cambiar `THREE.Clock` por `THREE.Timer` en `index.astro` cuando se toque el visor (hoy solo tira un warning deprecado en consola).
+- [x] **Warning de THREE.Clock** — reemplazado `THREE.Clock` por `performance.now()` en `index.astro` para eliminar warnings de deprecación y optimizar la animación de las ruedas.
 
 ## Comunidad e inscripción
 

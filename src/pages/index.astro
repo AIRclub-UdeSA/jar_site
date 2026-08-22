@@ -6,10 +6,11 @@ import { SITE, withBase } from '../config/site';
 <Base>
   <section class="page-hero hero-home">
     <div class="hero-stage-full">
+      <div class="stage-corners" aria-hidden="true"></div>
       <div id="robot-stage">
-        <p class="stage-loading">inicializando…</p>
+        <p class="stage-loading">inicializando robot…</p>
         <p class="stage-readout">
-          <span class="pulse-dot"></span>rosmaster x3 · gazebo fortress · arrastrá para orbitar
+          <span class="pulse-dot"></span><span>rosmaster x3 · arrastrá para orbitar</span>
         </p>
       </div>
     </div>
@@ -160,8 +161,7 @@ import { SITE, withBase } from '../config/site';
 <script>
   import * as THREE from 'three';
   import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-  import URDFLoader from 'urdf-loader';
-  import type { URDFRobot } from 'urdf-loader';
+  import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
   const stage = document.getElementById('robot-stage');
   const hint = stage?.querySelector<HTMLElement>('.stage-loading') ?? null;
@@ -202,19 +202,36 @@ import { SITE, withBase } from '../config/site';
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
-      stage.appendChild(renderer.domElement);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.25;
+      stage.prepend(renderer.domElement);
 
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(36, 1, 0.05, 50);
-      camera.position.set(1.25, 0.75, 1.6);
+      camera.position.set(1.45, 0.9, 1.85);
 
-      scene.add(new THREE.HemisphereLight(0xffffff, 0x334455, 2.2));
-      const key = new THREE.DirectionalLight(0xffffff, 2.4);
-      key.position.set(2, 4, 3);
+      // Iluminación para resaltar materiales metálicos y reflejos
+      scene.add(new THREE.HemisphereLight(0xffffff, 0x14281c, 2.6));
+      
+      const key = new THREE.DirectionalLight(0xffffff, 3.4);
+      key.position.set(2.5, 4.5, 3.5);
       scene.add(key);
-      const rim = new THREE.DirectionalLight(0xa40c4c, 1.1);
-      rim.position.set(-3, 1.5, -2.5);
+
+      const fill = new THREE.DirectionalLight(0x4ade80, 1.8);
+      fill.position.set(-3.5, 2.5, 2.5);
+      scene.add(fill);
+
+      const backLight = new THREE.DirectionalLight(0x86efac, 1.4);
+      backLight.position.set(0, 3.5, -4);
+      scene.add(backLight);
+
+      const rim = new THREE.DirectionalLight(0xfbbf24, 1.1);
+      rim.position.set(3.5, 1.8, -2.5);
       scene.add(rim);
+
+      const groundBounce = new THREE.DirectionalLight(0x22c55e, 0.8);
+      groundBounce.position.set(0, -3, 0);
+      scene.add(groundBounce);
 
       const controls = new OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
@@ -222,8 +239,8 @@ import { SITE, withBase } from '../config/site';
       controls.minDistance = 0.7;
       controls.maxDistance = 3.5;
       controls.autoRotate = !reducedMotion;
-      controls.autoRotateSpeed = 1.5;
-      controls.target.set(0, 0.02, 0);
+      controls.autoRotateSpeed = 1.4;
+      controls.target.set(0, -0.05, 0);
 
       const resize = () => {
         const w = stage.clientWidth;
@@ -235,69 +252,26 @@ import { SITE, withBase } from '../config/site';
       resize();
       new ResizeObserver(resize).observe(stage);
 
-      let fitted = false;
-      let prevMaxDim = -1;
-      let stableFrames = 0;
-      let robotModel: URDFRobot | null = null;
-
-      function updateFit() {
-        if (fitted || !robotModel) return;
-
-        const prevScale = robotModel.scale.x;
-        const prevPos = robotModel.position.clone();
-        robotModel.scale.setScalar(1);
-        robotModel.position.set(0, 0, 0);
-        robotModel.updateMatrixWorld(true);
-
-        const box = new THREE.Box3().setFromObject(robotModel);
-        const size = box.getSize(new THREE.Vector3());
-        const center = box.getCenter(new THREE.Vector3());
-        const maxDim = Math.max(size.x, size.y, size.z);
-
-        if (box.isEmpty() || !isFinite(maxDim) || maxDim <= 0.01) {
-          robotModel.scale.setScalar(prevScale);
-          robotModel.position.copy(prevPos);
-          return;
-        }
-
-        const scale = 1.3 / maxDim;
-        robotModel.scale.setScalar(scale);
-        robotModel.position.copy(center).multiplyScalar(-scale);
-
-        const allLoaded = totalCount > 0 && loadedCount >= totalCount;
-        const changed = prevMaxDim <= 0 || Math.abs(maxDim - prevMaxDim) / prevMaxDim > 0.01;
-        prevMaxDim = maxDim;
-        if (changed || !allLoaded) {
-          stableFrames = 0;
-          return;
-        }
-
-        stableFrames += 1;
-        if (stableFrames < 10) return;
-
-        fitted = true;
-        controls.target.set(0, -0.05, 0);
-        camera.position.set(1.45, 0.9, 1.85);
-        controls.update();
-      }
-
       const manager = new THREE.LoadingManager();
-      let loadedCount = 0;
-      let totalCount = 0;
-      manager.onProgress = (_url, loaded, total) => {
-        loadedCount = loaded;
-        totalCount = total;
-      };
       manager.onError = (url) => reportError(`no se pudo cargar ${url.split('/').pop()}`);
 
-      const loader = new URDFLoader(manager);
-      loader.workingPath = `${base}/models/rosmaster/`;
+      const gltfLoader = new GLTFLoader(manager);
+      gltfLoader.load(
+        `${base}/models/rosmaster_unified.glb`,
+        (gltf) => {
+          const robot = gltf.scene;
+          robot.rotation.set(0, 0, 0);
 
-      loader.load(
-        `${base}/models/rosmaster/rosmaster_x3.urdf`,
-        (robot) => {
-          robotModel = robot;
-          robot.rotation.x = -Math.PI / 2;
+          // Ajuste automático de escala y centrado
+          const box = new THREE.Box3().setFromObject(robot);
+          const size = box.getSize(new THREE.Vector3());
+          const center = box.getCenter(new THREE.Vector3());
+          const maxDim = Math.max(size.x, size.y, size.z);
+          const scale = 1.35 / maxDim;
+          robot.scale.setScalar(scale);
+          robot.position.copy(center).multiplyScalar(-scale);
+          robot.position.y -= 0.04;
+
           scene.add(robot);
 
           if (hint) {
@@ -305,21 +279,7 @@ import { SITE, withBase } from '../config/site';
             setTimeout(() => hint.remove(), 600);
           }
 
-          const wheelNames = [
-            'front_left_wheel_joint',
-            'front_right_wheel_joint',
-            'back_left_wheel_joint',
-            'back_right_wheel_joint',
-          ];
-          const wheels = wheelNames.map((name) => robot.joints[name]).filter(Boolean);
-          const clock = new THREE.Clock();
-
           renderer.setAnimationLoop(() => {
-            updateFit();
-            if (wheels.length === wheelNames.length && !reducedMotion) {
-              const angle = clock.getElapsedTime() * 2.5;
-              wheels.forEach((joint) => joint.setJointValue(angle));
-            }
             controls.update();
             renderer.render(scene, camera);
           });
@@ -327,10 +287,10 @@ import { SITE, withBase } from '../config/site';
         (progress) => {
           if (!hint || !progress || !progress.loaded) return;
           const mb = (progress.loaded / 1048576).toFixed(0);
-          hint.textContent = `cargando modelo · ${mb} MB`;
+          hint.textContent = `cargando robot · ${mb} MB`;
         },
         (err) =>
-          reportError(err instanceof ErrorEvent ? err.message : 'no se pudo cargar el modelo')
+          reportError(err instanceof ErrorEvent ? err.message : 'no se pudo cargar el modelo 3D')
       );
     }
   }
