@@ -52,6 +52,8 @@ npm run check && npm run build
 
 sin errores. No commitear nunca `node_modules/`, `dist/` ni `.astro/`.
 
+El backlog de tareas pendientes vive en `TODO.md` — consultarlo antes de proponer trabajo nuevo y mantenerlo actualizado al cerrar tareas.
+
 # Deploy
 
 Automático en push a `main` vía GitHub Actions (`.github/workflows/deploy.yml`). `site` y `base` en `astro.config.mjs` apuntan a `https://airclub-udesa.github.io/jar_site` — cambiarlos solo si cambia dónde se hostea el sitio.
