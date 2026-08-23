@@ -1,7 +1,47 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-  <rect width="128" height="128" rx="28" fill="#4ade80"/>
-  <path d="M38 92 L64 66 L64 36" fill="none" stroke="#07130c" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="38" cy="92" r="11" fill="#07130c"/>
-  <circle cx="64" cy="66" r="7.5" fill="#ffffff"/>
-  <circle cx="64" cy="36" r="6" fill="#86efac"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <!-- Background Badge with Dark Emerald Border -->
+  <rect width="128" height="128" rx="28" fill="#08120c"/>
+  <rect x="2" y="2" width="124" height="124" rx="26" stroke="#4ade80" stroke-opacity="0.4" stroke-width="3"/>
+
+  <!-- Top LiDAR (Laser Link) -->
+  <rect x="46" y="14" width="36" height="15" rx="4" fill="#1b2a20" stroke="#4ade80" stroke-width="2"/>
+  <line x1="52" y1="29" x2="52" y2="38" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="76" y1="29" x2="76" y2="38" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="64" cy="21.5" r="3" fill="#4ade80"/>
+
+  <!-- Top Deck (Green Acrylic Plate) -->
+  <polygon points="30,38 98,38 92,47 24,47" fill="#4ade80"/>
+  <polygon points="24,47 92,47 92,51 24,51" fill="#22c55e"/>
+
+  <!-- RGB-D Camera (Astra / RealSense) -->
+  <rect x="34" y="53" width="60" height="15" rx="6" fill="#111c15" stroke="#86efac" stroke-width="2"/>
+  <circle cx="45" cy="60.5" r="3.5" fill="#050807" stroke="#4ade80" stroke-width="1.8"/>
+  <circle cx="64" cy="60.5" r="3" fill="#050807" stroke="#86efac" stroke-width="1.5"/>
+  <circle cx="83" cy="60.5" r="3.5" fill="#050807" stroke="#4ade80" stroke-width="1.8"/>
+
+  <!-- Standoffs between decks -->
+  <line x1="28" y1="51" x2="28" y2="69" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
+  <line x1="100" y1="51" x2="100" y2="69" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Middle Deck (Main Chassis Green Plate) -->
+  <polygon points="20,69 108,69 100,79 12,79" fill="#4ade80"/>
+  <polygon points="12,79 100,79 100,83 12,83" fill="#16a34a"/>
+
+  <!-- Front Chassis Bracket / Bumper -->
+  <rect x="38" y="83" width="52" height="22" rx="3" fill="#24372c" stroke="#86efac" stroke-width="1.8"/>
+  <line x1="46" y1="89" x2="82" y2="89" stroke="#08120c" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="50" y1="96" x2="78" y2="96" stroke="#08120c" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Mecanum Wheels (Front Left & Front Right with roller ribs) -->
+  <!-- Left Wheel -->
+  <rect x="8" y="73" width="20" height="40" rx="6" fill="#15221a" stroke="#4ade80" stroke-width="2.2"/>
+  <line x1="10" y1="81" x2="26" y2="90" stroke="#86efac" stroke-width="2" stroke-linecap="round"/>
+  <line x1="10" y1="93" x2="26" y2="102" stroke="#86efac" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="18" cy="93" r="3.5" fill="#4ade80"/>
+
+  <!-- Right Wheel -->
+  <rect x="100" y="73" width="20" height="40" rx="6" fill="#15221a" stroke="#4ade80" stroke-width="2.2"/>
+  <line x1="118" y1="81" x2="102" y2="90" stroke="#86efac" stroke-width="2" stroke-linecap="round"/>
+  <line x1="118" y1="93" x2="102" y2="102" stroke="#86efac" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="110" cy="93" r="3.5" fill="#4ade80"/>
 </svg>
