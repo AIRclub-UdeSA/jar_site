@@ -1,10 +1,10 @@
 ---
 title: "Workshops asincrónicos"
-description: "Programa semanal de mini-proyectos para aprender ROS 2 con el simulador."
+description: "Programa de mini-proyectos para aprender ROS 2 con el simulador."
 status: listo
 ---
 
-Los workshops son mini-proyectos pensados para hacer a tu ritmo: uno por semana hasta la JAR. Cada uno trae un mini-proyecto con código para correr contra el simulador y ver cómo se comporta el robot en tiempo real.
+Los workshops son mini-proyectos prácticos pensados para hacer a tu ritmo. Cada uno trae código de ejemplo para correr contra el simulador y ver cómo se comporta el robot en tiempo real.
 
 Van de simple a complejo: arrancás publicando tu primer mensaje en un topic y terminás armando una solución completa del desafío de comportamiento robótico.
 

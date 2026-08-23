@@ -5,8 +5,8 @@ Backlog compartido para quienes sigan trabajando en el sitio. Antes de arrancar:
 ## Contenido
 
 - [ ] **Revisar todos los textos** — recorrer landing + docs puliendo redacción (rioplatense, voseo). Los stubs tienen blockquotes `> TODO:` marcando lo pendiente de definición.
-- [ ] **Bloque de info de la JAR** — reemplazar el strip de "próximo evento" por un bloque con qué es la JAR, cuándo y dónde (Rosario, 3–6 nov 2026). El concepto "countdown a un evento" no aporta acá: el sitio es exclusivo del challenge. Está en `src/pages/index.astro` (clase `.strip`).
-- [ ] **Sección "Acerca de nosotros"** — párrafo corto sobre el AIR Club UdeSA con links a la página del club (`SITE.orgUrl`) y redes cuando existan. Al pie del landing, simple y directo.
+- [x] **Bloque de info de la JAR** — sección monumental dedicada a la JAR 2026 (Rosario, 3–6 nov 2026) con titular geográfico, split descriptivo y links directos a `jar.net.ar` y a la UNR.
+- [x] **Sección "Acerca de nosotros"** — bloque de manifiesto del AIR Club UdeSA con declaración de misión institucional y links al sitio oficial y al GitHub de la organización.
 - [ ] **Setup family-friendly** — repasar `src/content/docs/setup/`: explicar cada concepto la primera vez que aparece, capturas de pantalla por paso, no asumir experiencia previa con ROS ni Linux.
 - [ ] **Guía opcional con Docker** — página nueva en `setup/` para quien no tenga Ubuntu 22.04 nativo. Validar que el simulador funcione dentro del contenedor antes de documentar los comandos.
 - [ ] **Reestructurar workshops** — hoy el sidebar ordena por nombre de archivo (`semana-NN-*`). Si se suelta esa convención: agregar campo `order` al schema de `src/content.config.ts`, usarlo en `Sidebar.astro` y actualizar `AGENTS.md` para que quede documentado.
@@ -16,6 +16,8 @@ Backlog compartido para quienes sigan trabajando en el sitio. Antes de arrancar:
 
 ## Diseño
 
+- [x] **Rediseño radical 'Black Void & Sculptural Scale' (Landing Page)** — transformación integral inspirada en Dala/Linear: eliminación de cajas grises genéricas, split asimétrico para el desafío y telemetría de specs, stepper continuo de 4 fases con números monolíticos, lista interactiva de recursos, acordeón hairline para FAQ y bloque de postulación monumental.
+- [ ] **Revisión y pulido estético en Setup y Workshops** — trasladar la estética 'Black Void & Sculptural Scale' a la documentación: layout `Doc.astro`, sidebar con jerarquía limpia y hairlines, callouts sutiles y bloques de código con chrome sobrio y tipografía JetBrains Mono.
 - [x] **Favicon con el ROSMASTER** — icono SVG vectorial del ROSMASTER X3 CAD (chasis verde, ruedas mecanum, cámara RGB-D y LiDAR) en `public/favicon.svg` y sincronizado en los logos inline de `Nav.astro` y `Footer.astro`.
 - [x] **Rediseño hero fullscreen "mission control"** — hero interactivo 100vh con micro-animaciones escalonadas (`anim-fade-up`), badge del evento con glassmorphism, botones con glow verde, encuadre 3D a la derecha en desktop mediante `camera.setViewOffset`, y zoom con rueda condicional al click presionado para no bloquear el scroll de la página.
 - [ ] **Capturas del simulador** — screenshots/GIFs de Gazebo y RViz corriendo, para el landing y el setup. Van en `public/` y se referencian relativo desde los markdown.
@@ -31,8 +33,8 @@ Backlog compartido para quienes sigan trabajando en el sitio. Antes de arrancar:
 
 ## Comunidad e inscripción
 
-- [ ] **Medio de inscripción** — hoy no existe forma de anotarse: definir canal (mail, formulario, link) y sumar CTA visible en el landing.
-- [ ] **FAQ** — requisitos técnicos, nivel esperado, tamaño de equipos, si hace falta viajar. Reduce consultas repetidas y sirve de contenido para el landing.
+- [x] **Convocatoria y postulación de equipos** — formulario de postulación en Google Forms (`https://forms.gle/2zkW6gwJQptUzbXn6`) con proceso de selección por cupos físicos en pista, participación gratuita y sin límite de integrantes.
+- [x] **FAQ** — preguntas frecuentes interactivas con acordeón hairline despojado cubriendo requisitos técnicos, proceso de selección, gratuidad, presencia del capitán en Rosario y autonomía de herramientas.
 
 ## Repos e infra
 
