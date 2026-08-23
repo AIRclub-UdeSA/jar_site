@@ -4,8 +4,6 @@ description: "Clonar, compilar y correr el simulador del ROSMASTER X3."
 status: listo
 ---
 
-# Levantar el simulador
-
 Con ROS 2 y Gazebo listos, en esta página vas a clonar el repositorio del simulador, compilarlo con colcon y lanzar el ROSMASTER X3 en el mundo del desafío de comportamiento robótico.
 
 ## 1. Crear el workspace
@@ -48,7 +46,7 @@ source /opt/ros/humble/setup.bash
 source ~/rosmaster_ws/install/setup.bash
 ```
 
-Si seguiste el paso 4 de la [guía de ROS 2 Humble](./ros2-humble/), el primero se carga solo desde `~/.bashrc`.
+Si seguiste el paso 4 de la [guía de ROS 2 Humble](../ros2-humble/), el primero se carga solo desde `~/.bashrc`.
 
 ## 5. Lanzar la simulación
 

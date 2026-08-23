@@ -4,8 +4,6 @@ description: "Instalación de la integración Gazebo-ROS 2 y verificación de RV
 status: listo
 ---
 
-# Gazebo Fortress y RViz
-
 Este desafío usa Gazebo Fortress (la versión "nueva" de Ignition) y NO Gazebo Classic: el movimiento mecanum del ROSMASTER X3 se simula con física real de contactos entre ruedas y suelo, algo que Fortress resuelve mucho mejor que Classic.
 
 ## 1. Instalar la integración Gazebo-ROS 2

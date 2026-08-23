@@ -4,15 +4,13 @@ description: "Tu primer nodo ROS 2: publicar y suscribirse a topics."
 status: listo
 ---
 
-# Semana 01 · Talkers y listeners
-
 ## Objetivo
 
 Entender los conceptos de nodos y topics de ROS 2 escribiendo un talker que publica mensajes y un listener que los recibe, todo en Python.
 
 ## Antes de empezar
 
-Tené el simulador levantado antes de arrancar: seguí la guía de [levantar el simulador](../setup/simulador/). No hace falta instalar nada extra esta semana: `rclpy` y `std_msgs` ya vienen con `ros-humble-desktop`.
+Tené el simulador levantado antes de arrancar: seguí la guía de [levantar el simulador](../../setup/simulador/). No hace falta instalar nada extra esta semana: `rclpy` y `std_msgs` ya vienen con `ros-humble-desktop`.
 
 ## Mini-proyecto
 
@@ -45,7 +43,7 @@ Vas a ver al talker publicando `Publiqué: "Hola desde el talker, mensaje N"` co
 
 ## Qué observar en el sim
 
-Con el simulador levantado, sumá una tercera terminal y corré la teleoperación por teclado (ver la [guía del simulador](../setup/simulador/#6-teleoperación)):
+Con el simulador levantado, sumá una tercera terminal y corré la teleoperación por teclado (ver la [guía del simulador](../../setup/simulador/#6-teleoperación)):
 
 ```bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard

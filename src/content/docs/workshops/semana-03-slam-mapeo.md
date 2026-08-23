@@ -4,15 +4,13 @@ description: "Construí un mapa del entorno con SLAM mientras navegás."
 status: proximamente
 ---
 
-# Semana 03 · SLAM y mapeo
-
 ## Objetivo
 
 Correr SLAM sobre el topic `/scan` para construir un mapa 2D del laberinto mientras el robot navega por él.
 
 ## Antes de empezar
 
-Tené el simulador levantado antes de arrancar: seguí la guía de [levantar el simulador](../setup/simulador/). SLAM necesita el topic `/scan` del LiDAR, que está disponible en la instalación de Linux.
+Tené el simulador levantado antes de arrancar: seguí la guía de [levantar el simulador](../../setup/simulador/). SLAM necesita el topic `/scan` del LiDAR, que está disponible en la instalación de Linux.
 
 > TODO: agregar cualquier dependencia extra de esta semana.
 
