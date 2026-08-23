@@ -1259,45 +1259,47 @@ section.sec {
 .doc-shell {
   max-width: 1240px;
   margin: 0 auto;
-  padding: calc(72px + 40px) 40px 80px;
+  padding: calc(64px + 36px) 36px 80px;
   display: grid;
-  grid-template-columns: 264px minmax(0, 1fr);
+  grid-template-columns: 240px minmax(0, 1fr);
   gap: 56px;
 }
 
 .doc-side {
   position: sticky;
-  top: calc(72px + 32px);
+  top: calc(64px + 28px);
   align-self: start;
-  max-height: calc(100vh - 104px);
+  max-height: calc(100vh - 96px);
   overflow-y: auto;
-  padding-right: 8px;
+  padding-right: 16px;
+  border-right: 1px solid var(--border);
   scrollbar-width: thin;
+}
+
+.side-group {
+  margin-bottom: 24px;
 }
 
 .side-label {
   font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.18em;
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-3);
-  margin: 24px 0 8px;
-}
-
-.side-label:first-child {
-  margin-top: 0;
+  margin-bottom: 8px;
 }
 
 .side-link {
   display: flex;
-  align-items: baseline;
+  align-items: center;
+  justify-content: space-between;
   gap: 8px;
-  padding: 7px 12px;
-  border-radius: var(--r-sm);
-  font-size: 0.85rem;
+  padding: 8px 12px;
+  border-radius: var(--r-xs);
+  font-size: 0.84rem;
   color: var(--text-2);
   border-left: 2px solid transparent;
-  transition: all 0.25s var(--ease);
+  transition: all 0.2s var(--ease);
 }
 
 .side-link:hover {
@@ -1317,8 +1319,8 @@ section.sec {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  border: 1.5px dashed var(--text-3);
-  align-self: center;
+  border: 1.5px dashed var(--amber);
+  opacity: 0.85;
 }
 
 .mobile-doc-nav {
@@ -1354,24 +1356,26 @@ section.sec {
 }
 
 .doc-head {
-  margin-bottom: 34px;
+  margin-bottom: 38px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
 }
 
 .doc-title {
   font-family: var(--font-display);
-  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  font-size: clamp(2rem, 3.8vw, 2.8rem);
   font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
   color: var(--text);
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .doc-desc {
   color: var(--text-2);
-  font-size: 0.95rem;
+  font-size: 1.02rem;
   line-height: 1.65;
-  max-width: 640px;
+  max-width: 680px;
 }
 
 .prose {
@@ -1382,7 +1386,7 @@ section.sec {
   font-family: var(--font-display);
   font-size: 1.45rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   margin: 2.2em 0 0.6em;
   color: var(--text);
   scroll-margin-top: 96px;
@@ -1390,8 +1394,9 @@ section.sec {
 
 .prose h3 {
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: 1.12rem;
   font-weight: 700;
+  letter-spacing: -0.015em;
   margin: 1.8em 0 0.5em;
   color: var(--text);
   scroll-margin-top: 96px;
@@ -1407,8 +1412,8 @@ section.sec {
 
 .prose p {
   color: var(--text-2);
-  font-size: 0.93rem;
-  line-height: 1.8;
+  font-size: 0.94rem;
+  line-height: 1.78;
   margin-bottom: 1.1em;
 }
 
@@ -1416,8 +1421,8 @@ section.sec {
 .prose ol {
   margin: 0 0 1.2em 1.3em;
   color: var(--text-2);
-  font-size: 0.93rem;
-  line-height: 1.8;
+  font-size: 0.94rem;
+  line-height: 1.78;
 }
 
 .prose li::marker {
@@ -1453,21 +1458,23 @@ section.sec {
   background: var(--code-bg);
   color: var(--code-fg);
   padding: 0.15em 0.5em;
-  border-radius: 6px;
+  border-radius: var(--r-xs);
   word-break: break-word;
 }
 
 .prose blockquote {
-  border-left: 3px solid var(--amber);
-  background: var(--surface);
-  border-radius: var(--r-sm);
-  padding: 0.9em 1.3em;
-  margin: 0 0 1.2em;
+  border-left: 2px solid var(--amber);
+  background: rgba(251, 191, 36, 0.03);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  padding: 14px 18px;
+  margin: 1.4em 0;
 }
 
 .prose blockquote p {
   margin-bottom: 0.4em;
   color: var(--text-2);
+  font-size: 0.9rem;
+  line-height: 1.65;
 }
 
 .prose blockquote p:last-child {
@@ -1483,18 +1490,18 @@ section.sec {
 
 .prose th {
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: 0.64rem;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-3);
   text-align: left;
   padding: 10px 14px 10px 0;
-  border-bottom: 1px solid var(--border-hover);
+  border-bottom: 1px solid var(--border);
 }
 
 .prose td {
-  padding: 11px 14px 11px 0;
+  padding: 12px 14px 12px 0;
   border-bottom: 1px solid var(--border);
   color: var(--text-2);
   vertical-align: top;
@@ -1522,7 +1529,7 @@ section.sec {
   border: 1px solid var(--border);
   border-radius: var(--r-md);
   overflow: hidden;
-  background: #070b09;
+  background: #060907;
 }
 
 .term figcaption {
@@ -1531,7 +1538,7 @@ section.sec {
   gap: 12px;
   padding: 10px 14px;
   border-bottom: 1px solid var(--border);
-  background: var(--surface);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .term-dots {
@@ -1540,28 +1547,26 @@ section.sec {
 }
 
 .term-dots i {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
 }
 
 .term-dots i:nth-child(1) {
-  background: var(--amber);
-  opacity: 0.85;
+  background: rgba(251, 191, 36, 0.65);
 }
 
 .term-dots i:nth-child(2) {
-  background: var(--accent);
-  opacity: 0.85;
+  background: rgba(74, 222, 128, 0.65);
 }
 
 .term-dots i:nth-child(3) {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .term-title {
   font-family: var(--font-mono);
-  font-size: 0.66rem;
+  font-size: 0.65rem;
   letter-spacing: 0.08em;
   color: var(--text-3);
   flex: 1;
@@ -1579,15 +1584,16 @@ section.sec {
   color: var(--text-3);
   background: transparent;
   border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 4px 10px;
+  border-radius: var(--r-xs);
+  padding: 3px 8px;
   cursor: pointer;
-  transition: all 0.25s var(--ease);
+  transition: all 0.2s var(--ease);
 }
 
 .copy-btn:hover {
   color: var(--accent);
-  border-color: rgba(74, 222, 128, 0.4);
+  border-color: var(--border-hover);
+  background: var(--surface-h);
 }
 
 .copy-btn.copied {
@@ -1597,8 +1603,8 @@ section.sec {
 
 .term pre.astro-code,
 .prose pre.astro-code {
-  background: #070b09 !important;
-  padding: 20px;
+  background: #060907 !important;
+  padding: 18px 20px;
   font-family: var(--font-mono);
   font-size: 0.76rem;
   line-height: 1.85;
@@ -1618,12 +1624,13 @@ section.sec {
   border: 1px solid var(--border);
   border-radius: var(--r-md);
   padding: 16px 20px;
-  background: var(--card);
-  transition: all 0.35s var(--ease);
+  background: rgba(255, 255, 255, 0.015);
+  transition: all 0.25s var(--ease);
 }
 
 .pager a:hover {
-  border-color: rgba(74, 222, 128, 0.35);
+  border-color: var(--border-hover);
+  background: var(--surface-h);
   transform: translateY(-2px);
 }
 
@@ -1633,8 +1640,8 @@ section.sec {
 
 .pager-label {
   font-family: var(--font-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.15em;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-3);
   display: block;
@@ -1644,7 +1651,7 @@ section.sec {
 .pager-title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: var(--text);
 }
 
@@ -1652,12 +1659,12 @@ section.sec {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-top: 24px;
+  margin-top: 28px;
   font-family: var(--font-mono);
   font-size: 0.68rem;
   letter-spacing: 0.06em;
   color: var(--text-3);
-  transition: color 0.3s;
+  transition: color 0.2s;
 }
 
 .edit-link:hover {

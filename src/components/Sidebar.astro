@@ -19,20 +19,20 @@ const isActive = (href: string): boolean => {
 
 {
   DOC_SECTIONS.map((section) => (
-    <div>
-      <p class="side-label">{section.label}</p>
+    <div class="side-group">
+      <p class="side-label">// {section.label}</p>
       {section.items.map((item) => (
         <a class:list={['side-link', { active: isActive(item.href) }]} href={withBase(item.href)}>
-          {item.label}
+          <span>{item.label}</span>
         </a>
       ))}
     </div>
   ))
 }
-<div>
-  <p class="side-label">Workshops</p>
+<div class="side-group">
+  <p class="side-label">// Workshops</p>
   <a class:list={['side-link', { active: isActive('/workshops/') }]} href={withBase('/workshops/')}>
-    Sobre los workshops
+    <span>Sobre los workshops</span>
   </a>
   {
     weeks.map((week) => (
@@ -40,8 +40,8 @@ const isActive = (href: string): boolean => {
         class:list={['side-link', { active: isActive(`/${week.id}/`) }]}
         href={withBase(`/${week.id}/`)}
       >
-        {week.data.status === 'proximamente' && <span class="soon-dot" />}
-        {week.data.title}
+        <span>{week.data.title}</span>
+        {week.data.status === 'proximamente' && <span class="soon-dot" title="Próximamente" />}
       </a>
     ))
   }

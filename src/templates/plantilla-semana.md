@@ -4,7 +4,7 @@ El título aparece solo en el sidebar. Cambiá status a listo cuando publiques.
 -->
 
 ---
-title: "Semana NN · Título"
+title: "NN · Título"
 description: "..."
 status: proximamente
 ---

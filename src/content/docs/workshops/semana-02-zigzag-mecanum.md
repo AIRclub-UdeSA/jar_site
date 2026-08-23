@@ -1,5 +1,5 @@
 ---
-title: "Semana 02 · Zigzag mecanum"
+title: "02 · Zigzag mecanum"
 description: "Hacé que el robot zigzaguee usando velocidad lateral."
 status: listo
 ---
@@ -10,18 +10,18 @@ Publicar mensajes `Twist` a `/cmd_vel` alternando `linear.x` y `linear.y` para q
 
 ## Antes de empezar
 
-Tené el simulador levantado antes de arrancar: seguí la guía de [levantar el simulador](../../setup/simulador/). No hace falta instalar nada extra esta semana: `rclpy` y `geometry_msgs` ya vienen con `ros-humble-desktop`.
+Tené el simulador levantado antes de arrancar: seguí la guía de [levantar el simulador](../../setup/simulador/). No hace falta instalar nada extra para este workshop: `rclpy` y `geometry_msgs` ya vienen con `ros-humble-desktop`.
 
 ## Mini-proyecto
 
-El código de esta semana vive en el repo [jar_workshops](https://github.com/AIRclub-UdeSA/jar_workshops), en el paquete `zigzag_mecanum`. Si todavía no clonaste el repo (lo usaste en la [Semana 01](../semana-01-talkers-listeners/)), hacelo dentro de tu workspace:
+El código de este workshop vive en el repo [jar_workshops](https://github.com/AIRclub-UdeSA/jar_workshops), en el paquete `zigzag_mecanum`. Si todavía no clonaste el repo (lo usaste en el [Workshop 01](../semana-01-talkers-listeners/)), hacelo dentro de tu workspace:
 
 ```bash
 cd ~/rosmaster_ws/src
 git clone https://github.com/AIRclub-UdeSA/jar_workshops.git
 ```
 
-Compilá el paquete de esta semana y cargá el overlay:
+Compilá el paquete de este workshop y cargá el overlay:
 
 ```bash
 cd ~/rosmaster_ws

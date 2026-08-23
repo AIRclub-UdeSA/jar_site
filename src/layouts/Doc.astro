@@ -47,7 +47,16 @@ const editUrl = `${SITE.editBaseUrl}${entry.id}.md`;
       </details>
       <article class="prose">
         <header class="doc-head">
-          {status === 'proximamente' && <span class="tag tag-muted">Próximamente</span>}
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px;">
+            <p class="sys-label" style="margin-bottom: 0;">
+              {entry.id.startsWith('setup') ? '[ 01 // setup ]' : '[ 02 // workshop ]'}
+            </p>
+            {status === 'proximamente' && (
+              <span class="tag" style="color: var(--amber); background: rgba(251, 191, 36, 0.08); border-color: rgba(251, 191, 36, 0.2);">
+                Próximamente
+              </span>
+            )}
+          </div>
           <h1 class="doc-title">{title}</h1>
           {description && <p class="doc-desc">{description}</p>}
         </header>

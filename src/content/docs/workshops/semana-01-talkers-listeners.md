@@ -1,5 +1,5 @@
 ---
-title: "Semana 01 · Talkers y listeners"
+title: "01 · Talkers y listeners"
 description: "Tu primer nodo ROS 2: publicar y suscribirse a topics."
 status: listo
 ---
@@ -10,11 +10,11 @@ Entender los conceptos de nodos y topics de ROS 2 escribiendo un talker que publ
 
 ## Antes de empezar
 
-Tené el simulador levantado antes de arrancar: seguí la guía de [levantar el simulador](../../setup/simulador/). No hace falta instalar nada extra esta semana: `rclpy` y `std_msgs` ya vienen con `ros-humble-desktop`.
+Tené el simulador levantado antes de arrancar: seguí la guía de [levantar el simulador](../../setup/simulador/). No hace falta instalar nada extra para este workshop: `rclpy` y `std_msgs` ya vienen con `ros-humble-desktop`.
 
 ## Mini-proyecto
 
-El código de esta semana vive en el repo [jar_workshops](https://github.com/AIRclub-UdeSA/jar_workshops), en el paquete `talkers_listeners`. Clonalo dentro de tu workspace (el mismo donde tenés `yahboom_rosmaster`):
+El código de este workshop vive en el repo [jar_workshops](https://github.com/AIRclub-UdeSA/jar_workshops), en el paquete `talkers_listeners`. Clonalo dentro de tu workspace (el mismo donde tenés `yahboom_rosmaster`):
 
 ```bash
 cd ~/rosmaster_ws/src
