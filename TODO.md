@@ -16,17 +16,18 @@ Backlog compartido para quienes sigan trabajando en el sitio. Antes de arrancar:
 
 ## Diseño
 
-- [ ] **Favicon con el ROSMASTER** — hoy `public/favicon.svg` es una marca abstracta. Generar una imagen del robot (render del URDF o foto recortada) y exportarla chica. Si se cambia, revisar también los SVG inline de `Nav.astro` y `Footer.astro` para mantener coherencia.
+- [x] **Favicon con el ROSMASTER** — icono SVG vectorial del ROSMASTER X3 CAD (chasis verde, ruedas mecanum, cámara RGB-D y LiDAR) en `public/favicon.svg` y sincronizado en los logos inline de `Nav.astro` y `Footer.astro`.
+- [x] **Rediseño hero fullscreen "mission control"** — hero interactivo 100vh con micro-animaciones escalonadas (`anim-fade-up`), badge del evento con glassmorphism, botones con glow verde, encuadre 3D a la derecha en desktop mediante `camera.setViewOffset`, y zoom con rueda condicional al click presionado para no bloquear el scroll de la página.
 - [ ] **Capturas del simulador** — screenshots/GIFs de Gazebo y RViz corriendo, para el landing y el setup. Van en `public/` y se referencian relativo desde los markdown.
 - [ ] **Social preview** — imagen OG (`public/og.png`, 1200×630) + `<meta property="og:image">` en `Base.astro`. La misma imagen sirve de banner del repo (Settings → Social preview).
 
 ## Técnica
 
-- [ ] **Optimizar meshes 3D** — ~32MB hoy (`public/models/rosmaster/meshes/`). Decimate en Blender apuntando a <10MB y regenerar con `scripts/sync-robot.sh`. Impacta directo en la carga del hero, sobre todo en mobile.
+- [x] **Optimizar meshes 3D e integrar modelo CAD unificado** — integró el modelo CAD unificado de alta fidelidad en `public/models/rosmaster_unified.glb` (7.8 MB, bajando de ~32 MB de mallas URDF dispersas), con ajuste de la cámara RGB-D (-1 cm Z) para resolver la interferencia con el bulón de fijación.
 - [ ] **Revisar la estructura superior del URDF** — en el visor sobresale un mástil con caños sobre el chasis. Confirmar que es parte real del xacro y no algo que convenga ocultar para la web (el loader permite ocultar links puntuales).
 - [ ] **Página 404** — crear `src/pages/404.astro` amigable; GitHub Pages la sirve automáticamente si está en el build.
 - [ ] **sitemap + robots.txt** — integración `@astrojs/sitemap` y `robots.txt` en `public/`.
-- [ ] **Warning de THREE.Clock** — cambiar `THREE.Clock` por `THREE.Timer` en `index.astro` cuando se toque el visor (hoy solo tira un warning deprecado en consola).
+- [x] **Warning de THREE.Clock y optimización del visor** — reemplazo de APIs obsoletas, zoom condicional (`isMouseDown`), centrado y escalado automático optimizado.
 
 ## Comunidad e inscripción
 

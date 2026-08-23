@@ -4,31 +4,56 @@ import { SITE, withBase } from '../config/site';
 ---
 
 <Base>
-  <section class="page-hero hero-home">
-    <div class="hero-stage-full">
-      <div id="robot-stage">
-        <p class="stage-loading">inicializando…</p>
-        <p class="stage-readout">
-          <span class="pulse-dot"></span>rosmaster x3 · gazebo fortress · arrastrá para orbitar
-        </p>
-      </div>
+  <section class="hero-fs">
+    <div id="robot-stage" class="hero-fs-stage">
+      <p class="stage-loading">inicializando robot…</p>
     </div>
-    <div class="wrap hero-copy-below">
-      <p class="sys-label">[ challenge jar · rosario · nov 2026 ]</p>
-      <h1 class="hero-title">Un robot.<br />Una tarea.<br /><span class="grad-text">Tu código.</span></h1>
-      <p class="hero-sub">
-        El AIR Club UdeSA construyó una flota de ROSMASTER X3 y su propio simulador.
-        Los equipos programan su comportamiento autónomo contra el gemelo digital —
-        y la tarea exacta se revela pronto<span class="tw-cursor"></span>
-      </p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href={withBase('/setup/')}>Preparar el entorno</a>
-        <a class="btn" href="#participar">Cómo participar</a>
+
+    <div class="stage-corners" aria-hidden="true"></div>
+
+    <div class="hero-fs-content">
+      <div class="hero-fs-top anim-fade-up delay-1">
+        <div class="sys-badge">
+          <span class="pulse-dot"></span>
+          <span>challenge jar · rosario · 03–06 nov 2026</span>
+        </div>
+        <h1 class="hero-fs-title anim-fade-up delay-2">
+          Un robot.<br />
+          Una tarea.<br />
+          <span class="grad-text">Tu código.</span>
+        </h1>
+      </div>
+
+      <div class="hero-fs-bottom">
+        <div class="hero-fs-info anim-fade-up delay-3">
+          <p class="hero-fs-sub">
+            El AIR Club UdeSA construyó una flota de ROSMASTER X3 y su propio simulador.
+            Los equipos programan su comportamiento autónomo contra el gemelo digital —
+            y la tarea exacta se revela en la JAR.
+          </p>
+          <div class="hero-fs-actions anim-fade-up delay-4">
+            <a class="btn btn-primary btn-glow" href={withBase('/setup/')}>
+              Preparar el entorno
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="btn-arrow"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+            <a class="btn btn-ghost" href="#participar">Cómo participar</a>
+          </div>
+        </div>
+
+        <div class="hero-fs-meta anim-fade-up delay-4">
+          <span class="stage-hint">
+            <span class="pulse-dot"></span>arrastrá para orbitar · click + scroll para zoom
+          </span>
+          <a class="scroll-hint" href="#desafio" aria-label="Bajar a la siguiente sección">
+            <span>scroll para explorar</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+          </a>
+        </div>
       </div>
     </div>
   </section>
 
-  <div class="strip">
+  <div class="strip" id="desafio">
     <span class="strip-label"><span class="pulse-dot"></span>próximo evento</span>
     <span class="strip-event">JAR 2026 · Rosario · 03–06 NOV</span>
     <a class="strip-link" href="#participar">cómo participar ↓</a>
@@ -160,8 +185,7 @@ import { SITE, withBase } from '../config/site';
 <script>
   import * as THREE from 'three';
   import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-  import URDFLoader from 'urdf-loader';
-  import type { URDFRobot } from 'urdf-loader';
+  import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
   const stage = document.getElementById('robot-stage');
   const hint = stage?.querySelector<HTMLElement>('.stage-loading') ?? null;
@@ -202,102 +226,120 @@ import { SITE, withBase } from '../config/site';
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
-      stage.appendChild(renderer.domElement);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.25;
+      stage.prepend(renderer.domElement);
 
       const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(36, 1, 0.05, 50);
-      camera.position.set(1.25, 0.75, 1.6);
+      const camera = new THREE.PerspectiveCamera(34, 1, 0.05, 50);
+      camera.position.set(1.75, 1.05, 2.25);
 
-      scene.add(new THREE.HemisphereLight(0xffffff, 0x334455, 2.2));
-      const key = new THREE.DirectionalLight(0xffffff, 2.4);
-      key.position.set(2, 4, 3);
+      // Iluminación para resaltar materiales metálicos y reflejos
+      scene.add(new THREE.HemisphereLight(0xffffff, 0x14281c, 2.6));
+      
+      const key = new THREE.DirectionalLight(0xffffff, 3.4);
+      key.position.set(2.5, 4.5, 3.5);
       scene.add(key);
-      const rim = new THREE.DirectionalLight(0xa40c4c, 1.1);
-      rim.position.set(-3, 1.5, -2.5);
+
+      const fill = new THREE.DirectionalLight(0x4ade80, 1.8);
+      fill.position.set(-3.5, 2.5, 2.5);
+      scene.add(fill);
+
+      const backLight = new THREE.DirectionalLight(0x86efac, 1.4);
+      backLight.position.set(0, 3.5, -4);
+      scene.add(backLight);
+
+      const rim = new THREE.DirectionalLight(0xfbbf24, 1.1);
+      rim.position.set(3.5, 1.8, -2.5);
       scene.add(rim);
+
+      const groundBounce = new THREE.DirectionalLight(0x22c55e, 0.8);
+      groundBounce.position.set(0, -3, 0);
+      scene.add(groundBounce);
 
       const controls = new OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
       controls.enablePan = false;
-      controls.minDistance = 0.7;
-      controls.maxDistance = 3.5;
+      // Desactivamos el zoom automático por rueda para permitir el scroll natural de la página
+      controls.enableZoom = false;
       controls.autoRotate = !reducedMotion;
-      controls.autoRotateSpeed = 1.5;
-      controls.target.set(0, 0.02, 0);
+      controls.autoRotateSpeed = 1.2;
+      controls.target.set(0, -0.04, 0);
+
+      // Manejador para permitir zoom con rueda SOLO cuando el botón del mouse está presionado
+      let isMouseDown = false;
+      stage.addEventListener('pointerdown', (e) => {
+        if (e.button === 0) isMouseDown = true;
+      });
+      window.addEventListener('pointerup', () => {
+        isMouseDown = false;
+      });
+      window.addEventListener('pointercancel', () => {
+        isMouseDown = false;
+      });
+
+      stage.addEventListener(
+        'wheel',
+        (e) => {
+          if (isMouseDown) {
+            e.preventDefault();
+            const zoomFactor = Math.pow(0.95, -e.deltaY * 0.008);
+            const offset = camera.position.clone().sub(controls.target);
+            const dist = offset.length();
+            const newDist = dist * zoomFactor;
+            if (newDist >= 0.7 && newDist <= 5.5) {
+              offset.multiplyScalar(zoomFactor);
+              camera.position.copy(controls.target).add(offset);
+              controls.update();
+            }
+          }
+        },
+        { passive: false }
+      );
 
       const resize = () => {
         const w = stage.clientWidth;
         const h = stage.clientHeight;
         renderer.setSize(w, h);
         camera.aspect = Math.max(w, 1) / Math.max(h, 1);
+
+        // En desktop desplazamos el punto de vista para que el robot se ubique en la mitad derecha
+        if (w >= 1024) {
+          camera.setViewOffset(w, h, -Math.round(w * 0.22), 0, w, h);
+        } else {
+          camera.clearViewOffset();
+        }
         camera.updateProjectionMatrix();
       };
       resize();
       new ResizeObserver(resize).observe(stage);
 
-      let fitted = false;
-      let prevMaxDim = -1;
-      let stableFrames = 0;
-      let robotModel: URDFRobot | null = null;
-
-      function updateFit() {
-        if (fitted || !robotModel) return;
-
-        const prevScale = robotModel.scale.x;
-        const prevPos = robotModel.position.clone();
-        robotModel.scale.setScalar(1);
-        robotModel.position.set(0, 0, 0);
-        robotModel.updateMatrixWorld(true);
-
-        const box = new THREE.Box3().setFromObject(robotModel);
-        const size = box.getSize(new THREE.Vector3());
-        const center = box.getCenter(new THREE.Vector3());
-        const maxDim = Math.max(size.x, size.y, size.z);
-
-        if (box.isEmpty() || !isFinite(maxDim) || maxDim <= 0.01) {
-          robotModel.scale.setScalar(prevScale);
-          robotModel.position.copy(prevPos);
-          return;
-        }
-
-        const scale = 1.3 / maxDim;
-        robotModel.scale.setScalar(scale);
-        robotModel.position.copy(center).multiplyScalar(-scale);
-
-        const allLoaded = totalCount > 0 && loadedCount >= totalCount;
-        const changed = prevMaxDim <= 0 || Math.abs(maxDim - prevMaxDim) / prevMaxDim > 0.01;
-        prevMaxDim = maxDim;
-        if (changed || !allLoaded) {
-          stableFrames = 0;
-          return;
-        }
-
-        stableFrames += 1;
-        if (stableFrames < 10) return;
-
-        fitted = true;
-        controls.target.set(0, -0.05, 0);
-        camera.position.set(1.45, 0.9, 1.85);
-        controls.update();
-      }
-
       const manager = new THREE.LoadingManager();
-      let loadedCount = 0;
-      let totalCount = 0;
-      manager.onProgress = (_url, loaded, total) => {
-        loadedCount = loaded;
-        totalCount = total;
-      };
       manager.onError = (url) => reportError(`no se pudo cargar ${url.split('/').pop()}`);
 
-      const loader = new URDFLoader(manager);
-      loader.workingPath = `${base}/models/rosmaster/`;
+      const gltfLoader = new GLTFLoader(manager);
+      gltfLoader.load(
+        `${base}/models/rosmaster_unified.glb`,
+        (gltf) => {
+          const robot = gltf.scene;
+          robot.rotation.set(0, 0, 0);
 
-      loader.load(
-        `${base}/models/rosmaster/rosmaster_x3.urdf`,
-        (robot) => {
-          robotModel = robot;
-          robot.rotation.x = -Math.PI / 2;
+          // Ajuste de la cámara RGB-D: 1 cm (10 mm en unidades del CAD) hacia atrás en la referencia del robot
+          const rgbdCam = robot.getObjectByName('rgbd_camera');
+          if (rgbdCam) {
+            rgbdCam.position.z = -10;
+          }
+
+          // Ajuste automático de escala con zoom aumentado y centrado
+          const box = new THREE.Box3().setFromObject(robot);
+          const size = box.getSize(new THREE.Vector3());
+          const center = box.getCenter(new THREE.Vector3());
+          const maxDim = Math.max(size.x, size.y, size.z);
+          const scale = 1.28 / maxDim;
+          robot.scale.setScalar(scale);
+          robot.position.copy(center).multiplyScalar(-scale);
+          robot.position.y -= 0.04;
+
           scene.add(robot);
 
           if (hint) {
@@ -305,21 +347,7 @@ import { SITE, withBase } from '../config/site';
             setTimeout(() => hint.remove(), 600);
           }
 
-          const wheelNames = [
-            'front_left_wheel_joint',
-            'front_right_wheel_joint',
-            'back_left_wheel_joint',
-            'back_right_wheel_joint',
-          ];
-          const wheels = wheelNames.map((name) => robot.joints[name]).filter(Boolean);
-          const clock = new THREE.Clock();
-
           renderer.setAnimationLoop(() => {
-            updateFit();
-            if (wheels.length === wheelNames.length && !reducedMotion) {
-              const angle = clock.getElapsedTime() * 2.5;
-              wheels.forEach((joint) => joint.setJointValue(angle));
-            }
             controls.update();
             renderer.render(scene, camera);
           });
@@ -327,10 +355,10 @@ import { SITE, withBase } from '../config/site';
         (progress) => {
           if (!hint || !progress || !progress.loaded) return;
           const mb = (progress.loaded / 1048576).toFixed(0);
-          hint.textContent = `cargando modelo · ${mb} MB`;
+          hint.textContent = `cargando robot · ${mb} MB`;
         },
         (err) =>
-          reportError(err instanceof ErrorEvent ? err.message : 'no se pudo cargar el modelo')
+          reportError(err instanceof ErrorEvent ? err.message : 'no se pudo cargar el modelo 3D')
       );
     }
   }
