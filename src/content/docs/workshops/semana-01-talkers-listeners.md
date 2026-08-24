@@ -1,50 +1,78 @@
 ---
 title: "01 · Talkers y listeners"
-description: "Nodos, topics y comunicación asincrónica en ROS 2: publicadores, suscriptores y representación de estados."
+description: "Arquitectura de ROS 2: nodos, topics, comunicación publicador/suscriptor y modelo de ejecución asincrónico."
 status: listo
 ---
 
 ## Objetivo
 
-Comprender la arquitectura de comunicación publicador/suscriptor de ROS 2. Al completar este workshop vas a entender cómo se estructuran los nodos en Python, por qué ROS 2 utiliza un modelo no bloqueante basado en eventos y cómo este mismo patrón gobierna el control del robot ROSMASTER X3 en el simulador.
+Comprender los fundamentos de la arquitectura de ROS 2. Al finalizar este módulo vas a entender cómo se comunican los procesos a través de un grafo distribuido, cómo implementar nodos publicadores y suscriptores en Python, por qué ROS 2 utiliza un modelo de ejecución no bloqueante basado en timers y cómo este mismo patrón gobierna el control del robot ROSMASTER X3 en el simulador.
 
 ## Antes de empezar
 
-Asegurate de tener el entorno instalado y el simulador compilado en tu workspace siguiendo la [guía de instalación](../../setup/). No necesitás instalar paquetes adicionales para este módulo: `rclpy`, `std_msgs` y `geometry_msgs` forman parte de la instalación base de ROS 2 Humble.
+Asegurate de tener el entorno instalado y el simulador compilado siguiendo la [guía de instalación](../../setup/). No hace falta instalar paquetes adicionales: `rclpy`, `std_msgs` y `geometry_msgs` vienen incluidos en la instalación base de ROS 2 Humble.
 
 ---
 
-## 1. El modelo de ejecución en ROS 2: Timers vs Loops bloqueantes
+## 1. Arquitectura de ROS 2: El Grafo de Computación
 
-En un script convencional de Python, para ejecutar una tarea periódica solemos escribir un bucle infinito con retardos:
+ROS 2 no es un único programa monolítico, sino un ecosistema de procesos independientes que se comunican entre sí formando una red o **grafo de computación**. Sus tres pilares fundamentales son:
+
+### A. Nodos (*Nodes*)
+Un nodo es un proceso ejecutable independiente enfocado en resolver una tarea puntual. En una aplicación de robótica real:
+- Un nodo se encarga de leer los pulsos del LiDAR.
+- Otro nodo procesa las imágenes de la cámara de profundidad.
+- Otro nodo ejecuta el algoritmo de planificación de ruta.
+- Un nodo final traduce la ruta en señales eléctricas para los motores.
+
+Esta modularidad garantiza que si un sensor falla o un nodo se reinicia, el resto del robot sigue funcionando.
+
+### B. Tópicos (*Topics*)
+Los topics son canales unidireccionales con nombre declarativo (por ejemplo `/scan`, `/cmd_vel` o `/chatter`) a través de los cuales fluyen los datos entre nodos.
+
+### C. Mensajes (*Messages*)
+Los datos que circulan por un topic tienen una estructura fuertemente tipada. ROS 2 define mensajes estándar (como cadenas de texto `std_msgs/msg/String` o vectores de velocidad `geometry_msgs/msg/Twist`) para que cualquier nodo en Python, C++ o Rust hable el mismo idioma.
+
+### El patrón Publicador / Suscriptor (*Pub/Sub*)
+La comunicación entre nodos está **totalmente desacoplada**:
+- **El Publicador (*Talker*):** Genera datos y los envía al topic. No sabe (ni necesita saber) quién los está escuchando ni cuántos nodos hay conectados.
+- **El Suscriptor (*Listener*):** Se conecta al topic y espera datos. No sabe quién los genera ni en qué computadora está corriendo el publicador.
+
+---
+
+## 2. El modelo de ejecución: Timers vs Loops bloqueantes
+
+Una vez que entendemos qué es un nodo, surge la pregunta práctica: *¿Cómo programamos en Python un nodo para que publique datos periódicamente (por ejemplo, 1 vez por segundo)?*
+
+En un script clásico de Python, la primera intuición suele ser usar un bucle infinito con retardos:
 
 ```python
-# ❌ ENFOQUE BLOQUEANTE (NO RECOMENDADO EN ROS 2)
+# ❌ ENFOQUE BLOQUEANTE (NO RECOMENDADO EN ROBÓTICA)
 import time
 
 while True:
-    time.sleep(1.0)  # Bloquea el hilo completo durante 1 segundo
+    time.sleep(1.0)  # Bloquea el hilo de ejecución durante 1 segundo
     publicar_mensaje()
 ```
 
-### ¿Por qué este enfoque no sirve en robótica?
-Cuando un proceso ejecuta `time.sleep()`, el hilo de ejecución queda congelado. Si durante ese segundo llega un mensaje del LiDAR, una lectura de la IMU o una orden de freno de emergencia, el nodo no puede atenderlos a tiempo.
+### El problema en robótica
+Cuando un programa ejecuta `time.sleep()`, el hilo del proceso queda **completamente congelado**. Si durante ese segundo llega una lectura crítica del LiDAR con un obstáculo o una orden de freno de emergencia, el nodo no puede atenderlas a tiempo.
 
-### La solución de ROS 2: Timers y Callbacks
-ROS 2 adopta una **arquitectura orientada a eventos**:
+### La solución de ROS 2: Arquitectura orientada a eventos
+ROS 2 utiliza **Timers periódicos** combinados con un despachador de eventos (`rclpy.spin`):
 
 ```python
 # ✅ ENFOQUE ASINCRÓNICO DE ROS 2
 self.timer = self.create_timer(1.0, self.timer_callback)
 ```
 
-En lugar de retener la CPU esperando, el nodo le solicita al framework: *"llamá a mi función `timer_callback` cada 1 segundo"*. Durante el tiempo restante, el nodo queda libre en `rclpy.spin()` para procesar mensajes entrantes, callbacks de sensores o responder a señales del sistema, consumiendo solo las milésimas de segundo que tarda en ejecutar la lógica.
+En lugar de retener la CPU esperando, el nodo le indica al framework: *"llamá a mi función `timer_callback` cada 1.0 segundo"*. Durante el tiempo restante, el nodo permanece libre en `rclpy.spin()` atendiendo mensajes de sensores y eventos del sistema, consumiendo solo las milésimas de segundo que tarda en ejecutar la lógica.
 
 ---
 
-## 2. Anatomía de un Publicador (`talker.py`)
+## 3. Anatomía de un Publicador (`talker.py`)
 
-Un nodo publicador (*Talker*) envía mensajes periódicamente a un topic específico. Veamos su estructura:
+Veamos cómo se implementa un nodo publicador completo en Python:
 
 ```python
 #!/usr/bin/env python3
@@ -59,14 +87,15 @@ class TalkerNode(Node):
         # Inicializa el nodo con el nombre 'talker'
         super().__init__('talker')
 
-        # Crea un publicador de tipo String en el topic 'chatter' con cola de 10
+        # 1. Crea el publicador (Tipo de mensaje, Nombre del topic, Tamaño de cola QoS)
         self.publisher_ = self.create_publisher(String, 'chatter', 10)
 
-        # Crea un timer que dispara el callback cada 1.0 segundo
+        # 2. Crea un timer periódico a 1 Hz (dispara el callback cada 1.0 segundo)
         self.timer = self.create_timer(1.0, self.timer_callback)
         self.count = 0
 
     def timer_callback(self):
+        # Se ejecuta cada 1 segundo sin bloquear el hilo
         msg = String()
         msg.data = f'Hola desde el talker: mensaje #{self.count}'
         self.publisher_.publish(msg)
@@ -78,7 +107,7 @@ def main(args=None):
     rclpy.init(args=args)
     node = TalkerNode()
     try:
-        rclpy.spin(node)  # Mantiene el nodo vivo despachando callbacks
+        rclpy.spin(node)  # Despacha callbacks y mantiene el nodo activo
     except KeyboardInterrupt:
         pass
     finally:
@@ -90,16 +119,16 @@ if __name__ == '__main__':
     main()
 ```
 
-### Puntos clave del publicador:
+### Puntos clave del código:
 1. **`super().__init__('talker')`**: Registra el nodo con el nombre `talker` en el grafo de ROS 2.
-2. **`self.create_publisher(String, 'chatter', 10)`**: Define el tipo de mensaje (`String`), el nombre del canal (`chatter`) y el tamaño de cola de QoS (*Quality of Service*).
-3. **`self.get_logger().info(...)`**: Sistema de logging estructurado que imprime en terminal con timestamps y nivel de severidad.
+2. **`create_publisher(String, 'chatter', 10)`**: Define que por el topic `chatter` viajarán mensajes `String` y configura una cola de 10 mensajes (*QoS*).
+3. **`get_logger().info(...)`**: Sistema de logs estructurado que imprime en terminal con marca temporal y nivel de severidad.
 
 ---
 
-## 3. Anatomía de un Suscriptor (`listener.py`)
+## 4. Anatomía de un Suscriptor (`listener.py`)
 
-Un nodo suscriptor (*Listener*) se conecta a un topic y ejecuta una función automáticamente cada vez que recibe un dato:
+El nodo suscriptor se enlaza al mismo topic y ejecuta una función automáticamente cada vez que arriba un nuevo mensaje:
 
 ```python
 #!/usr/bin/env python3
@@ -120,7 +149,7 @@ class ListenerNode(Node):
         self.subscription  # Evita advertencias de variable no utilizada
 
     def listener_callback(self, msg: String):
-        # Esta función se ejecuta automáticamente cuando llega un mensaje
+        # Esta función es invocada automáticamente al recibir un mensaje
         self.get_logger().info(f'Recibí: "{msg.data}"')
 
 
@@ -140,13 +169,11 @@ if __name__ == '__main__':
     main()
 ```
 
-> **Desacople total:** El `talker` y el `listener` no conocen sus direcciones de memoria ni en qué máquina están corriendo. Solo acuerdan el nombre del topic (`chatter`) y el tipo de dato (`String`).
-
 ---
 
-## 4. Compilación y Entry Points
+## 5. Compilación y Entry Points
 
-Para que ROS 2 reconozca estos scripts como ejecutables, se declaran en el archivo `setup.py` del paquete:
+Para que ROS 2 pueda ejecutar estos nodos mediante la terminal (`ros2 run`), los scripts se declaran en el diccionario `entry_points` de `setup.py`:
 
 ```python
 # setup.py
@@ -170,7 +197,7 @@ source install/setup.bash
 
 ---
 
-## 5. Poniendo a prueba los nodos
+## 6. Ejecución e Introspección del Grafo
 
 Abrí dos terminales independientes (ambas con el entorno cargado mediante `source ~/rosmaster_ws/install/setup.bash`):
 
@@ -184,71 +211,50 @@ ros2 run talkers_listeners talker
 ros2 run talkers_listeners listener
 ```
 
-### Introspección del grafo
-Mientras los nodos están corriendo, abrí una tercera terminal y probá estos comandos de diagnóstico:
+Vas a ver al talker emitiendo mensajes periódicos y al listener imprimiéndolos en tiempo real a medida que llegan.
+
+### Diagnóstico e introspección en vivo
+En una tercera terminal, utilizá las herramientas CLI de ROS 2 para inspeccionar el grafo:
 
 ```bash
-# Ver todos los topics activos en el sistema
+# Listar todos los topics activos en el sistema
 ros2 topic list
 
-# Inspeccionar el tipo de mensaje y cantidad de publicadores/suscriptores
+# Ver detalles del topic: tipo de mensaje, publicadores y suscriptores conectados
 ros2 topic info /chatter
 
-# Medir la frecuencia real de publicación en Hz
+# Medir la frecuencia real de transmisión en Hz
 ros2 topic hz /chatter
 ```
 
 > **Pregunta conceptual:** *¿Qué sucede si cerrás el talker y dejás únicamente el listener corriendo?*  
-> Si ejecutás `ros2 topic list`, vas a ver que el topic `/chatter` **sigue existiendo** en el grafo porque el suscriptor lo mantiene declarado, aunque ningún mensaje circule por él hasta que se conecte un publicador.
+> Si ejecutás `ros2 topic list`, vas a notar que el topic `/chatter` **sigue existiendo** en el grafo porque el suscriptor lo mantiene declarado, aunque ningún dato fluirá por él hasta que se conecte un publicador.
 
 ---
 
-## 6. Conexión con el simulador: Control de velocidad (`/cmd_vel`)
+## 7. Del ejemplo básico al robot: El topic `/cmd_vel`
 
-El patrón de talker y listener es exactamente el mismo que se utiliza para mover el robot real y el simulador en Gazebo:
+El patrón de talker y listener que acabás de probar es **exactamente el mismo** que controla los movimientos del ROSMASTER X3:
 
-1. **El Publicador:** Un nodo de teleoperación o tu propio algoritmo de navegación calcula la velocidad y publica mensajes de tipo `geometry_msgs/msg/Twist` en el topic `/cmd_vel`.
-2. **El Suscriptor:** El controlador de hardware del ROSMASTER X3 (o el plugin de Gazebo) está suscripto a `/cmd_vel` y transforma esas velocidades lineales y angulares en revoluciones para cada una de las 4 ruedas mecanum.
+1. **El Publicador:** Un nodo de teleoperación por teclado (o tu propio algoritmo de navegación autónoma) calcula la velocidad requerida y publica mensajes de tipo `geometry_msgs/msg/Twist` en el topic `/cmd_vel`.
+2. **El Suscriptor:** El controlador de hardware del robot (o el plugin de Gazebo) está suscripto a `/cmd_vel` y transforma esas velocidades en revoluciones para cada una de las 4 ruedas mecanum.
 
-Podés comprobarlo en vivo:
-1. Levantá el simulador: `ros2 launch yahboom_rosmaster_description display.launch.py`
-2. En otra terminal, manejá el robot con el teclado:
+Podés verificarlo en tiempo real:
+1. Levantá el simulador:
+   ```bash
+   ros2 launch yahboom_rosmaster_description display.launch.py
+   ```
+2. En otra terminal, manejá el robot con las teclas:
    ```bash
    ros2 run teleop_twist_keyboard teleop_twist_keyboard
    ```
-3. En una tercera terminal, observá los datos crudos en tiempo real:
+3. En una tercera terminal, inspeccioná los mensajes que circulan por el bus:
    ```bash
    ros2 topic echo /cmd_vel
    ```
 
 ---
 
-## 7. Nota Técnica: ¿Por qué en robótica usamos Cuaterniones en vez de Euler?
-
-Cuando inspecciones la odometría del robot (`/odom`) o las transformadas de coordenadas (`/tf`), vas a notar que la orientación no viene expresada en grados o radianes de Roll, Pitch y Yaw, sino como un **cuaternión** `[x, y, z, w]`.
-
-| Método | Parámetros | Ventajas | Desventajas |
-| --- | --- | --- | --- |
-| **Ángulos de Euler** (Roll, Pitch, Yaw) | 3 | Intuitivo para humanos. | Sufre de **Gimbal Lock** (pérdida de un grado de libertad) y singularidades matemáticas en 90°. |
-| **Matriz de Rotación** | 9 | Sin singularidades. | Redundante (9 números para 3 DOF) y propensa a perder ortonormalidad por errores de redondeo. |
-| **Cuaterniones** | 4 | Compactos, suaves para interpolar (SLERP), sin Gimbal Lock ni singularidades. | Poco intuitivos para visualización directa. |
-
-### Cómo convertir un Cuaternión a ángulo Yaw en Python
-Para robots terrestres que se desplazan sobre un plano 2D, solo nos interesa el giro sobre el eje vertical (**Yaw**). Podés extraerlo a partir de la orientación del mensaje con esta fórmula estándar:
-
-```python
-import math
-
-
-def quaternion_to_yaw(x, y, z, w) -> float:
-    """Convierte un cuaternión de orientación en ángulo Yaw (radianes)."""
-    siny_cosp = 2.0 * (w * z + x * y)
-    cosy_cosp = 1.0 - 2.0 * (y * y + z * z)
-    return math.atan2(siny_cosp, cosy_cosp)
-```
-
----
-
 ## Desafío extra
 
-Modificá `listener.py` para que en vez de suscribirse a `chatter` escuche directamente el topic `/cmd_vel` (`geometry_msgs/msg/Twist`). Hacé que imprima en pantalla un aviso cada vez que el robot se desplace lateralmente (`linear.y != 0`) aprovechando la cinemática de las ruedas mecanum.
+Modificá `listener.py` para que en vez de suscribirse a `chatter` escuche directamente el topic `/cmd_vel` (`geometry_msgs/msg/Twist`). Hacé que imprima en pantalla un aviso cada vez que la velocidad lineal en `x` supere `0.2 m/s`.
