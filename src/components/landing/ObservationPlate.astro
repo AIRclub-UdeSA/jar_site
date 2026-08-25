@@ -1,0 +1,125 @@
+---
+import { withBase } from '../../config/site';
+---
+
+<figure class="landing-observation" data-observation aria-labelledby="observation-caption">
+  <div class="landing-observation-view">
+    <div class="landing-observation-meta">
+      <span><b>01</b> Entorno simulado</span>
+      <span>Gazebo Fortress</span>
+    </div>
+    <video
+      muted
+      loop
+      playsinline
+      preload="none"
+      poster={withBase('/media/donatello-gazebo-poster.webp')}
+      data-observation-video
+      data-video-src={withBase('/media/donatello-gazebo.webm')}
+      aria-hidden="true"
+      tabindex="-1"
+    ></video>
+  </div>
+
+  <div class="landing-observation-view landing-observation-view-sensors">
+    <div class="landing-observation-meta">
+      <span><b>02</b> Lectura sensorial</span>
+      <span>RViz 2</span>
+    </div>
+    <video
+      muted
+      loop
+      playsinline
+      preload="none"
+      poster={withBase('/media/donatello-rviz-poster.webp')}
+      data-observation-video
+      data-video-src={withBase('/media/donatello-rviz.webm')}
+      aria-hidden="true"
+      tabindex="-1"
+    ></video>
+  </div>
+
+  <figcaption class="landing-observation-caption">
+    <div>
+      <strong id="observation-caption">El mismo entorno, visto por el robot.</strong>
+      <span>Gazebo construye la escena. RViz hace visible su lectura.</span>
+    </div>
+    <button type="button" data-observation-toggle aria-pressed="false" hidden>
+      <span data-observation-toggle-label>Pausar las vistas</span>
+    </button>
+  </figcaption>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-observation]').forEach((observation) => {
+    const videos = Array.from(observation.querySelectorAll<HTMLVideoElement>('[data-observation-video]'));
+    const toggle = observation.querySelector<HTMLButtonElement>('[data-observation-toggle]');
+    const toggleLabel = observation.querySelector<HTMLElement>('[data-observation-toggle-label]');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let mediaLoaded = false;
+    let visible = false;
+    let userPaused = false;
+
+    const pauseVideos = () => videos.forEach((video) => video.pause());
+
+    const updatePlayback = () => {
+      if (!mediaLoaded || reducedMotion || userPaused || !visible || document.hidden) {
+        pauseVideos();
+        return;
+      }
+
+      videos.forEach((video) => {
+        video.play().catch(() => undefined);
+      });
+    };
+
+    const loadMedia = () => {
+      if (mediaLoaded || reducedMotion) return;
+      mediaLoaded = true;
+
+      videos.forEach((video) => {
+        if (video.dataset.videoSrc) video.src = video.dataset.videoSrc;
+        video.load();
+        video.addEventListener('canplay', updatePlayback, { once: true });
+      });
+    };
+
+    if (reducedMotion) {
+      if (toggle) toggle.hidden = true;
+    } else {
+      if (toggle) toggle.hidden = false;
+
+      const loadObserver = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) {
+            loadMedia();
+            loadObserver.disconnect();
+          }
+        },
+        { rootMargin: '320px' }
+      );
+
+      const visibilityObserver = new IntersectionObserver(
+        ([entry]) => {
+          visible = entry?.isIntersecting ?? false;
+          updatePlayback();
+        },
+        { threshold: 0.08 }
+      );
+
+      loadObserver.observe(observation);
+      visibilityObserver.observe(observation);
+    }
+
+    toggle?.addEventListener('click', () => {
+      userPaused = !userPaused;
+      toggle.setAttribute('aria-pressed', String(userPaused));
+      if (toggleLabel) {
+        toggleLabel.textContent = userPaused ? 'Reanudar las vistas' : 'Pausar las vistas';
+      }
+      updatePlayback();
+    });
+
+    document.addEventListener('visibilitychange', updatePlayback);
+  });
+</script>

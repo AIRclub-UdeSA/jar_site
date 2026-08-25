@@ -22,7 +22,8 @@
 
 .landing-section,
 .landing-application,
-.landing-hero {
+.landing-hero,
+.landing-donatello {
   scroll-margin-top: 5rem;
 }
 
@@ -35,7 +36,7 @@
 .landing-resource-number,
 .landing-step-number,
 .landing-step-status,
-.landing-facts dt,
+.landing-donatello-stack dt,
 .landing-viewer-status,
 .landing-viewer-caption {
   font-family: var(--font-mono);
@@ -103,13 +104,14 @@
 }
 
 /* Hero */
-.landing-hero {
-  padding: calc(4rem + clamp(3rem, 9vw, 6.5rem)) 0 clamp(4.5rem, 9vw, 7rem);
+.landing-donatello-story {
+  position: relative;
+  --landing-visual-shift: 0px;
+  --landing-viewer-caption-opacity: 1;
 }
 
-.landing-hero-layout {
-  display: grid;
-  gap: clamp(3rem, 8vw, 6rem);
+.landing-hero {
+  padding: calc(4rem + clamp(3rem, 9vw, 6.5rem)) 0 clamp(4.5rem, 9vw, 7rem);
 }
 
 .landing-hero-copy {
@@ -121,6 +123,8 @@
 .landing-hero-meta {
   margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
   color: var(--accent);
+  font-size: 0.66rem;
+  letter-spacing: 0.075em;
 }
 
 .landing-hero-title {
@@ -145,7 +149,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.75rem 1.4rem;
+  gap: 0.75rem;
   margin-top: 2rem;
 }
 
@@ -212,35 +216,56 @@
   transform-origin: left;
 }
 
+.landing-story-visual {
+  position: relative;
+  width: 100%;
+}
+
 .landing-viewer {
+  position: relative;
   min-width: 0;
   animation: landing-intro 0.7s 0.12s var(--ease) both;
 }
 
 .landing-viewer-stage {
   position: relative;
-  height: clamp(20rem, 78vw, 31rem);
-  overflow: hidden;
-  border-block: 1px solid var(--landing-rule);
-  cursor: grab;
-}
-
-.landing-viewer-stage:active {
-  cursor: grabbing;
+  height: clamp(28rem, 120vw, 40rem);
+  pointer-events: none;
 }
 
 .landing-viewer-stage canvas {
   position: absolute;
+  z-index: 1;
   inset: 0;
   width: 100% !important;
   height: 100% !important;
   display: block;
+  pointer-events: none;
+}
+
+.landing-viewer-control {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  aspect-ratio: 1;
+  transform: translate(calc(-50% + var(--landing-visual-shift)), -50%);
+}
+
+.landing-viewer-control {
+  z-index: 3;
+  width: min(90vw, 34rem);
+  cursor: grab;
+  pointer-events: auto;
+}
+
+.landing-viewer-control:active {
+  cursor: grabbing;
 }
 
 .landing-viewer-status {
   position: absolute;
-  inset: 50% auto auto 50%;
-  z-index: 1;
+  inset: 50% auto auto calc(50% + var(--landing-visual-shift));
+  z-index: 4;
   width: min(90%, 28rem);
   color: var(--text-3);
   font-size: 0.7rem;
@@ -260,25 +285,104 @@
 }
 
 .landing-viewer-caption {
+  position: absolute;
+  z-index: 4;
+  left: calc(50% + var(--landing-visual-shift));
+  bottom: -3rem;
   min-height: 44px;
+  width: min(calc(100% - (var(--landing-gutter) * 2)), 34rem);
   display: flex;
   align-items: center;
+  justify-content: center;
   color: var(--text-3);
   font-size: 0.66rem;
   line-height: 1.5;
+  text-align: center;
+  opacity: var(--landing-viewer-caption-opacity);
+  transform: translateX(-50%);
+  transition: opacity 0.2s var(--ease);
 }
 
 .landing-viewer-caption-touch {
   display: none;
 }
 
-/* Challenge */
-.landing-challenge-grid {
+/* Donatello */
+.landing-donatello {
+  padding-block: clamp(5rem, 12vw, 8rem) clamp(6rem, 14vw, 10rem);
+}
+
+.landing-donatello-sticky,
+.landing-donatello-layout {
+  position: relative;
+}
+
+.landing-donatello-copy {
+  position: relative;
+}
+
+.landing-donatello-heading h2 {
+  max-width: 8ch;
+  color: var(--landing-ink);
+  font-family: var(--font-display);
+  font-size: clamp(3.4rem, 13vw, 6.25rem);
+  font-weight: 500;
+  line-height: 0.9;
+  letter-spacing: -0.055em;
+}
+
+.landing-donatello-stack {
+  margin-top: clamp(3rem, 7vw, 5rem);
+  border-top: 1px solid var(--landing-rule);
+}
+
+.landing-donatello-stack > div {
   display: grid;
-  gap: clamp(3rem, 8vw, 6rem);
+  grid-template-columns: minmax(7.5rem, 38%) minmax(0, 1fr);
+  gap: 1.25rem;
+  padding-block: 1.1rem;
+  border-bottom: 1px solid var(--landing-rule);
+}
+
+.landing-donatello-stack dt {
+  color: var(--text-3);
+  font-size: 0.72rem;
+  line-height: 1.55;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.landing-donatello-stack dt span {
+  margin-right: 0.65rem;
+  color: var(--accent);
+}
+
+.landing-donatello-stack dd {
+  color: var(--landing-ink);
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+/* Challenge */
+.landing-challenge-layout {
+  display: grid;
+  gap: clamp(3.5rem, 10vw, 7rem);
+}
+
+.landing-challenge-content,
+.landing-challenge .landing-section-heading,
+.landing-challenge-flow,
+.landing-challenge-copy {
+  max-width: 65ch;
+}
+
+.landing-challenge-flow {
+  display: flex;
+  flex-direction: column;
 }
 
 .landing-notice {
+  max-width: 60ch;
   margin-top: clamp(2.5rem, 6vw, 4rem);
   padding-top: 1.25rem;
   border-top: 1px solid rgba(251, 191, 36, 0.5);
@@ -295,30 +399,113 @@
   line-height: 1.7;
 }
 
-.landing-facts {
-  border-top: 1px solid var(--landing-rule);
-}
-
-.landing-facts > div {
+.landing-observation {
+  min-width: 0;
+  margin: 0;
   display: grid;
-  grid-template-columns: minmax(6.5rem, 35%) minmax(0, 1fr);
-  gap: 1.25rem;
-  padding-block: 1.15rem;
-  border-bottom: 1px solid var(--landing-rule);
+  gap: clamp(1.75rem, 7vw, 2.75rem);
 }
 
-.landing-facts dt {
+.landing-observation-view {
+  min-width: 0;
+}
+
+.landing-observation-meta {
+  min-height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid var(--landing-rule);
   color: var(--text-3);
-  font-size: 0.67rem;
-  line-height: 1.55;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  line-height: 1.45;
   letter-spacing: 0.07em;
   text-transform: uppercase;
 }
 
-.landing-facts dd {
+.landing-observation-meta b {
+  margin-right: 0.55rem;
+  color: var(--accent);
+  font-weight: 400;
+}
+
+.landing-observation-view video {
+  width: 100%;
+  aspect-ratio: 48 / 25;
+  display: block;
+  background: #0a0d0b;
+  object-fit: cover;
+  filter: saturate(0.78) contrast(1.04);
+}
+
+.landing-observation-view-sensors video {
+  filter: saturate(0.82) contrast(1.08) brightness(0.96);
+}
+
+.landing-observation-caption {
+  display: grid;
+  gap: 1.25rem;
+  padding-block: 1.25rem;
+  border-block: 1px solid var(--landing-rule);
+}
+
+.landing-observation-caption > div {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.landing-observation-caption strong {
+  max-width: 22ch;
   color: var(--landing-ink);
-  font-size: 0.98rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 3.5vw, 1.75rem);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+
+.landing-observation-caption span {
+  max-width: 42ch;
+  color: var(--landing-muted);
+  font-size: 0.88rem;
   line-height: 1.55;
+}
+
+.landing-observation-caption button {
+  min-width: 44px;
+  min-height: 44px;
+  width: fit-content;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  background: transparent;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+}
+
+.landing-observation-caption button:hover {
+  color: var(--landing-ink);
+}
+
+@media (min-width: 48rem) {
+  .landing-observation-view {
+    width: 92%;
+  }
+
+  .landing-observation-view-sensors {
+    justify-self: end;
+  }
+
+  .landing-observation-caption {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 2rem;
+  }
 }
 
 /* Roadmap */
@@ -347,7 +534,7 @@
 
 .landing-step-number,
 .landing-step-status {
-  font-size: 0.66rem;
+  font-size: 0.78rem;
   line-height: 1.4;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -698,7 +885,22 @@
     --landing-gutter: 2rem;
   }
 
+  .landing-hero-meta {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+  }
+
+  .landing-actions {
+    column-gap: 1.4rem;
+  }
+
   .landing-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 2rem;
+  }
+
+  .landing-donatello-stack {
+    display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0 2rem;
   }
@@ -724,31 +926,115 @@
 }
 
 @media (min-width: 64rem) {
+  .landing-donatello-story {
+    min-height: 200svh;
+  }
+
   .landing-hero {
+    position: relative;
+    z-index: 2;
     min-height: 100svh;
-    padding: 4.25rem 0 0;
+    padding: calc(4.25rem + clamp(3rem, 7svh, 5rem)) 0 clamp(3rem, 7svh, 5rem);
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  .landing-hero-copy {
+    max-width: min(35rem, 42vw);
+    pointer-events: auto;
+  }
+
+  .landing-story-visual {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .landing-viewer {
+    position: sticky;
+    top: 4.25rem;
+    height: calc(100svh - 4.25rem);
+  }
+
+  .landing-viewer-stage {
+    height: 100%;
+  }
+
+  .landing-viewer-control {
+    width: min(52vw, 46rem, 76svh);
+  }
+
+  .landing-viewer-caption {
+    bottom: 0.5rem;
+  }
+
+  .landing-donatello {
+    position: relative;
+    z-index: 2;
+    min-height: 100svh;
+    padding: 0;
+    pointer-events: none;
     display: flex;
     align-items: center;
   }
 
-  .landing-hero-layout {
-    grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+  .landing-donatello-sticky {
+    width: 100%;
+  }
+
+  .landing-donatello-layout {
+    min-height: 0;
+  }
+
+  .landing-donatello-copy {
+    max-width: min(33rem, 40vw);
+    min-width: 0;
+  }
+
+  .landing-donatello-heading h2 {
+    max-width: 7ch;
+    font-size: clamp(3.4rem, 5vw, 4.8rem);
+  }
+
+  .landing-donatello-stack {
+    margin-top: clamp(2.25rem, 4svh, 3.5rem);
+    display: block;
+  }
+
+  .landing-donatello-stack > div {
+    grid-template-columns: minmax(8rem, 42%) minmax(0, 1fr);
+    gap: clamp(1rem, 2vw, 2rem);
+    padding-block: clamp(0.7rem, 1.25svh, 1rem);
+  }
+
+  .landing-donatello-stack dt span {
+    display: inline;
+    margin-right: 0.65rem;
+  }
+
+  .landing-donatello-stack dd {
+    margin-top: 0;
+  }
+
+  .landing-challenge-layout {
+    grid-template-columns: minmax(0, 1.08fr) minmax(22rem, 0.92fr);
+    gap: clamp(3rem, 6vw, 6rem);
     align-items: center;
-    gap: clamp(3.5rem, 6vw, 6rem);
-    padding-block: clamp(3rem, 7svh, 5rem);
+  }
+
+  .landing-challenge .landing-section-heading {
+    margin-bottom: clamp(2rem, 3.5vw, 2.75rem);
+  }
+
+  .landing-challenge .landing-notice {
+    margin-top: clamp(2rem, 3vw, 2.75rem);
   }
 
   .landing-hero-title {
     font-size: clamp(4.75rem, 6.5vw, 6.25rem);
-  }
-
-  .landing-viewer-stage {
-    height: min(72svh, 45rem);
-  }
-
-  .landing-challenge-grid {
-    grid-template-columns: minmax(0, 1.1fr) minmax(20rem, 0.9fr);
-    align-items: start;
   }
 
   .landing-steps {

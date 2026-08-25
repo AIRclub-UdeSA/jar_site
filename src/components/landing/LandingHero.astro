@@ -1,55 +1,65 @@
 ---
+import DonatelloProfile from './DonatelloProfile.astro';
 import { SITE, withBase } from '../../config/site';
 ---
 
-<section class="landing-hero" aria-labelledby="landing-hero-title">
-  <div class="landing-shell landing-hero-layout">
-    <div class="landing-hero-copy">
-      <p class="landing-meta landing-hero-meta">
-        Challenge JAR 2026 · {SITE.event.city} · {SITE.event.shortDate}
-      </p>
-      <h1 id="landing-hero-title" class="landing-hero-title">
-        Un robot.<br />
-        Una tarea.<br />
-        Tu código.
-      </h1>
-      <p class="landing-hero-lede">
-        Armamos una flota de ROSMASTER X3 y un gemelo digital abierto en Gazebo.
-        Vos y tu equipo desarrollan el comportamiento autónomo desde su compu y lo
-        ponen a prueba en la pista real de Rosario.
-      </p>
-      <div class="landing-actions">
-        <a class="landing-action landing-action-primary" href={SITE.applyUrl} target="_blank" rel="noopener">
-          Postular equipo
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
-        </a>
-        <a class="landing-action landing-action-secondary" href={withBase('/setup/')}>
-          Preparar el entorno
-        </a>
+<div class="landing-donatello-story">
+  <section class="landing-hero" aria-labelledby="landing-hero-title">
+    <div class="landing-shell">
+      <div class="landing-hero-copy">
+        <p class="landing-meta landing-hero-meta">
+          Challenge JAR 2026 · {SITE.event.city} · {SITE.event.shortDate}
+        </p>
+        <h1 id="landing-hero-title" class="landing-hero-title">
+          Un robot.<br />
+          Una tarea.<br />
+          Tu código.
+        </h1>
+        <p class="landing-hero-lede">
+          Armamos una flota de ROSMASTER X3 y un gemelo digital abierto en Gazebo.
+          Vos y tu equipo desarrollan el comportamiento autónomo desde su compu y lo
+          ponen a prueba en la pista real de Rosario.
+        </p>
+        <div class="landing-actions">
+          <a class="landing-action landing-action-primary" href={SITE.applyUrl} target="_blank" rel="noopener">
+            Postular equipo
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+          </a>
+          <a class="landing-action landing-action-secondary" href={withBase('/setup/')}>
+            Preparar el entorno
+          </a>
+        </div>
       </div>
     </div>
+  </section>
 
+  <div class="landing-story-visual">
     <figure class="landing-viewer">
       <div
         id="robot-stage"
         class="landing-viewer-stage"
         role="img"
-        aria-label="Modelo 3D interactivo del robot ROSMASTER X3"
+        aria-label="Modelo 3D interactivo de Donatello, el robot ROSMASTER X3"
         aria-describedby="robot-instructions"
       >
         <p class="landing-viewer-status" role="status" aria-live="polite">Cargando modelo 3D…</p>
       </div>
+      <div class="landing-viewer-control" data-robot-controls aria-hidden="true"></div>
       <figcaption id="robot-instructions" class="landing-viewer-caption">
         <span class="landing-viewer-caption-pointer">Arrastrá para girar · mantené click y usá la rueda para acercar</span>
         <span class="landing-viewer-caption-touch">Deslizá horizontalmente para girar</span>
       </figcaption>
     </figure>
   </div>
-</section>
+
+  <DonatelloProfile />
+</div>
 
 <script>
   const stage = document.getElementById('robot-stage');
+  const story = stage?.closest<HTMLElement>('.landing-donatello-story') ?? null;
   const status = stage?.querySelector<HTMLElement>('.landing-viewer-status') ?? null;
+  const controlSurface = story?.querySelector<HTMLElement>('[data-robot-controls]') ?? null;
 
   const reportError = (message: string) => {
     if (!status) return;
@@ -57,7 +67,8 @@ import { SITE, withBase } from '../../config/site';
     status.textContent = `No pudimos cargar el modelo 3D: ${message}`;
   };
 
-  if (stage && status) {
+  if (stage && status && controlSurface) {
+    const controlsElement = controlSurface;
     const base = import.meta.env.BASE_URL.replace(/\/+$/, '');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
@@ -98,6 +109,8 @@ import { SITE, withBase } from '../../config/site';
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(34, 1, 0.05, 50);
       camera.position.set(1.75, 1.05, 2.25);
+      const robotRig = new THREE.Group();
+      scene.add(robotRig);
 
       scene.add(new THREE.HemisphereLight(0xffffff, 0x14281c, 2.6));
 
@@ -121,18 +134,27 @@ import { SITE, withBase } from '../../config/site';
       groundBounce.position.set(0, -3, 0);
       scene.add(groundBounce);
 
-      const controls = new OrbitControls(camera, renderer.domElement);
+      const controls = new OrbitControls(camera, controlsElement);
       controls.enableDamping = !reducedMotion;
       controls.enablePan = false;
       controls.enableZoom = false;
       controls.autoRotate = !reducedMotion;
-      controls.autoRotateSpeed = 1.05;
+      controls.autoRotateSpeed = 0.72;
       controls.target.set(0, -0.04, 0);
-      renderer.domElement.style.touchAction = coarsePointer ? 'pan-y' : 'none';
+      controlsElement.style.touchAction = coarsePointer ? 'pan-y' : 'none';
 
       let isMouseDown = false;
       let modelReady = false;
+      let modelBounds = new THREE.Box3();
+      let fittedDistance = camera.position.distanceTo(controls.target);
+      let minimumDistanceFactor = 0.62;
       let viewerVisible = true;
+      let userInteracted = false;
+      let storyProgress = 0;
+      let scrollFrame = 0;
+      let resumeRotationTimer = 0;
+      let stageWidth = 1;
+      let stageHeight = 1;
 
       const draw = () => {
         renderer.render(scene, camera);
@@ -143,38 +165,186 @@ import { SITE, withBase } from '../../config/site';
         draw();
       };
 
+      const smoothstep = (start: number, end: number, value: number) => {
+        const progress = THREE.MathUtils.clamp((value - start) / (end - start), 0, 1);
+        return progress * progress * (3 - 2 * progress);
+      };
+
+      const fitCamera = () => {
+        if (modelBounds.isEmpty()) return;
+
+        const wideLayout = window.matchMedia('(min-width: 64rem)').matches;
+        const largeLayout = window.matchMedia('(min-width: 80rem)').matches;
+        const direction = camera.position.clone().sub(controls.target).normalize();
+        const targetWidth = largeLayout ? 0.64 : wideLayout ? 0.56 : 0.92;
+        const targetHeight = largeLayout ? 0.88 : wideLayout ? 0.78 : 0.76;
+        const { min, max } = modelBounds;
+        const corners = [
+          new THREE.Vector3(min.x, min.y, min.z),
+          new THREE.Vector3(min.x, min.y, max.z),
+          new THREE.Vector3(min.x, max.y, min.z),
+          new THREE.Vector3(min.x, max.y, max.z),
+          new THREE.Vector3(max.x, min.y, min.z),
+          new THREE.Vector3(max.x, min.y, max.z),
+          new THREE.Vector3(max.x, max.y, min.z),
+          new THREE.Vector3(max.x, max.y, max.z),
+        ];
+
+        camera.clearViewOffset();
+
+        const fitsAtDistance = (distance: number) => {
+          camera.position.copy(controls.target).addScaledVector(direction, distance);
+          camera.lookAt(controls.target);
+          camera.updateMatrixWorld();
+
+          let minX = Number.POSITIVE_INFINITY;
+          let maxX = Number.NEGATIVE_INFINITY;
+          let minY = Number.POSITIVE_INFINITY;
+          let maxY = Number.NEGATIVE_INFINITY;
+
+          corners.forEach((corner) => {
+            const projected = corner.clone().project(camera);
+            minX = Math.min(minX, projected.x);
+            maxX = Math.max(maxX, projected.x);
+            minY = Math.min(minY, projected.y);
+            maxY = Math.max(maxY, projected.y);
+          });
+
+          return maxX - minX <= targetWidth * 2 && maxY - minY <= targetHeight * 2;
+        };
+
+        let nearDistance = 0.2;
+        let farDistance = 10;
+        for (let iteration = 0; iteration < 28; iteration += 1) {
+          const testDistance = (nearDistance + farDistance) / 2;
+          if (fitsAtDistance(testDistance)) farDistance = testDistance;
+          else nearDistance = testDistance;
+        }
+
+        fittedDistance = farDistance * 1.03;
+        minimumDistanceFactor = wideLayout ? 0.52 : 0.62;
+        camera.position.copy(controls.target).addScaledVector(direction, fittedDistance);
+        camera.near = Math.max(fittedDistance / 100, 0.01);
+        camera.far = fittedDistance * 20;
+        controls.minDistance = fittedDistance * minimumDistanceFactor;
+        controls.maxDistance = fittedDistance * 1.6;
+        camera.updateProjectionMatrix();
+        controls.update();
+      };
+
+      const applyStoryPose = () => {
+        const wideLayout = window.matchMedia('(min-width: 64rem)').matches;
+        const approach = wideLayout && !reducedMotion
+          ? smoothstep(0.08, 0.92, storyProgress)
+          : 0;
+        const visualShift = wideLayout
+          ? stageWidth * THREE.MathUtils.lerp(0.235, 0.215, approach)
+          : 0;
+        const captionOpacity = wideLayout
+          ? 1 - smoothstep(0.42, 0.72, storyProgress)
+          : 1;
+
+        robotRig.rotation.set(0, 0, 0);
+        robotRig.position.set(0, THREE.MathUtils.lerp(0, 0.05, approach), 0);
+        robotRig.scale.setScalar(THREE.MathUtils.lerp(1, 1.09, approach));
+        controls.autoRotate = !reducedMotion && !userInteracted;
+
+        camera.setViewOffset(stageWidth, stageHeight, -visualShift, 0, stageWidth, stageHeight);
+        camera.updateProjectionMatrix();
+
+        story?.style.setProperty('--landing-visual-shift', `${visualShift.toFixed(2)}px`);
+        story?.style.setProperty('--landing-viewer-caption-opacity', captionOpacity.toFixed(3));
+        stage.dataset.storyProgress = storyProgress.toFixed(3);
+
+        if (modelReady && viewerVisible && !document.hidden) draw();
+      };
+
+      const updateStoryProgress = () => {
+        if (!story) return;
+
+        const wideLayout = window.matchMedia('(min-width: 64rem)').matches;
+        if (wideLayout) {
+          const rect = story.getBoundingClientRect();
+          const scrollableDistance = Math.max(rect.height - window.innerHeight, 1);
+          storyProgress = THREE.MathUtils.clamp(-rect.top / scrollableDistance, 0, 1);
+        } else {
+          storyProgress = 0;
+        }
+
+        applyStoryPose();
+      };
+
+      const queueStoryUpdate = () => {
+        if (scrollFrame) return;
+        scrollFrame = window.requestAnimationFrame(() => {
+          scrollFrame = 0;
+          updateStoryProgress();
+        });
+      };
+
+      updateStoryProgress();
+      story?.classList.add('is-scroll-ready');
+      window.addEventListener('scroll', queueStoryUpdate, { passive: true });
+      window.addEventListener('resize', queueStoryUpdate);
+
       const syncRenderLoop = () => {
         const shouldLoop = modelReady && !reducedMotion && viewerVisible && !document.hidden;
         renderer.setAnimationLoop(shouldLoop ? renderFrame : null);
-        if (modelReady && !shouldLoop && !document.hidden) draw();
+        if (modelReady && viewerVisible && !shouldLoop && !document.hidden) draw();
+      };
+
+      const pauseAutoRotation = () => {
+        userInteracted = true;
+        window.clearTimeout(resumeRotationTimer);
+        controls.autoRotate = false;
+      };
+
+      const resumeAutoRotationSoon = () => {
+        if (reducedMotion) return;
+        window.clearTimeout(resumeRotationTimer);
+        resumeRotationTimer = window.setTimeout(() => {
+          userInteracted = false;
+          applyStoryPose();
+        }, 1800);
       };
 
       controls.addEventListener('start', () => {
-        controls.autoRotate = false;
+        pauseAutoRotation();
+      });
+      controls.addEventListener('end', () => {
+        isMouseDown = false;
+        resumeAutoRotationSoon();
       });
       if (reducedMotion) controls.addEventListener('change', draw);
 
-      stage.addEventListener('pointerdown', (event) => {
-        controls.autoRotate = false;
+      controlsElement.addEventListener('pointerdown', (event) => {
+        pauseAutoRotation();
         if (!coarsePointer && event.button === 0) isMouseDown = true;
       });
-      window.addEventListener('pointerup', () => {
+      const releaseMouse = () => {
         isMouseDown = false;
-      });
-      window.addEventListener('pointercancel', () => {
-        isMouseDown = false;
-      });
+        resumeAutoRotationSoon();
+      };
+      controlsElement.addEventListener('pointerup', releaseMouse, { capture: true });
+      controlsElement.addEventListener('pointercancel', releaseMouse, { capture: true });
+      controlsElement.addEventListener('lostpointercapture', releaseMouse);
+      window.addEventListener('pointerup', releaseMouse);
+      window.addEventListener('pointercancel', releaseMouse);
 
-      stage.addEventListener(
+      controlsElement.addEventListener(
         'wheel',
         (event) => {
           if (coarsePointer || !isMouseDown) return;
           event.preventDefault();
-          controls.autoRotate = false;
+          pauseAutoRotation();
+          resumeAutoRotationSoon();
           const zoomFactor = Math.pow(0.95, -event.deltaY * 0.008);
           const offset = camera.position.clone().sub(controls.target);
           const newDistance = offset.length() * zoomFactor;
-          if (newDistance >= 0.7 && newDistance <= 5.5) {
+          if (
+            newDistance >= fittedDistance * minimumDistanceFactor &&
+            newDistance <= fittedDistance * 1.55
+          ) {
             offset.multiplyScalar(zoomFactor);
             camera.position.copy(controls.target).add(offset);
             draw();
@@ -184,12 +354,14 @@ import { SITE, withBase } from '../../config/site';
       );
 
       const resize = () => {
-        const width = Math.max(stage.clientWidth, 1);
-        const height = Math.max(stage.clientHeight, 1);
-        renderer.setSize(width, height);
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
-        if (modelReady) draw();
+        stageWidth = Math.max(stage.clientWidth, 1);
+        stageHeight = Math.max(stage.clientHeight, 1);
+        renderer.setSize(stageWidth, stageHeight);
+        camera.aspect = stageWidth / stageHeight;
+        camera.clearViewOffset();
+        fitCamera();
+        applyStoryPose();
+        if (modelReady && viewerVisible && !document.hidden) draw();
       };
       resize();
       new ResizeObserver(resize).observe(stage);
@@ -226,8 +398,12 @@ import { SITE, withBase } from '../../config/site';
           robot.position.copy(center).multiplyScalar(-scale);
           robot.position.y -= 0.04;
 
-          scene.add(robot);
+          robotRig.add(robot);
+          modelBounds = new THREE.Box3().setFromObject(robot);
+          controls.target.copy(modelBounds.getCenter(new THREE.Vector3()));
           modelReady = true;
+          fitCamera();
+          applyStoryPose();
           status.classList.add('is-done');
           window.setTimeout(() => status.remove(), 350);
           syncRenderLoop();
