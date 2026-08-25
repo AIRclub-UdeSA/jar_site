@@ -16,6 +16,7 @@ Backlog compartido para quienes sigan trabajando en el sitio. Antes de arrancar:
 
 ## Diseño
 
+- [x] **Pase editorial oscuro de la landing** — landing componentizada como journal técnico, jerarquía tipográfica sin chrome decorativo, postulación como única banda saturada, CSS aislado de los docs, shell compartido simplificado y visor 3D adaptativo con contratos de movimiento reducido y gestos mobile/desktop verificados en emulación.
 - [x] **Rediseño radical 'Black Void & Sculptural Scale' (Landing Page)** — transformación integral inspirada en Dala/Linear: eliminación de cajas grises genéricas, split asimétrico para el desafío y telemetría de specs, stepper continuo de 4 fases con números monolíticos, lista interactiva de recursos, acordeón hairline para FAQ y bloque de postulación monumental.
 - [x] **Revisión y pulido estético en Setup y Workshops** — trasladada la estética 'Black Void & Sculptural Scale' a la documentación: layout `Doc.astro` con eyebrows técnicos y badges ámbar, sidebar con hairlines y dots de estado, callouts sutiles y bloques de código con chrome sobrio en JetBrains Mono. Títulos numéricos (`01`, `02`, `03 · Próximamente`) sin ataduras a semanas fijas.
 - [x] **Favicon con el ROSMASTER** — icono SVG vectorial del ROSMASTER X3 CAD (chasis verde, ruedas mecanum, cámara RGB-D y LiDAR) en `public/favicon.svg` y sincronizado en los logos inline de `Nav.astro` y `Footer.astro`.

@@ -1,4 +1,5 @@
 ---
+import RobotMark from './RobotMark.astro';
 import { SITE } from '../config/site';
 
 const year = new Date().getFullYear();
@@ -7,49 +8,23 @@ const year = new Date().getFullYear();
 <footer class="site-footer">
   <div class="footer-content">
     <div class="footer-brand">
-      <svg class="nav-mark" viewBox="0 0 128 128" fill="none" aria-hidden="true">
-        <rect width="128" height="128" rx="28" fill="#08120c"></rect>
-        <rect x="2" y="2" width="124" height="124" rx="26" stroke="#4ade80" stroke-opacity="0.4" stroke-width="3"></rect>
-        <rect x="46" y="14" width="36" height="15" rx="4" fill="#1b2a20" stroke="#4ade80" stroke-width="2"></rect>
-        <line x1="52" y1="29" x2="52" y2="38" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"></line>
-        <line x1="76" y1="29" x2="76" y2="38" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"></line>
-        <circle cx="64" cy="21.5" r="3" fill="#4ade80"></circle>
-        <polygon points="30,38 98,38 92,47 24,47" fill="#4ade80"></polygon>
-        <polygon points="24,47 92,47 92,51 24,51" fill="#22c55e"></polygon>
-        <rect x="34" y="53" width="60" height="15" rx="6" fill="#111c15" stroke="#86efac" stroke-width="2"></rect>
-        <circle cx="45" cy="60.5" r="3.5" fill="#050807" stroke="#4ade80" stroke-width="1.8"></circle>
-        <circle cx="64" cy="60.5" r="3" fill="#050807" stroke="#86efac" stroke-width="1.5"></circle>
-        <circle cx="83" cy="60.5" r="3.5" fill="#050807" stroke="#4ade80" stroke-width="1.8"></circle>
-        <line x1="28" y1="51" x2="28" y2="69" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"></line>
-        <line x1="100" y1="51" x2="100" y2="69" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"></line>
-        <polygon points="20,69 108,69 100,79 12,79" fill="#4ade80"></polygon>
-        <polygon points="12,79 100,79 100,83 12,83" fill="#16a34a"></polygon>
-        <rect x="38" y="83" width="52" height="22" rx="3" fill="#24372c" stroke="#86efac" stroke-width="1.8"></rect>
-        <line x1="46" y1="89" x2="82" y2="89" stroke="#08120c" stroke-width="2.5" stroke-linecap="round"></line>
-        <line x1="50" y1="96" x2="78" y2="96" stroke="#08120c" stroke-width="2.5" stroke-linecap="round"></line>
-        <rect x="8" y="73" width="20" height="40" rx="6" fill="#15221a" stroke="#4ade80" stroke-width="2.2"></rect>
-        <line x1="10" y1="81" x2="26" y2="90" stroke="#86efac" stroke-width="2" stroke-linecap="round"></line>
-        <line x1="10" y1="93" x2="26" y2="102" stroke="#86efac" stroke-width="2" stroke-linecap="round"></line>
-        <circle cx="18" cy="93" r="3.5" fill="#4ade80"></circle>
-        <rect x="100" y="73" width="20" height="40" rx="6" fill="#15221a" stroke="#4ade80" stroke-width="2.2"></rect>
-        <line x1="118" y1="81" x2="102" y2="90" stroke="#86efac" stroke-width="2" stroke-linecap="round"></line>
-        <line x1="118" y1="93" x2="102" y2="102" stroke="#86efac" stroke-width="2" stroke-linecap="round"></line>
-        <circle cx="110" cy="93" r="3.5" fill="#4ade80"></circle>
-      </svg>
+      <RobotMark class="footer-mark" />
       <div class="footer-brand-text">
-        <h3>CHALLENGE JAR<em>_26</em></h3>
+        <p class="footer-kicker">Challenge JAR 2026</p>
         <p>{SITE.org} · {SITE.orgSubtitle}</p>
       </div>
     </div>
-    <div class="footer-contact">
-      <p>Ecosistema</p>
-      <a href={SITE.simRepo} target="_blank" rel="noopener">Simulador · yahboom_rosmaster</a>
-      <a href={SITE.workshopsRepo} target="_blank" rel="noopener">Workshops · jar_workshops</a>
-      <a href={SITE.orgUrl} target="_blank" rel="noopener">{SITE.orgUrl.replace('https://', '')}</a>
-    </div>
+
+    <nav class="footer-links" aria-label="Ecosistema Challenge JAR">
+      <a href={SITE.simRepo} target="_blank" rel="noopener">Simulador</a>
+      <a href={SITE.workshopsRepo} target="_blank" rel="noopener">Workshops</a>
+      <a href={SITE.orgUrl} target="_blank" rel="noopener">AIR Club UdeSA</a>
+      <a href={SITE.githubOrg} target="_blank" rel="noopener">GitHub</a>
+    </nav>
   </div>
+
   <div class="footer-bottom">
     <span>© {year} {SITE.org} · Jornadas Argentinas de Robótica</span>
-    <span>Ubuntu 22.04 · ROS 2 Humble · Gazebo Fortress</span>
+    <span>{SITE.event.city} · {SITE.event.dateRange}</span>
   </div>
 </footer>

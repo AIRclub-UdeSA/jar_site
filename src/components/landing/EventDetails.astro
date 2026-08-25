@@ -1,0 +1,39 @@
+---
+import { SITE } from '../../config/site';
+---
+
+<section class="landing-section landing-event" id="jar" aria-labelledby="event-title">
+  <div class="landing-shell">
+    <header class="landing-event-heading">
+      <p class="landing-eyebrow">JAR 2026</p>
+      <h2 id="event-title">{SITE.event.city}<br />{SITE.event.dateRange}</h2>
+      <p class="landing-meta">{SITE.event.venue}</p>
+    </header>
+
+    <div class="landing-event-body">
+      <div class="landing-prose">
+        <p>
+          Las <strong>Jornadas Argentinas de Robótica</strong> son el encuentro más importante
+          del país en la disciplina: reúnen a investigadores, laboratorios, docentes y estudiantes
+          de toda la región.
+        </p>
+        <p>
+          En esta edición, el <strong>AIR Club UdeSA</strong> organiza un desafío abierto de
+          comportamiento autónomo donde cada equipo evalúa su software en tiempo real frente
+          a toda la comunidad.
+        </p>
+      </div>
+
+      <nav class="landing-editorial-links" aria-label="Información de la JAR 2026">
+        <a href={SITE.event.officialUrl} target="_blank" rel="noopener">
+          <span>Sitio oficial JAR 2026</span>
+          <span aria-hidden="true">↗</span>
+        </a>
+        <a href={SITE.event.venueUrl} target="_blank" rel="noopener">
+          <span>Sede FCEIA · UNR</span>
+          <span aria-hidden="true">↗</span>
+        </a>
+      </nav>
+    </div>
+  </div>
+</section>

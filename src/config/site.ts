@@ -10,6 +10,15 @@ export const SITE = {
   simRepo: 'https://github.com/AIRclub-UdeSA/yahboom_rosmaster',
   workshopsRepo: 'https://github.com/AIRclub-UdeSA/jar_workshops',
   editBaseUrl: 'https://github.com/AIRclub-UdeSA/jar_site/edit/main/src/content/docs/',
+  applyUrl: 'https://forms.gle/2zkW6gwJQptUzbXn6',
+  event: {
+    city: 'Rosario',
+    dateRange: '3 al 6 de noviembre de 2026',
+    shortDate: '03–06 nov 2026',
+    venue: 'FCEIA · UNR',
+    officialUrl: 'https://jar.net.ar/',
+    venueUrl: 'https://web.fceia.unr.edu.ar/',
+  },
 };
 
 export const withBase = (path: string): string => {

@@ -1,0 +1,121 @@
+---
+import { SITE } from '../../config/site';
+---
+
+<section class="landing-section landing-closing" id="faq" aria-labelledby="faq-title">
+  <div class="landing-shell">
+    <header class="landing-section-heading">
+      <p class="landing-eyebrow">Preguntas frecuentes</p>
+      <h2 id="faq-title">Lo importante, antes de empezar.</h2>
+    </header>
+
+    <div class="landing-faq">
+      <details>
+        <summary>
+          <span>¿Hace falta tener un robot físico para participar?</span>
+          <span class="landing-faq-icon" aria-hidden="true">+</span>
+        </summary>
+        <div class="landing-faq-answer">
+          <p>
+            No. El AIR Club UdeSA pone a disposición una flota completa de robots ROSMASTER X3
+            reales en Rosario. Durante el desarrollo trabajás sobre el gemelo digital en Gazebo
+            Fortress, que replica los mismos topics, sensores y dinámica física del hardware.
+          </p>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <span>¿Cuántas personas pueden integrar un equipo y cómo es la selección?</span>
+          <span class="landing-faq-icon" aria-hidden="true">+</span>
+        </summary>
+        <div class="landing-faq-answer">
+          <p>
+            No hay límite: podés participar individualmente o en grupos de cualquier tamaño,
+            desde instituciones educativas hasta equipos independientes.
+          </p>
+          <p>
+            Como la flota y el tiempo de pista son limitados, habrá una selección previa. Si tu
+            equipo queda seleccionado, al menos un integrante debe asistir a la JAR para supervisar
+            y ejecutar las pruebas.
+          </p>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <span>¿Tiene algún costo la postulación o participación?</span>
+          <span class="landing-faq-icon" aria-hidden="true">+</span>
+        </summary>
+        <div class="landing-faq-answer">
+          <p>
+            No. La postulación y la participación son 100% gratuitas. El simulador, las guías
+            y el código de los workshops también son públicos y libres.
+          </p>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <span>¿Qué nivel se necesita y qué herramientas se pueden usar?</span>
+          <span class="landing-faq-icon" aria-hidden="true">+</span>
+        </summary>
+        <div class="landing-faq-answer">
+          <p>
+            No necesitás experiencia avanzada: los workshops nivelan los conceptos clave de ROS 2
+            de forma progresiva.
+          </p>
+          <p>
+            Para resolver el desafío podés investigar, reutilizar algoritmos, instalar paquetes de
+            la comunidad o sumar librerías externas de visión y control.
+          </p>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <span>¿Es obligatorio viajar a Rosario para competir?</span>
+          <span class="landing-faq-icon" aria-hidden="true">+</span>
+        </summary>
+        <div class="landing-faq-answer">
+          <p>
+            Sí. En los equipos seleccionados, al menos un integrante —capitán o representante—
+            debe asistir presencialmente a la JAR para acompañar las pruebas y calibrar la
+            ejecución del software en el robot físico.
+          </p>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <span>¿Cuándo se publican el reglamento y la tarea específica?</span>
+          <span class="landing-faq-icon" aria-hidden="true">+</span>
+        </summary>
+        <div class="landing-faq-answer">
+          <p>
+            La consigna, las métricas de evaluación y el reglamento oficial se publicarán en este
+            sitio con anticipación para que los equipos puedan implementar y ajustar sus soluciones.
+          </p>
+        </div>
+      </details>
+    </div>
+
+    <aside class="landing-club" id="club" aria-labelledby="club-title">
+      <div>
+        <p class="landing-eyebrow">Organiza</p>
+        <h2 id="club-title">AIR Club UdeSA</h2>
+      </div>
+      <div class="landing-club-copy">
+        <p>
+          Somos la comunidad de estudiantes de robótica e inteligencia artificial de la
+          Universidad de San Andrés. Aprendemos entre pares y encaramos proyectos que ninguno
+          podría hacer solo, con el acompañamiento del Departamento de Ingeniería de UdeSA.
+        </p>
+        <p class="landing-club-links">
+          <a href={SITE.orgUrl} target="_blank" rel="noopener">Sitio del club ↗</a>
+          <a href={SITE.githubOrg} target="_blank" rel="noopener">GitHub ↗</a>
+        </p>
+      </div>
+    </aside>
+  </div>
+</section>

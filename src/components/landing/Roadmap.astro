@@ -1,0 +1,48 @@
+---
+import { SITE, withBase } from '../../config/site';
+---
+
+<section class="landing-section landing-roadmap" id="roadmap" aria-labelledby="roadmap-title">
+  <div class="landing-shell">
+    <header class="landing-section-heading">
+      <p class="landing-eyebrow">Camino a Rosario</p>
+      <h2 id="roadmap-title">De tu compu a la pista.</h2>
+      <p>Cuatro etapas para pasar de cero a correr tu algoritmo en los ROSMASTER físicos.</p>
+    </header>
+
+    <ol class="landing-steps">
+      <li>
+        <div class="landing-step-meta">
+          <span class="landing-step-number">01</span>
+          <span class="landing-step-status is-live">Disponible</span>
+        </div>
+        <h3><a href={withBase('/setup/')}>Montá tu entorno</a></h3>
+        <p>Instalá Ubuntu 22.04, ROS 2 Humble y Gazebo Fortress; después levantá el simulador.</p>
+      </li>
+      <li>
+        <div class="landing-step-meta">
+          <span class="landing-step-number">02</span>
+          <span class="landing-step-status is-live">En curso</span>
+        </div>
+        <h3><a href={withBase('/workshops/')}>Workshops prácticos</a></h3>
+        <p>Practicá nodos, cinemática mecanum, SLAM, mapeo y navegación autónoma.</p>
+      </li>
+      <li>
+        <div class="landing-step-meta">
+          <span class="landing-step-number">03</span>
+          <span class="landing-step-status is-pending">Próximamente</span>
+        </div>
+        <h3>Consigna oficial</h3>
+        <p>Publicamos la tarea, el reglamento y las métricas para preparar la entrega.</p>
+      </li>
+      <li>
+        <div class="landing-step-meta">
+          <span class="landing-step-number">04</span>
+          <span class="landing-step-status">{SITE.event.shortDate}</span>
+        </div>
+        <h3>Despliegue en Rosario</h3>
+        <p>Cargamos tu código en los robots reales y evaluamos su comportamiento en la JAR.</p>
+      </li>
+    </ol>
+  </div>
+</section>

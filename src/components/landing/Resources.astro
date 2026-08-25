@@ -1,0 +1,34 @@
+---
+import { SITE, withBase } from '../../config/site';
+---
+
+<section class="landing-section" id="recursos" aria-labelledby="resources-title">
+  <div class="landing-shell">
+    <header class="landing-section-heading">
+      <p class="landing-eyebrow">Material abierto</p>
+      <h2 id="resources-title">Empezá a construir hoy.</h2>
+      <p>Todo lo necesario para preparar tu stack y practicar con el gemelo digital.</p>
+    </header>
+
+    <nav class="landing-resource-index" aria-label="Recursos para participar">
+      <a href={withBase('/setup/')}>
+        <span class="landing-resource-number">01</span>
+        <span class="landing-resource-title">Guía de setup</span>
+        <span class="landing-resource-description">ROS 2 Humble, Gazebo Fortress, RViz 2 y el simulador paso a paso.</span>
+        <span class="landing-resource-arrow" aria-hidden="true">→</span>
+      </a>
+      <a href={withBase('/workshops/')}>
+        <span class="landing-resource-number">02</span>
+        <span class="landing-resource-title">Workshops</span>
+        <span class="landing-resource-description">Ejercicios progresivos y código listo para ejecutar en el gemelo digital.</span>
+        <span class="landing-resource-arrow" aria-hidden="true">→</span>
+      </a>
+      <a href={SITE.simRepo} target="_blank" rel="noopener">
+        <span class="landing-resource-number">03</span>
+        <span class="landing-resource-title">Simulador</span>
+        <span class="landing-resource-description">Paquetes ROS 2, modelos URDF y código abierto en GitHub.</span>
+        <span class="landing-resource-arrow" aria-hidden="true">↗</span>
+      </a>
+    </nav>
+  </div>
+</section>

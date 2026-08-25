@@ -1,0 +1,244 @@
+---
+import { SITE, withBase } from '../../config/site';
+---
+
+<section class="landing-hero" aria-labelledby="landing-hero-title">
+  <div class="landing-shell landing-hero-layout">
+    <div class="landing-hero-copy">
+      <p class="landing-meta landing-hero-meta">
+        Challenge JAR 2026 · {SITE.event.city} · {SITE.event.shortDate}
+      </p>
+      <h1 id="landing-hero-title" class="landing-hero-title">
+        Un robot.<br />
+        Una tarea.<br />
+        Tu código.
+      </h1>
+      <p class="landing-hero-lede">
+        Armamos una flota de ROSMASTER X3 y un gemelo digital abierto en Gazebo.
+        Vos y tu equipo desarrollan el comportamiento autónomo desde su compu y lo
+        ponen a prueba en la pista real de Rosario.
+      </p>
+      <div class="landing-actions">
+        <a class="landing-action landing-action-primary" href={SITE.applyUrl} target="_blank" rel="noopener">
+          Postular equipo
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+        </a>
+        <a class="landing-action landing-action-secondary" href={withBase('/setup/')}>
+          Preparar el entorno
+        </a>
+      </div>
+    </div>
+
+    <figure class="landing-viewer">
+      <div
+        id="robot-stage"
+        class="landing-viewer-stage"
+        role="img"
+        aria-label="Modelo 3D interactivo del robot ROSMASTER X3"
+        aria-describedby="robot-instructions"
+      >
+        <p class="landing-viewer-status" role="status" aria-live="polite">Cargando modelo 3D…</p>
+      </div>
+      <figcaption id="robot-instructions" class="landing-viewer-caption">
+        <span class="landing-viewer-caption-pointer">Arrastrá para girar · mantené click y usá la rueda para acercar</span>
+        <span class="landing-viewer-caption-touch">Deslizá horizontalmente para girar</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<script>
+  const stage = document.getElementById('robot-stage');
+  const status = stage?.querySelector<HTMLElement>('.landing-viewer-status') ?? null;
+
+  const reportError = (message: string) => {
+    if (!status) return;
+    status.classList.add('is-error');
+    status.textContent = `No pudimos cargar el modelo 3D: ${message}`;
+  };
+
+  if (stage && status) {
+    const base = import.meta.env.BASE_URL.replace(/\/+$/, '');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+    let started = false;
+
+    const lazyLoad = new IntersectionObserver(
+      (entries) => {
+        if (!started && entries.some((entry) => entry.isIntersecting)) {
+          started = true;
+          lazyLoad.disconnect();
+          initViewer().catch((error) => {
+            reportError(error instanceof Error ? error.message : String(error));
+          });
+        }
+      },
+      { rootMargin: '160px' }
+    );
+
+    lazyLoad.observe(stage);
+
+    async function initViewer() {
+      if (!stage || !status) return;
+
+      const [THREE, { OrbitControls }, { GLTFLoader }] = await Promise.all([
+        import('three'),
+        import('three/addons/controls/OrbitControls.js'),
+        import('three/addons/loaders/GLTFLoader.js'),
+      ]);
+
+      const renderer = new THREE.WebGLRenderer({ antialias: !coarsePointer, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, coarsePointer ? 1.25 : 1.75));
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.25;
+      renderer.domElement.setAttribute('aria-hidden', 'true');
+      stage.prepend(renderer.domElement);
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(34, 1, 0.05, 50);
+      camera.position.set(1.75, 1.05, 2.25);
+
+      scene.add(new THREE.HemisphereLight(0xffffff, 0x14281c, 2.6));
+
+      const key = new THREE.DirectionalLight(0xffffff, 3.4);
+      key.position.set(2.5, 4.5, 3.5);
+      scene.add(key);
+
+      const fill = new THREE.DirectionalLight(0x4ade80, 1.8);
+      fill.position.set(-3.5, 2.5, 2.5);
+      scene.add(fill);
+
+      const backLight = new THREE.DirectionalLight(0x86efac, 1.4);
+      backLight.position.set(0, 3.5, -4);
+      scene.add(backLight);
+
+      const rim = new THREE.DirectionalLight(0xfbbf24, 1.1);
+      rim.position.set(3.5, 1.8, -2.5);
+      scene.add(rim);
+
+      const groundBounce = new THREE.DirectionalLight(0x22c55e, 0.8);
+      groundBounce.position.set(0, -3, 0);
+      scene.add(groundBounce);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = !reducedMotion;
+      controls.enablePan = false;
+      controls.enableZoom = false;
+      controls.autoRotate = !reducedMotion;
+      controls.autoRotateSpeed = 1.05;
+      controls.target.set(0, -0.04, 0);
+      renderer.domElement.style.touchAction = coarsePointer ? 'pan-y' : 'none';
+
+      let isMouseDown = false;
+      let modelReady = false;
+      let viewerVisible = true;
+
+      const draw = () => {
+        renderer.render(scene, camera);
+      };
+
+      const renderFrame = () => {
+        controls.update();
+        draw();
+      };
+
+      const syncRenderLoop = () => {
+        const shouldLoop = modelReady && !reducedMotion && viewerVisible && !document.hidden;
+        renderer.setAnimationLoop(shouldLoop ? renderFrame : null);
+        if (modelReady && !shouldLoop && !document.hidden) draw();
+      };
+
+      controls.addEventListener('start', () => {
+        controls.autoRotate = false;
+      });
+      if (reducedMotion) controls.addEventListener('change', draw);
+
+      stage.addEventListener('pointerdown', (event) => {
+        controls.autoRotate = false;
+        if (!coarsePointer && event.button === 0) isMouseDown = true;
+      });
+      window.addEventListener('pointerup', () => {
+        isMouseDown = false;
+      });
+      window.addEventListener('pointercancel', () => {
+        isMouseDown = false;
+      });
+
+      stage.addEventListener(
+        'wheel',
+        (event) => {
+          if (coarsePointer || !isMouseDown) return;
+          event.preventDefault();
+          controls.autoRotate = false;
+          const zoomFactor = Math.pow(0.95, -event.deltaY * 0.008);
+          const offset = camera.position.clone().sub(controls.target);
+          const newDistance = offset.length() * zoomFactor;
+          if (newDistance >= 0.7 && newDistance <= 5.5) {
+            offset.multiplyScalar(zoomFactor);
+            camera.position.copy(controls.target).add(offset);
+            draw();
+          }
+        },
+        { passive: false }
+      );
+
+      const resize = () => {
+        const width = Math.max(stage.clientWidth, 1);
+        const height = Math.max(stage.clientHeight, 1);
+        renderer.setSize(width, height);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        if (modelReady) draw();
+      };
+      resize();
+      new ResizeObserver(resize).observe(stage);
+
+      const visibilityObserver = new IntersectionObserver(
+        ([entry]) => {
+          viewerVisible = entry?.isIntersecting ?? false;
+          syncRenderLoop();
+        },
+        { threshold: 0.05 }
+      );
+      visibilityObserver.observe(stage);
+      document.addEventListener('visibilitychange', syncRenderLoop);
+
+      const manager = new THREE.LoadingManager();
+      manager.onError = (url) => reportError(`no se pudo cargar ${url.split('/').pop()}`);
+
+      const loader = new GLTFLoader(manager);
+      loader.load(
+        `${base}/models/rosmaster_unified.glb`,
+        (gltf) => {
+          const robot = gltf.scene;
+          robot.rotation.set(0, 0, 0);
+
+          const rgbdCamera = robot.getObjectByName('rgbd_camera');
+          if (rgbdCamera) rgbdCamera.position.z = -10;
+
+          const box = new THREE.Box3().setFromObject(robot);
+          const size = box.getSize(new THREE.Vector3());
+          const center = box.getCenter(new THREE.Vector3());
+          const maxDimension = Math.max(size.x, size.y, size.z);
+          const scale = 1.32 / maxDimension;
+          robot.scale.setScalar(scale);
+          robot.position.copy(center).multiplyScalar(-scale);
+          robot.position.y -= 0.04;
+
+          scene.add(robot);
+          modelReady = true;
+          status.classList.add('is-done');
+          window.setTimeout(() => status.remove(), 350);
+          syncRenderLoop();
+        },
+        (progress) => {
+          if (!progress.loaded) return;
+          const megabytes = (progress.loaded / 1048576).toFixed(0);
+          status.textContent = `Cargando modelo 3D · ${megabytes} MB`;
+        },
+        (error) => reportError(error instanceof ErrorEvent ? error.message : 'error de carga')
+      );
+    }
+  }
+</script>

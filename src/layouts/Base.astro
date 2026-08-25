@@ -7,9 +7,10 @@ import { SITE, withBase } from '../config/site';
 interface Props {
   title?: string;
   description?: string;
+  bodyClass?: string;
 }
 
-const { title, description = SITE.description } = Astro.props;
+const { title, description = SITE.description, bodyClass } = Astro.props;
 const fullTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} · ${SITE.tagline}`;
 ---
 
@@ -35,7 +36,8 @@ const fullTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} · ${SITE.t
       rel="stylesheet"
     />
   </head>
-  <body>
+  <body class={bodyClass}>
+    <a class="skip-link" href="#main-content">Saltar al contenido</a>
     <Nav />
     <slot />
     <Footer />

@@ -1,0 +1,28 @@
+---
+import { SITE } from '../../config/site';
+---
+
+<section class="landing-application" id="postulacion" aria-labelledby="application-title">
+  <div class="landing-shell landing-application-inner">
+    <div>
+      <p class="landing-meta">Postulaciones abiertas</p>
+      <h2 id="application-title">Postulá a tu equipo.</h2>
+      <p>
+        La participación es gratuita y no hay límite de integrantes. Como la capacidad
+        en pista es limitada, realizaremos una selección antes del evento en Rosario.
+      </p>
+    </div>
+
+    <div class="landing-application-action">
+      <ul aria-label="Condiciones de participación">
+        <li>Postulación abierta</li>
+        <li>Participación gratuita</li>
+        <li>Cupos físicos limitados</li>
+      </ul>
+      <a href={SITE.applyUrl} target="_blank" rel="noopener">
+        Abrir formulario
+        <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
