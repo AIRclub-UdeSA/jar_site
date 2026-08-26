@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1720 500" role="img" aria-labelledby="title desc">
   <title id="title">Animación de la máquina de estados de evasión de obstáculos</title>
-  <desc id="desc">A la izquierda, la máquina de estados Avanzar/Girar: el estado activo pulsa con una luz de su propio color (Avanzar verde, Girar blanco), y la flecha de la transición en curso pulsa como una corriente desde el nodo saliente al entrante. A la derecha, un robot esquemático avanza, frena antes de un obstáculo, gira en el lugar y retoma el avance con el nuevo rumbo, en loop.</desc>
+  <desc id="desc">A la izquierda, la máquina de estados Avanzar/Girar: el estado activo pulsa con una luz de su propio color (Avanzar verde, Girar blanco), y la flecha de la transición en curso pulsa como una corriente desde el nodo saliente al entrante, justo durante esa transición. A la derecha, un robot esquemático avanza, frena antes de un obstáculo, gira en el lugar y retoma el avance con el nuevo rumbo, en loop.</desc>
 
   <defs>
     <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -19,59 +19,63 @@
 
     <!-- arco superior, base tenue y sólida: Avanzar -> Girar -->
     <path d="M311.6 176.3 Q480 40 648.4 176.3" fill="none" stroke="#4ade80" stroke-opacity=".28" stroke-width="2" marker-end="url(#arrow-green)"/>
-    <!-- overlay que pulsa (corriente) mientras la transición está activa -->
+    <!-- overlay: corriente fuerte, prende justo al inicio de la transición y se apaga justo al final -->
     <g opacity="0">
-      <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
-        keyTimes="0;0.2222;0.2556;0.2889;0.3222;0.3556;0.5222;0.5556;0.5889;0.6222;0.6556;0.8778;1"
-        values="0;1;1;1;1;1;0;0;0;0;0;0;0"/>
-      <path d="M311.6 176.3 Q480 40 648.4 176.3" fill="none" stroke="#4ade80" stroke-width="3.5">
-        <animate attributeName="opacity" dur="0.6s" repeatCount="indefinite" values="0.45;1;0.45"/>
+      <animate attributeName="opacity" dur="11.5s" repeatCount="indefinite"
+        keyTimes="0;0.2087;0.2261;0.2522;0.2870;0.3217;0.3565;0.3739;0.5304;0.5565;0.5913;0.6261;0.6609;0.8870;1"
+        values="0;0;1;1;1;1;1;0;0;0;0;0;0;0;0"/>
+      <path d="M311.6 176.3 Q480 40 648.4 176.3" fill="none" stroke="#4ade80">
+        <animate attributeName="opacity" dur="0.55s" repeatCount="indefinite" values="0.2;1;0.2"/>
+        <animate attributeName="stroke-width" dur="0.55s" repeatCount="indefinite" values="3;6;3"/>
       </path>
     </g>
 
     <!-- arco inferior, base tenue y sólida: Girar -> Avanzar -->
     <path d="M648.4 323.7 Q480 420 311.6 323.7" fill="none" stroke="#f2f6f1" stroke-opacity=".22" stroke-width="2" marker-end="url(#arrow-white)"/>
     <g opacity="0">
-      <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
-        keyTimes="0;0.2222;0.2556;0.2889;0.3222;0.3556;0.5222;0.5556;0.5889;0.6222;0.6556;0.8778;1"
-        values="0;0;0;0;0;0;1;1;1;1;1;0;0"/>
-      <path d="M648.4 323.7 Q480 420 311.6 323.7" fill="none" stroke="#f2f6f1" stroke-width="3.5">
-        <animate attributeName="opacity" dur="0.6s" repeatCount="indefinite" values="0.45;1;0.45"/>
+      <animate attributeName="opacity" dur="11.5s" repeatCount="indefinite"
+        keyTimes="0;0.2261;0.2522;0.2870;0.3217;0.3565;0.5130;0.5304;0.5565;0.5913;0.6261;0.6609;0.6783;0.8870;1"
+        values="0;0;0;0;0;0;0;1;1;1;1;1;0;0;0"/>
+      <path d="M648.4 323.7 Q480 420 311.6 323.7" fill="none" stroke="#f2f6f1">
+        <animate attributeName="opacity" dur="0.55s" repeatCount="indefinite" values="0.2;1;0.2"/>
+        <animate attributeName="stroke-width" dur="0.55s" repeatCount="indefinite" values="3;6;3"/>
       </path>
     </g>
 
     <text x="480" y="94" fill="#4ade80" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="21" font-weight="600" text-anchor="middle">
       hay_obstaculo()
-      <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
-        keyTimes="0;0.2222;0.2556;0.2889;0.3222;0.3556;0.5222;0.5556;0.5889;0.6222;0.6556;0.8778;1"
+      <animate attributeName="opacity" dur="11.5s" repeatCount="indefinite"
+        keyTimes="0;0.2261;0.2522;0.2870;0.3217;0.3565;0.5304;0.5565;0.5913;0.6261;0.6609;0.8870;1"
         values="0.35;0.35;1;0.35;1;0.35;0.35;0.35;0.35;0.35;0.35;0.35;0.35"/>
     </text>
     <text x="480" y="402" fill="#f2f6f1" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="21" font-weight="600" text-anchor="middle">
       giro_completo()
-      <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
-        keyTimes="0;0.2222;0.2556;0.2889;0.3222;0.3556;0.5222;0.5556;0.5889;0.6222;0.6556;0.8778;1"
+      <animate attributeName="opacity" dur="11.5s" repeatCount="indefinite"
+        keyTimes="0;0.2261;0.2522;0.2870;0.3217;0.3565;0.5304;0.5565;0.5913;0.6261;0.6609;0.8870;1"
         values="0.35;0.35;0.35;0.35;0.35;0.35;0.35;1;0.35;1;0.35;0.35;0.35"/>
     </text>
 
-    <!-- estado AVANZAR: base tenue fija + luz pulsante verde cuando está activo -->
+    <!-- estado AVANZAR: base tenue fija + luz pulsante verde fuerte cuando está activo -->
     <circle cx="260" cy="250" r="90" fill="#07100c" stroke="#4ade80" stroke-opacity=".35" stroke-width="2"/>
     <g opacity="0">
-      <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
-        keyTimes="0;0.2222;0.2556;0.2889;0.3222;0.3556;0.5222;0.5556;0.5889;0.6222;0.6556;0.8778;1"
+      <animate attributeName="opacity" dur="11.5s" repeatCount="indefinite"
+        keyTimes="0;0.2261;0.2522;0.2870;0.3217;0.3565;0.5304;0.5565;0.5913;0.6261;0.6609;0.8870;1"
         values="1;1;0;0;0;0;0;0;0;0;1;1;1"/>
-      <circle cx="260" cy="250" r="90" fill="none" stroke="#4ade80" stroke-width="3">
-        <animate attributeName="opacity" dur="1s" repeatCount="indefinite" values="0.5;1;0.5"/>
+      <circle cx="260" cy="250" r="90" fill="none" stroke="#4ade80">
+        <animate attributeName="opacity" dur="1s" repeatCount="indefinite" values="0.25;1;0.25"/>
+        <animate attributeName="stroke-width" dur="1s" repeatCount="indefinite" values="2.5;5;2.5"/>
       </circle>
     </g>
 
-    <!-- estado GIRAR: base tenue fija + luz pulsante blanca cuando está activo (no cambia de color) -->
+    <!-- estado GIRAR: base tenue fija + luz pulsante blanca fuerte cuando está activo (no cambia de color) -->
     <circle cx="700" cy="250" r="90" fill="#07100c" stroke="#f2f6f1" stroke-opacity=".3" stroke-width="2"/>
     <g opacity="0">
-      <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
-        keyTimes="0;0.2222;0.2556;0.2889;0.3222;0.3556;0.5222;0.5556;0.5889;0.6222;0.6556;0.8778;1"
+      <animate attributeName="opacity" dur="11.5s" repeatCount="indefinite"
+        keyTimes="0;0.2261;0.2522;0.2870;0.3217;0.3565;0.5304;0.5565;0.5913;0.6261;0.6609;0.8870;1"
         values="0;0;1;1;1;1;1;1;1;1;0;0;0"/>
-      <circle cx="700" cy="250" r="90" fill="none" stroke="#f2f6f1" stroke-width="3">
-        <animate attributeName="opacity" dur="1s" repeatCount="indefinite" values="0.5;1;0.5"/>
+      <circle cx="700" cy="250" r="90" fill="none" stroke="#f2f6f1">
+        <animate attributeName="opacity" dur="1s" repeatCount="indefinite" values="0.25;1;0.25"/>
+        <animate attributeName="stroke-width" dur="1s" repeatCount="indefinite" values="2.5;5;2.5"/>
       </circle>
     </g>
 
@@ -89,26 +93,26 @@
     <rect x="365" y="175" width="40" height="40" rx="6" fill="#0b120f" stroke="#fbbf24" stroke-width="2"/>
     <text x="385" y="235" fill="#8d9892" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="13" letter-spacing="1.2" text-anchor="middle">OBSTÁCULO</text>
 
-    <!-- robot: grupo de traslación -->
+    <!-- robot: grupo de traslación (más lento: cada tramo dura más) -->
     <g>
-      <animateTransform attributeName="transform" type="translate" dur="9s" repeatCount="indefinite"
-        keyTimes="0;0.2222;0.2556;0.2889;0.3222;0.3556;0.5222;0.5556;0.5889;0.6222;0.6556;0.8778;1"
+      <animateTransform attributeName="transform" type="translate" dur="11.5s" repeatCount="indefinite"
+        keyTimes="0;0.2261;0.2522;0.2870;0.3217;0.3565;0.5304;0.5565;0.5913;0.6261;0.6609;0.8870;1"
         values="60,200;290,200;290,200;290,200;290,200;290,200;290,200;290,200;290,200;290,200;290,200;161.4,353.2;161.4,353.2"/>
 
       <g opacity="1">
-        <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
+        <animate attributeName="opacity" dur="11.5s" repeatCount="indefinite"
           keyTimes="0;0.02;0.98;1" values="0;1;1;0"/>
 
         <!-- robot: grupo de rotación (alrededor de su propio centro) -->
         <g>
-          <animateTransform attributeName="transform" type="rotate" dur="9s" repeatCount="indefinite"
-            keyTimes="0;0.2222;0.2556;0.2889;0.3222;0.3556;0.5222;0.5556;0.5889;0.6222;0.6556;0.8778;1"
+          <animateTransform attributeName="transform" type="rotate" dur="11.5s" repeatCount="indefinite"
+            keyTimes="0;0.2261;0.2522;0.2870;0.3217;0.3565;0.5304;0.5565;0.5913;0.6261;0.6609;0.8870;1"
             values="0;0;0;0;0;0;130;130;130;130;130;130;130"/>
 
           <!-- cono de detección -->
           <path d="M23 0 85 -34 85 34 Z" fill="#4ade80">
-            <animate attributeName="fill-opacity" dur="9s" repeatCount="indefinite"
-              keyTimes="0;0.2222;0.2556;0.2889;0.3222;0.3556;0.5222;0.5556;0.5889;0.6222;0.6556;0.8778;1"
+            <animate attributeName="fill-opacity" dur="11.5s" repeatCount="indefinite"
+              keyTimes="0;0.2261;0.2522;0.2870;0.3217;0.3565;0.5304;0.5565;0.5913;0.6261;0.6609;0.8870;1"
               values="0.12;0.12;0.65;0.12;0.65;0.12;0.12;0.12;0.12;0.12;0.12;0.12;0.12"/>
           </path>
 
