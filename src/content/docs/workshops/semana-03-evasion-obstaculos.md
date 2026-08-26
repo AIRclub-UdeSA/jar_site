@@ -31,8 +31,8 @@ El comportamiento que buscamos (avanzar, y cuando corresponda girar) tiene dos m
 Pensar el problema como una máquina de estados obliga a responder dos preguntas separadas: **¿en qué estado estoy?** y **¿qué hace que pase de uno a otro?** Un **estado** representa la situación actual del sistema (acá, `ESTADO_AVANZAR` o `ESTADO_GIRAR` — excluyentes, nunca "un poco en cada uno"). Una **transición** es el cambio de un estado a otro, disparado por un evento, sensor o temporizador.
 
 <figure class="doc-figure">
-  <img src="../../media/docs/diagrama-estados-evasion.png" alt="Diagrama de la máquina de estados con dos estados, Avanzar y Girar, y las transiciones entre ellos" width="1094" height="224" loading="lazy" />
-  <figcaption>Dos estados excluyentes y dos transiciones: hay un obstáculo, y ya giró lo suficiente.</figcaption>
+  <img src="../../media/docs/maquina-estados-evasion.svg" alt="Diagrama de la máquina de estados con dos estados, Avanzar y Girar, y las flechas de transición entre ellos" width="960" height="460" loading="lazy" />
+  <figcaption>Dos estados excluyentes y dos transiciones: hay_obstaculo() lleva de Avanzar a Girar; girar lo suficiente vuelve a Avanzar.</figcaption>
 </figure>
 
 Para que esto funcione bien arriba de un robot conviene seguir algunas reglas de diseño:

@@ -31,9 +31,9 @@ H se mide en grados alrededor de un círculo (OpenCV lo comprime a 0-179). El ro
 
 Igual que en la semana 03, conviene separar quién guarda datos de quién decide: el callback de la cámara (`recibir_imagen`) solo convierte la imagen con `cv_bridge` y la guarda, no procesa nada. Un timer (`procesar_imagen`), corriendo a frecuencia fija, es el que agarra la última imagen guardada y decide si hay un cuadrado rojo. Solo se publica cuando hay un cuadrado — el topic es un aviso, no un estado continuo — pero conviene loguear siempre las transiciones (de "veo" a "no veo" y viceversa), aunque el `False` no se publique.
 
-## Implementación — Parte 1: `detector.py`
+## Implementación — Parte 1
 
-El archivo ya trae resuelto lo que no es la detección en sí: los parámetros ROS, el publisher/subscriber, la conversión de `Image` a array de OpenCV (`recibir_imagen`), y `area_mayor_contorno` (busca contornos con `cv2.findContours` y devuelve el área del más grande). Quedan 3 funciones con `TODO`:
+[`detector.py`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-04-deteccion-color/deteccion_color/deteccion_color/detector.py) ya trae resuelto lo que no es la detección en sí: los parámetros ROS, el publisher/subscriber, la conversión de `Image` a array de OpenCV (`recibir_imagen`), y `area_mayor_contorno` (busca contornos con `cv2.findContours` y devuelve el área del más grande). Quedan 3 funciones con `TODO`:
 
 1. **`mascara_rojo()`** — la percepción: dada una imagen en HSV, devolver una máscara binaria de qué píxeles son rojos, combinando los dos rangos de H.
 2. **`hay_cuadrado_rojo()`** — usa `mascara_rojo()` y `area_mayor_contorno()` para decidir si lo que ve la cámara ahora mismo cuenta como un cuadrado rojo.
@@ -44,9 +44,9 @@ Completalas en ese orden: `mascara_rojo()` es la pieza chica y fácil de probar 
 > [!NOTE]
 > Los parámetros de HSV (`hue_rojo_bajo_1`, `hue_rojo_alto_1`, `hue_rojo_bajo_2`, `hue_rojo_alto_2`, `saturacion_min`, `valor_min`) y `area_minima_px` son todos configurables por `--ros-args -p`. Si el rojo real queda muy pálido u oscuro bajo la luz del simulador, es normal tener que calibrar `saturacion_min`/`valor_min` a ojo, mirando la imagen, en vez de confiar ciegamente en los defaults.
 
-## Implementación — Parte 2: `detector_scan.py`
+## Implementación — Parte 2
 
-`detector.py` contesta una pregunta binaria — ¿hay rojo ahora? — pero no dice **dónde** está el cuadrado respecto del robot. El lidar sí mide distancia y ángulo con precisión, pero no tiene idea de colores. La idea es combinar los dos: para cada punto que devuelve el lidar, preguntarse "si la cámara estuviera mirando justo donde apunta este rayo, ¿qué píxel le tocaría?", y mirar si ese píxel es rojo.
+Esta parte se resuelve en [`detector_scan.py`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-04-deteccion-color/deteccion_color/deteccion_color/detector_scan.py). `detector.py` contesta una pregunta binaria — ¿hay rojo ahora? — pero no dice **dónde** está el cuadrado respecto del robot. El lidar sí mide distancia y ángulo con precisión, pero no tiene idea de colores. La idea es combinar los dos: para cada punto que devuelve el lidar, preguntarse "si la cámara estuviera mirando justo donde apunta este rayo, ¿qué píxel le tocaría?", y mirar si ese píxel es rojo.
 
 Para proyectar un punto 3D a un píxel hacen falta dos cosas: dónde está la cámara respecto del lidar (la transformada entre `laser_link` y el frame óptico de la cámara, que `robot_state_publisher` ya publica en [tf2](https://docs.ros.org/en/lyrical/Tutorials/Intermediate/Tf2/Tf2-Main.html) a partir del URDF — no hace falta medirla a mano), y el modelo *pinhole* de la cámara (`u = fx * x/z + cx`, `v = fy * y/z + cy`, con los intrínsecos publicados en `sensor_msgs/CameraInfo`). Con eso, cada punto del `/scan` (polar, en el frame del lidar) se pasa a cartesiano, se rota/traslada al frame de la cámara, y se proyecta a un píxel.
 
