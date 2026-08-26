@@ -117,12 +117,13 @@ ros2 topic echo /cmd_vel
 | --- | --- | --- |
 | `/cmd_vel` | `geometry_msgs/msg/Twist` | Comandos de velocidad para mover el robot |
 | `/joint_states` | `sensor_msgs/msg/JointState` | Posición y velocidad de las ruedas |
-| `/scan` | `sensor_msgs/msg/LaserScan` | Lecturas del LiDAR 2D |
-| `/cam_1/color/image_raw` | `sensor_msgs/msg/Image` | Imagen RGB de la cámara RGB-D |
-| `/cam_1/depth/image_raw` | `sensor_msgs/msg/Image` | Profundidad de la cámara RGB-D |
 | `/odom` | `nav_msgs/msg/Odometry` | Odometría calculada desde las ruedas |
+| `/scan` | `sensor_msgs/msg/LaserScan` | Lecturas del LiDAR 2D |
 | `/imu/data` | `sensor_msgs/msg/Imu` | Orientación y aceleraciones del IMU |
+| `/cam_1/color/image_raw` | `sensor_msgs/msg/Image` | Imagen RGB de la cámara RGB-D |
+| `/cam_1/depth/color/points` | `sensor_msgs/msg/PointCloud2` | Nube de puntos RGB-D procesada |
 | `/tf` | `tf2_msgs/msg/TFMessage` | Transformaciones dinámicas del robot |
+| `/tf_static` | `tf2_msgs/msg/TFMessage` | Transformaciones fijas entre sus componentes |
 | `/clock` | `rosgraph_msgs/msg/Clock` | Reloj de la simulación |
 
 Listá las interfaces disponibles con:

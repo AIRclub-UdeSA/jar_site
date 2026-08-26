@@ -47,6 +47,7 @@ Ecosistema de 3 repos de la org [AIRclub-UdeSA](https://github.com/AIRclub-UdeSA
 - Links entre páginas markdown SIEMPRE relativos (`./x/` o `../seccion/x/`), porque el sitio vive bajo `/jar_site`.
 - Archivos nuevos de workshop: prefijo `semana-NN-` con dos dígitos → entran solos al sidebar, ordenados alfabéticamente.
 - Comandos de código siempre probados para Ubuntu 22.04 + ROS 2 Humble + Gazebo Fortress.
+- La tabla de interfaces del setup es un contrato orientado a participantes, no un volcado de `ros2 topic list`: conserva el RGB público `/cam_1/color/image_raw` y la nube procesada `/cam_1/depth/color/points`; no publicar profundidad cruda, topics bajo `/internal/`, bridges, watchdogs, ground truth ni odometrías de diagnóstico.
 - Callouts Markdown admitidos: `[!NOTE]` (Nota), `[!CHECK]` (Comprobá esto), `[!WARNING]` (Atención) y `[!QUESTION]` (Para pensar). Se escriben como blockquotes y nunca deben contener información confidencial.
 - Los fences usan el lenguaje real: `bash` se presenta como Terminal, `python` como Python y `text` como Salida esperada. No agregar hostnames ficticios, traffic lights ni chrome de terminal decorativo.
 - Las figuras de documentación necesitan texto alternativo, caption, dimensiones y `loading="lazy"`. Los SVG code-native van en `public/media/docs/`, con fondo transparente y sin grillas, glow, HUD ni marcos ornamentales.
