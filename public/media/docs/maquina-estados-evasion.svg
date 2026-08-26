@@ -18,8 +18,8 @@
   <path d="M648.4 323.7 Q480 420 311.6 323.7" fill="none" stroke="#f2f6f1" stroke-opacity=".7" stroke-width="2.5" marker-end="url(#state-arrow-white)"/>
 
   <g font-family="'JetBrains Mono', 'Courier New', monospace" text-anchor="middle">
-    <text x="480" y="66" fill="#4ade80" font-size="21" font-weight="600">hay_obstaculo()</text>
-    <text x="480" y="440" fill="#f2f6f1" font-size="21" font-weight="600">angulo_girado() ≥ objetivo</text>
+    <text x="480" y="94" fill="#4ade80" font-size="21" font-weight="600">hay_obstaculo()</text>
+    <text x="480" y="402" fill="#f2f6f1" font-size="21" font-weight="600">angulo_girado() ≥ objetivo</text>
   </g>
 
   <g>
