@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 500" role="img" aria-labelledby="title desc">
+  <title id="title">Animación de la proyección de un punto del lidar sobre la imagen de la cámara</title>
+  <desc id="desc">A la izquierda, un rayo del lidar barre un arco frente al robot; cuando apunta al cuadrado rojo, se ilumina. A la derecha, la vista de cámara con el mismo cuadrado rojo: una barra vertical recorre la imagen en sincronía con el ángulo del rayo, y se ilumina en el mismo instante, mostrando a qué píxel corresponde ese punto del lidar.</desc>
+
+  <line x1="790" y1="10" x2="790" y2="490" stroke="#f2f6f1" stroke-opacity=".1"/>
+
+  <!-- ===================== PANEL IZQUIERDO: VISTA SUPERIOR ===================== -->
+  <g transform="translate(20,20)">
+    <text x="0" y="14" fill="#8d9892" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="17" letter-spacing="1.5">PROYECCIÓN LIDAR → CÁMARA</text>
+
+    <rect x="10" y="30" width="730" height="420" fill="none" stroke="#f2f6f1" stroke-opacity=".12"/>
+
+    <!-- cuadrado rojo en el mundo -->
+    <g>
+      <rect x="387" y="213" width="34" height="34" rx="4" fill="#0b120f" stroke="#f87171" stroke-width="2">
+        <animate attributeName="stroke-width" dur="4s" repeatCount="indefinite"
+          keyTimes="0;0.1125;0.15;0.1875;0.8125;0.85;0.8875;1"
+          values="2;2;4.5;2;2;4.5;2;2"/>
+      </rect>
+      <rect x="387" y="213" width="34" height="34" rx="4" fill="#f87171" opacity="0">
+        <animate attributeName="opacity" dur="4s" repeatCount="indefinite"
+          keyTimes="0;0.1125;0.15;0.1875;0.8125;0.85;0.8875;1"
+          values="0;0;.5;0;0;.5;0;0"/>
+      </rect>
+    </g>
+
+    <!-- robot, estático, mirando de frente al arco de barrido -->
+    <rect x="77" y="285" width="46" height="30" rx="8" fill="#07100c" stroke="#4ade80" stroke-width="2"/>
+    <path d="M123 294 123 306 133 300Z" fill="#4ade80"/>
+
+    <!-- rayo del lidar: barre de -35° a 35° y vuelve, en loop continuo -->
+    <g>
+      <animateTransform attributeName="transform" type="rotate" dur="4s" repeatCount="indefinite"
+        values="-35 123 300;35 123 300;-35 123 300"/>
+      <line x1="123" y1="300" x2="623" y2="300" stroke="#4ade80" stroke-opacity=".22" stroke-width="2"/>
+      <line x1="123" y1="300" x2="623" y2="300" stroke="#4ade80">
+        <animate attributeName="opacity" dur="4s" repeatCount="indefinite"
+          keyTimes="0;0.1125;0.15;0.1875;0.8125;0.85;0.8875;1"
+          values="0.22;0.22;1;0.22;0.22;1;0.22;0.22"/>
+        <animate attributeName="stroke-width" dur="4s" repeatCount="indefinite"
+          keyTimes="0;0.1125;0.15;0.1875;0.8125;0.85;0.8875;1"
+          values="2;2;4.5;2;2;4.5;2;2"/>
+      </line>
+    </g>
+  </g>
+
+  <!-- ===================== PANEL DERECHO: VISTA DE CÁMARA ===================== -->
+  <g transform="translate(830,20)">
+    <text x="0" y="14" fill="#8d9892" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="17" letter-spacing="1.5">VISTA DE CÁMARA</text>
+
+    <rect x="0" y="40" width="300" height="220" fill="#07100c" stroke="#f2f6f1" stroke-opacity=".2"/>
+
+    <!-- el mismo cuadrado rojo, ahora visto por la cámara -->
+    <rect x="81" y="133" width="34" height="34" rx="4" fill="#0b120f" stroke="#f87171" stroke-width="2">
+      <animate attributeName="stroke-width" dur="4s" repeatCount="indefinite"
+        keyTimes="0;0.1125;0.15;0.1875;0.8125;0.85;0.8875;1"
+        values="2;2;4.5;2;2;4.5;2;2"/>
+    </rect>
+
+    <!-- barra que recorre la imagen en sincronía con el ángulo del rayo -->
+    <g>
+      <animateTransform attributeName="transform" type="translate" dur="4s" repeatCount="indefinite"
+        values="20,0;280,0;20,0"/>
+      <rect x="-5" y="40" width="10" height="220" fill="#4ade80" opacity=".18"/>
+      <rect x="-5" y="40" width="10" height="220" fill="#4ade80" opacity="0">
+        <animate attributeName="opacity" dur="4s" repeatCount="indefinite"
+          keyTimes="0;0.1125;0.15;0.1875;0.8125;0.85;0.8875;1"
+          values="0;0;.85;0;0;.85;0;0"/>
+      </rect>
+    </g>
+
+    <text x="150" y="292" fill="#4ade80" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="15" font-weight="600" text-anchor="middle" opacity="0">
+      /scan_rojo ← coincide
+      <animate attributeName="opacity" dur="4s" repeatCount="indefinite"
+        keyTimes="0;0.1125;0.15;0.1875;0.8125;0.85;0.8875;1"
+        values="0;0;1;0;0;1;0;0"/>
+    </text>
+  </g>
+</svg>

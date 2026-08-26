@@ -50,6 +50,11 @@ Completalas en ese orden: `mascara_rojo()` es la pieza chica y fácil de probar 
 
 Para proyectar un punto 3D a un píxel hacen falta dos cosas: dónde está la cámara respecto del lidar (la transformada entre `laser_link` y el frame óptico de la cámara, que `robot_state_publisher` ya publica en [tf2](https://docs.ros.org/en/lyrical/Tutorials/Intermediate/Tf2/Tf2-Main.html) a partir del URDF — no hace falta medirla a mano), y el modelo *pinhole* de la cámara (`u = fx * x/z + cx`, `v = fy * y/z + cy`, con los intrínsecos publicados en `sensor_msgs/CameraInfo`). Con eso, cada punto del `/scan` (polar, en el frame del lidar) se pasa a cartesiano, se rota/traslada al frame de la cámara, y se proyecta a un píxel.
 
+<figure class="doc-figure">
+  <img src="../../media/docs/proyeccion-lidar-camara.svg" alt="Animación de la proyección de un rayo del lidar sobre la imagen de la cámara: el rayo barre un arco y se ilumina junto con el píxel correspondiente cuando ambos coinciden con el cuadrado rojo" width="1140" height="500" loading="lazy" />
+  <figcaption>El rayo del lidar barre el arco frente al robot; la barra de la derecha recorre la imagen en sincronía con ese ángulo y se ilumina en el mismo instante en que el rayo apunta al cuadrado rojo.</figcaption>
+</figure>
+
 > [!WARNING]
 > El lidar escanea en un plano horizontal a altura fija. Si el cuadrado rojo es una marca chata pegada al piso, la cámara lo ve perfecto pero el lidar nunca la va a tocar — no hay calibración que arregle eso.
 
