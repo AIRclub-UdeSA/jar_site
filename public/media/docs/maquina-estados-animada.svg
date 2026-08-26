@@ -25,11 +25,11 @@
         keyTimes="0;0.2087;0.2261;0.2522;0.2870;0.3217;0.3565;0.3739;0.5304;0.5565;0.5913;0.6261;0.6609;0.8870;1"
         values="0;0;1;1;1;1;1;0;0;0;0;0;0;0;0"/>
       <g>
-        <animateMotion dur="0.7s" repeatCount="indefinite">
+        <animateMotion dur="0.7s" repeatCount="indefinite" rotate="auto">
           <mpath href="#path-top" xlink:href="#path-top"/>
         </animateMotion>
-        <circle r="15" fill="#4ade80" opacity=".35"/>
-        <circle r="6" fill="#4ade80"/>
+        <rect x="-24" y="-8" width="48" height="16" rx="7" fill="#4ade80" opacity=".3"/>
+        <rect x="-18" y="-4" width="36" height="8" rx="4" fill="#4ade80"/>
       </g>
     </g>
 
@@ -41,11 +41,11 @@
         keyTimes="0;0.2261;0.2522;0.2870;0.3217;0.3565;0.5130;0.5304;0.5565;0.5913;0.6261;0.6609;0.6783;0.8870;1"
         values="0;0;0;0;0;0;0;1;1;1;1;1;0;0;0"/>
       <g>
-        <animateMotion dur="0.7s" repeatCount="indefinite">
+        <animateMotion dur="0.7s" repeatCount="indefinite" rotate="auto">
           <mpath href="#path-bottom" xlink:href="#path-bottom"/>
         </animateMotion>
-        <circle r="15" fill="#f2f6f1" opacity=".35"/>
-        <circle r="6" fill="#f2f6f1"/>
+        <rect x="-24" y="-8" width="48" height="16" rx="7" fill="#f2f6f1" opacity=".3"/>
+        <rect x="-18" y="-4" width="36" height="8" rx="4" fill="#f2f6f1"/>
       </g>
     </g>
 
