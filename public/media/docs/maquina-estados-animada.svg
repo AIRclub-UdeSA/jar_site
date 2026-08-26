@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1230 500" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1720 500" role="img" aria-labelledby="title desc">
   <title id="title">Animación de la máquina de estados de evasión de obstáculos</title>
-  <desc id="desc">A la izquierda, los estados Avanzar y Girar se activan por turnos. A la derecha, un robot esquemático avanza, frena antes de un obstáculo, pulsa la detección, gira en el lugar, pulsa el fin del giro y retoma el avance con el nuevo rumbo, en loop.</desc>
+  <desc id="desc">A la izquierda, la máquina de estados Avanzar/Girar: el círculo del estado activo se pone punteado y brillante, y la flecha de la transición en curso fluye del nodo saliente al entrante. A la derecha, un robot esquemático avanza, frena antes de un obstáculo, gira en el lugar y retoma el avance con el nuevo rumbo, en loop.</desc>
 
   <defs>
     <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -11,51 +11,79 @@
     </marker>
   </defs>
 
-  <line x1="530" y1="10" x2="530" y2="490" stroke="#f2f6f1" stroke-opacity=".1"/>
+  <line x1="1010" y1="10" x2="1010" y2="490" stroke="#f2f6f1" stroke-opacity=".1"/>
 
-  <!-- ===================== PANEL IZQUIERDO: MÁQUINA DE ESTADOS ===================== -->
-  <g transform="translate(20,10)">
-    <text x="10" y="26" fill="#8d9892" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="17" letter-spacing="1.5">MÁQUINA DE ESTADOS</text>
+  <!-- ===================== PANEL IZQUIERDO: MÁQUINA DE ESTADOS (horizontal) ===================== -->
+  <g transform="translate(20,20)">
+    <text x="60" y="32" fill="#8d9892" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="19" letter-spacing="1.5">MÁQUINA DE ESTADOS</text>
 
-    <!-- arco derecho: Avanzar -> Girar -->
-    <path d="M263.9 174.8 Q340 245 263.9 315.2" fill="none" stroke="#4ade80" stroke-width="2.5" marker-end="url(#arrow-green)"/>
-    <!-- arco izquierdo: Girar -> Avanzar -->
-    <path d="M136.1 315.2 Q60 245 136.1 174.8" fill="none" stroke="#f2f6f1" stroke-opacity=".7" stroke-width="2.5" marker-end="url(#arrow-white)"/>
+    <!-- arco superior, base tenue: Avanzar -> Girar -->
+    <path d="M311.6 176.3 Q480 40 648.4 176.3" fill="none" stroke="#4ade80" stroke-opacity=".28" stroke-width="2"/>
+    <!-- overlay que fluye cuando la transición está activa -->
+    <path d="M311.6 176.3 Q480 40 648.4 176.3" fill="none" stroke="#4ade80" stroke-width="3.5" stroke-dasharray="16 12" marker-end="url(#arrow-green)" opacity="0">
+      <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
+        keyTimes="0;0.2222;0.2556;0.2889;0.3222;0.3556;0.5222;0.5556;0.5889;0.6222;0.6556;0.8778;1"
+        values="0;1;1;1;1;1;0;0;0;0;0;0;0"/>
+      <animate attributeName="stroke-dashoffset" dur="0.8s" repeatCount="indefinite" values="0;-28"/>
+    </path>
 
-    <text x="352" y="245" fill="#4ade80" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="15" font-weight="600" text-anchor="middle" transform="rotate(-90 352 245)">
+    <!-- arco inferior, base tenue: Girar -> Avanzar -->
+    <path d="M648.4 323.7 Q480 420 311.6 323.7" fill="none" stroke="#f2f6f1" stroke-opacity=".22" stroke-width="2"/>
+    <path d="M648.4 323.7 Q480 420 311.6 323.7" fill="none" stroke="#f2f6f1" stroke-width="3.5" stroke-dasharray="16 12" marker-end="url(#arrow-white)" opacity="0">
+      <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
+        keyTimes="0;0.2222;0.2556;0.2889;0.3222;0.3556;0.5222;0.5556;0.5889;0.6222;0.6556;0.8778;1"
+        values="0;0;0;0;0;0;1;1;1;1;1;0;0"/>
+      <animate attributeName="stroke-dashoffset" dur="0.8s" repeatCount="indefinite" values="0;-28"/>
+    </path>
+
+    <text x="480" y="94" fill="#4ade80" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="21" font-weight="600" text-anchor="middle">
       hay_obstaculo()
       <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
         keyTimes="0;0.2222;0.2556;0.2889;0.3222;0.3556;0.5222;0.5556;0.5889;0.6222;0.6556;0.8778;1"
         values="0.35;0.35;1;0.35;1;0.35;0.35;0.35;0.35;0.35;0.35;0.35;0.35"/>
     </text>
-    <text x="48" y="245" fill="#f2f6f1" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="15" font-weight="600" text-anchor="middle" transform="rotate(-90 48 245)">
+    <text x="480" y="402" fill="#f2f6f1" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="21" font-weight="600" text-anchor="middle">
       giro_completo()
       <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
         keyTimes="0;0.2222;0.2556;0.2889;0.3222;0.3556;0.5222;0.5556;0.5889;0.6222;0.6556;0.8778;1"
         values="0.35;0.35;0.35;0.35;0.35;0.35;0.35;1;0.35;1;0.35;0.35;0.35"/>
     </text>
 
-    <!-- anillos de estado activo -->
-    <circle cx="200" cy="130" r="86" fill="none" stroke="#4ade80" stroke-width="3">
-      <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
+    <!-- estado AVANZAR: el círculo propio se pone punteado y brillante -->
+    <circle cx="260" cy="250" r="90" fill="#07100c" stroke="#4ade80">
+      <animate attributeName="stroke-opacity" dur="9s" repeatCount="indefinite"
         keyTimes="0;0.2222;0.2556;0.2889;0.3222;0.3556;0.5222;0.5556;0.5889;0.6222;0.6556;0.8778;1"
-        values="1;1;0;0;0;0;0;0;0;0;1;1;1"/>
-    </circle>
-    <circle cx="200" cy="360" r="86" fill="none" stroke="#4ade80" stroke-width="3">
-      <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
+        values="1;1;.4;.4;.4;.4;.4;.4;.4;.4;1;1;1"/>
+      <animate attributeName="stroke-width" dur="9s" repeatCount="indefinite"
         keyTimes="0;0.2222;0.2556;0.2889;0.3222;0.3556;0.5222;0.5556;0.5889;0.6222;0.6556;0.8778;1"
-        values="0;0;1;1;1;1;1;1;1;1;0;0;0"/>
+        values="3.2;3.2;2;2;2;2;2;2;2;2;3.2;3.2;3.2"/>
+      <animate attributeName="stroke-dasharray" calcMode="discrete" dur="9s" repeatCount="indefinite"
+        keyTimes="0;0.2222;0.2556;0.2889;0.3222;0.3556;0.5222;0.5556;0.5889;0.6222;0.6556;0.8778;1"
+        values="10 7;10 7;none;none;none;none;none;none;none;none;10 7;10 7;10 7"/>
     </circle>
 
-    <circle cx="200" cy="130" r="78" fill="#07100c" stroke="#4ade80" stroke-opacity=".55" stroke-width="2"/>
-    <circle cx="200" cy="360" r="78" fill="#07100c" stroke="#f2f6f1" stroke-opacity=".35" stroke-width="2"/>
+    <!-- estado GIRAR: en reposo es blanco tenue; al activarse se pone verde, brillante y punteado -->
+    <circle cx="700" cy="250" r="90" fill="#07100c" stroke="#f2f6f1">
+      <animate attributeName="stroke" dur="9s" repeatCount="indefinite"
+        keyTimes="0;0.2222;0.2556;0.2889;0.3222;0.3556;0.5222;0.5556;0.5889;0.6222;0.6556;0.8778;1"
+        values="#f2f6f1;#f2f6f1;#4ade80;#4ade80;#4ade80;#4ade80;#4ade80;#4ade80;#4ade80;#4ade80;#f2f6f1;#f2f6f1;#f2f6f1"/>
+      <animate attributeName="stroke-opacity" dur="9s" repeatCount="indefinite"
+        keyTimes="0;0.2222;0.2556;0.2889;0.3222;0.3556;0.5222;0.5556;0.5889;0.6222;0.6556;0.8778;1"
+        values=".35;.35;1;1;1;1;1;1;1;1;.35;.35;.35"/>
+      <animate attributeName="stroke-width" dur="9s" repeatCount="indefinite"
+        keyTimes="0;0.2222;0.2556;0.2889;0.3222;0.3556;0.5222;0.5556;0.5889;0.6222;0.6556;0.8778;1"
+        values="2;2;3.2;3.2;3.2;3.2;3.2;3.2;3.2;3.2;2;2;2"/>
+      <animate attributeName="stroke-dasharray" calcMode="discrete" dur="9s" repeatCount="indefinite"
+        keyTimes="0;0.2222;0.2556;0.2889;0.3222;0.3556;0.5222;0.5556;0.5889;0.6222;0.6556;0.8778;1"
+        values="none;none;10 7;10 7;10 7;10 7;10 7;10 7;10 7;10 7;none;none;none"/>
+    </circle>
 
-    <text x="200" y="139" fill="#f2f6f1" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="27" font-weight="600" text-anchor="middle">AVANZAR</text>
-    <text x="200" y="369" fill="#f2f6f1" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="27" font-weight="600" text-anchor="middle">GIRAR</text>
+    <text x="260" y="259" fill="#f2f6f1" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="27" font-weight="600" text-anchor="middle">AVANZAR</text>
+    <text x="700" y="259" fill="#f2f6f1" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="27" font-weight="600" text-anchor="middle">GIRAR</text>
   </g>
 
   <!-- ===================== PANEL DERECHO: ESCENA DE EJEMPLO ===================== -->
-  <g transform="translate(560,10)">
+  <g transform="translate(1050,10)">
     <text x="10" y="26" fill="#8d9892" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="17" letter-spacing="1.5">SIMULACIÓN DE EJEMPLO</text>
 
     <rect x="10" y="40" width="620" height="430" fill="none" stroke="#f2f6f1" stroke-opacity=".12"/>
