@@ -12,7 +12,6 @@
 
   <g fill="#8d9892" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="19" letter-spacing="1.5">
     <text x="60" y="52">MÁQUINA DE ESTADOS</text>
-    <text x="60" y="80" fill="#f2f6f1" font-size="22">EVASIÓN DE OBSTÁCULOS</text>
   </g>
 
   <path d="M311.6 176.3 Q480 40 648.4 176.3" fill="none" stroke="#4ade80" stroke-width="2.5" marker-end="url(#state-arrow)"/>
@@ -29,10 +28,7 @@
   </g>
 
   <g font-family="'JetBrains Mono', 'Courier New', monospace" text-anchor="middle">
-    <text x="260" y="242" fill="#f2f6f1" font-size="27" font-weight="600">AVANZAR</text>
-    <text x="260" y="270" fill="#8d9892" font-size="14" letter-spacing="1.5">ESTADO_AVANZAR</text>
-
-    <text x="700" y="242" fill="#f2f6f1" font-size="27" font-weight="600">GIRAR</text>
-    <text x="700" y="270" fill="#8d9892" font-size="14" letter-spacing="1.5">ESTADO_GIRAR</text>
+    <text x="260" y="259" fill="#f2f6f1" font-size="27" font-weight="600">AVANZAR</text>
+    <text x="700" y="259" fill="#f2f6f1" font-size="27" font-weight="600">GIRAR</text>
   </g>
 </svg>
