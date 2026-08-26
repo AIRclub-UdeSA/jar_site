@@ -87,8 +87,16 @@
     <!-- puntos que no caen sobre el rojo: apagados -->
     <g fill="#f2f6f1" opacity=".28">
       <circle cx="20" cy="150" r="5"/>
-      <circle cx="63.3" cy="150" r="5"/>
-      <circle cx="236.7" cy="150" r="5"/>
+      <circle cx="38" cy="150" r="5"/>
+      <circle cx="56" cy="150" r="5"/>
+      <circle cx="74" cy="150" r="5"/>
+      <circle cx="92" cy="150" r="5"/>
+      <circle cx="110" cy="150" r="5"/>
+      <circle cx="190" cy="150" r="5"/>
+      <circle cx="208" cy="150" r="5"/>
+      <circle cx="226" cy="150" r="5"/>
+      <circle cx="244" cy="150" r="5"/>
+      <circle cx="262" cy="150" r="5"/>
       <circle cx="280" cy="150" r="5"/>
     </g>
 
