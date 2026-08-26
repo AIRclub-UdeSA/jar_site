@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
+  <title id="title">Ejes de movimiento de una base mecanum</title>
+  <desc id="desc">Vista superior abstracta del robot con flechas para avance linear x, desplazamiento lateral linear y y giro angular z.</desc>
+  <defs>
+    <marker id="green-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10Z" fill="#4ade80"/>
+    </marker>
+    <marker id="white-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10Z" fill="#f2f6f1"/>
+    </marker>
+  </defs>
+
+  <g transform="translate(480 270)">
+    <rect x="-172" y="-112" width="344" height="224" rx="4" fill="#07100c" stroke="#f2f6f1" stroke-opacity=".25"/>
+    <path d="M-86-112V112M86-112V112M-172 0H172" fill="none" stroke="#f2f6f1" stroke-opacity=".08"/>
+    <circle r="26" fill="none" stroke="#4ade80" stroke-width="2"/>
+    <circle r="5" fill="#4ade80"/>
+
+    <g fill="#0b120f" stroke="#f2f6f1" stroke-opacity=".4">
+      <rect x="-214" y="-90" width="54" height="80" rx="18"/>
+      <rect x="160" y="-90" width="54" height="80" rx="18"/>
+      <rect x="-214" y="10" width="54" height="80" rx="18"/>
+      <rect x="160" y="10" width="54" height="80" rx="18"/>
+    </g>
+
+    <g stroke="#4ade80" stroke-opacity=".55" stroke-width="3">
+      <path d="M-204-24-170-72M-204 70-170 22M170-72 204-24M170 22 204 70"/>
+    </g>
+
+    <path d="M0-30V-190" fill="none" stroke="#4ade80" stroke-width="2" marker-end="url(#green-arrow)"/>
+    <path d="M30 0H244" fill="none" stroke="#f2f6f1" stroke-width="2" marker-end="url(#white-arrow)"/>
+    <path d="M-112 127A174 174 0 0 0 112 127" fill="none" stroke="#4ade80" stroke-width="2" marker-end="url(#green-arrow)"/>
+  </g>
+
+  <g font-family="'JetBrains Mono', 'Courier New', monospace">
+    <text x="504" y="52" fill="#4ade80" font-size="28" font-weight="600">linear.x</text>
+    <text x="748" y="248" fill="#f2f6f1" font-size="28" font-weight="600">linear.y</text>
+    <text x="480" y="488" fill="#4ade80" font-size="28" font-weight="600" text-anchor="middle">angular.z</text>
+
+    <text x="60" y="76" fill="#8d9892" font-size="20" letter-spacing="2">VISTA SUPERIOR</text>
+    <text x="60" y="108" fill="#f2f6f1" font-size="25">BASE MECANUM 4WD</text>
+  </g>
+</svg>

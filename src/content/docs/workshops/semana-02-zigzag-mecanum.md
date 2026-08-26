@@ -1,59 +1,56 @@
 ---
 title: "02 · Zigzag mecanum"
-description: "Cinemática omnidireccional mecanum, control de velocidad con /cmd_vel y representación de orientación en 3D."
+description: "Combiná avance y desplazamiento lateral para programar una trayectoria mecanum."
 status: listo
+duration: "aprox. 60–90 min"
+level: intermedio
+outcome: "Al terminar, vas a tener una trayectoria que combina avance y movimiento lateral."
+prerequisites:
+  - "Setup completo"
+  - "Workshop 01"
 ---
 
-## Objetivo
+En esta práctica vas a publicar comandos de velocidad en `/cmd_vel` para que Donatello avance mientras se desplaza de un lado al otro. El ejercicio aprovecha el movimiento holonómico de sus ruedas mecanum.
 
-Aprender a controlar el movimiento del robot mediante el envío de comandos de velocidad al topic `/cmd_vel`. Al completar este workshop vas a comprender la estructura del mensaje `Twist`, la diferencia entre cinemática diferencial y omnidireccional mecanum, cómo trazar trayectorias combinando velocidades y cómo se representa la orientación en el espacio 3D mediante cuaterniones.
+## Resultado de la práctica
+
+Al terminar vas a tener un nodo que publica una trayectoria en zigzag a `10 Hz`. Vas a poder verla en el simulador, inspeccionar los comandos y reconocer cómo ROS 2 representa la orientación del robot.
 
 ## Antes de empezar
 
-Asegurate de haber completado el [Workshop 01](../semana-01-talkers-listeners/) para entender el modelo de publicadores en ROS 2 y tené listo el simulador según la [guía de instalación](../../setup/).
+Completá el [Workshop 01](../semana-01-talkers-listeners/) y levantá el simulador con la [guía de Setup](../../setup/simulador/).
 
----
+> [!CHECK]
+> Mové el robot con `teleop_twist_keyboard` y comprobá que `ros2 topic echo /cmd_vel` muestre valores mientras mantenés una tecla presionada.
 
-## 1. Fundamentos de Cinemática: ¿Cómo entiende la velocidad un robot?
+## Concepto mínimo: velocidad y movimiento mecanum
 
-En ROS 2, el estándar universal para gobernar el movimiento de una base móvil es el topic `/cmd_vel` (*command velocity*), el cual utiliza mensajes de tipo `geometry_msgs/msg/Twist`.
+ROS 2 usa mensajes `geometry_msgs/msg/Twist` para indicar la velocidad deseada de una base móvil. Cada mensaje contiene dos vectores:
 
-Un mensaje `Twist` se compone de dos vectores tridimensionales:
-
-```
+```text
 Twist
- ├── linear  (Vector3) ➔ [x, y, z] en metros por segundo (m/s)
- └── angular (Vector3) ➔ [x, y, z] en radianes por segundo (rad/s)
+ ├── linear  [x, y, z]  metros por segundo
+ └── angular [x, y, z]  radianes por segundo
 ```
 
-Para un robot terrestre que se desplaza sobre el plano del suelo ($z = 0$), los componentes activos son tres:
+Para un robot que se mueve sobre un plano con `z = 0`, nos interesan tres componentes:
 
-| Componente | Dirección | Sentido Positivo (+) | Sentido Negativo (-) |
+| Componente | Movimiento | Valor positivo | Valor negativo |
 | --- | --- | --- | --- |
-| `linear.x` | Eje longitudinal (adelante / atrás) | Avance hacia el frente | Retroceso |
-| `linear.y` | Eje transversal (lateral / strafe) | Desplazamiento a la izquierda | Desplazamiento a la derecha |
-| `angular.z` | Rotación sobre el eje vertical (Yaw) | Giro antihorario (hacia la izquierda) | Giro horario (hacia la derecha) |
+| `linear.x` | Longitudinal | Avanza | Retrocede |
+| `linear.y` | Lateral | Se desplaza a la izquierda | Se desplaza a la derecha |
+| `angular.z` | Giro sobre el eje vertical | Gira en sentido antihorario | Gira en sentido horario |
 
----
+<figure class="doc-figure">
+  <img src="../../media/docs/mecanum-axes.svg" alt="Vista superior de una base mecanum con los ejes linear x, linear y y angular z" width="960" height="520" loading="lazy" />
+  <figcaption>Las ruedas mecanum permiten combinar avance, desplazamiento lateral y giro sin alinear primero el chasis.</figcaption>
+</figure>
 
-## 2. Robots Diferenciales vs Robots Mecanum (Holonomía)
+Una base diferencial puede avanzar y girar, pero no moverse directamente de costado. En una base mecanum, los rodillos a 45 grados permiten coordinar las cuatro ruedas para generar movimiento lateral. Por eso `linear.y` puede ser distinto de `0`.
 
-La gran ventaja del ROSMASTER X3 frente a plataformas robóticas convencionales radica en su sistema de tracción:
+## Implementación
 
-### Plataformas Diferenciales (No Holonómicas)
-Un robot diferencial estándar (como un auto o una aspiradora robot) solo posee ruedas fijas. No puede desplazarse de costado sin antes girar su chasis (`linear.y` es siempre `0`). Para cambiar de carril, está obligado a:
-1. Rotar en el lugar (`angular.z`).
-2. Avanzar en línea recta (`linear.x`).
-3. Volver a rotar para alinearse.
-
-### Plataformas Mecanum (Holonómicas)
-El ROSMASTER X3 cuenta con **4 ruedas Mecanum** cuyos rodillos periféricos están orientados a 45°. Al variar la velocidad relativa y el sentido de giro de cada rueda individual, las fuerzas diagonales se combinan permitiendo **movimiento holonómico**: el robot puede desplazarse instantáneamente hacia cualquier lado (`linear.y != 0`) sin necesidad de girar su chasis.
-
----
-
-## 3. Implementación: El nodo `zigzag.py`
-
-Vamos a crear un nodo que aproveche la cinemática mecanum para hacer que el robot avance mientras zigzaguea de lado a lado:
+Creá `zigzag.py` dentro del paquete `zigzag_mecanum`:
 
 ```python
 #!/usr/bin/env python3
@@ -70,25 +67,25 @@ class ZigzagNode(Node):
         # Publicador de comandos de velocidad en /cmd_vel
         self.publisher_ = self.create_publisher(Twist, '/cmd_vel', 10)
 
-        # Timer a 10 Hz (publica cada 0.1 segundos)
+        # Timer a 10 Hz: publica cada 0.1 segundos
         self.timer = self.create_timer(0.1, self.timer_callback)
 
         self.step_count = 0
-        self.direction = 1.0  # 1.0 para izquierda, -1.0 para derecha
+        self.direction = 1.0
 
     def timer_callback(self):
         msg = Twist()
 
-        # 1. Mantiene una velocidad de avance constante
-        msg.linear.x = 0.2  # 0.2 m/s hacia adelante
+        # Mantiene una velocidad de avance constante
+        msg.linear.x = 0.2
 
-        # 2. Alterna la velocidad lateral cada 20 pasos (2.0 segundos a 10 Hz)
+        # Alterna la dirección lateral cada 20 pasos
         if self.step_count % 20 == 0:
             self.direction *= -1.0
 
-        msg.linear.y = 0.2 * self.direction  # 0.2 m/s de costado
+        msg.linear.y = 0.2 * self.direction
 
-        # 3. Sin rotación: el chasis se mantiene apuntando al frente
+        # Mantiene el chasis apuntando al frente
         msg.angular.z = 0.0
 
         self.publisher_.publish(msg)
@@ -101,7 +98,6 @@ def main(args=None):
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
-        # Freno de seguridad al detener el nodo
         stop_msg = Twist()
         node.publisher_.publish(stop_msg)
     finally:
@@ -113,11 +109,11 @@ if __name__ == '__main__':
     main()
 ```
 
----
+El nodo mantiene `linear.x` en `0.2 m/s` y cambia el signo de `linear.y` cada dos segundos. Como `angular.z` queda en `0`, el chasis conserva la misma orientación mientras se desplaza.
 
-## 4. Compilación y Ejecución
+## Ejecución
 
-Si ya tenés el repositorio `jar_workshops` en tu workspace, compilá el paquete y cargá el overlay:
+Compilá el paquete y cargá el overlay:
 
 ```bash
 cd ~/rosmaster_ws
@@ -125,53 +121,57 @@ colcon build --packages-select zigzag_mecanum
 source install/setup.bash
 ```
 
-Con el simulador de Gazebo levantado en una terminal:
+Con el simulador abierto, ejecutá el nodo en otra terminal:
 
 ```bash
-# En una nueva terminal con el entorno cargado:
+source ~/rosmaster_ws/install/setup.bash
 ros2 run zigzag_mecanum zigzag
 ```
 
----
+Para detenerlo, volvé a esa terminal y presioná `Ctrl+C`. El nodo publica un mensaje vacío antes de cerrar para pedir velocidad cero.
 
-## 5. Qué observar en Gazebo y RViz
+## Comprobación
 
-1. **En Gazebo:** Vas a ver al ROSMASTER X3 avanzar trazando una trayectoria en zigzag perfecta, desplazándose lateralmente de izquierda a derecha mientras su chasis permanece orientado hacia adelante.
-2. **En RViz:** Podés activar la visualización del topic `/odom` para observar el rastro de la trayectoria odofisiológica en el plano.
-3. **En la terminal:** Podés inspeccionar los comandos emitidos en tiempo real:
-   ```bash
-   ros2 topic echo /cmd_vel
-   ```
-   Fijate cómo `linear.x` se mantiene constante en `0.2` mientras `linear.y` conmuta de `0.2` a `-0.2` cada dos segundos.
+En el simulador, Donatello debería avanzar mientras alterna el desplazamiento lateral. El frente del chasis debería mantenerse apuntando en la misma dirección.
 
----
+Inspeccioná los mensajes en otra terminal:
 
-## 6. Nota Técnica: Orientación en el espacio (Cuaterniones vs Euler)
+```bash
+ros2 topic echo /cmd_vel
+```
 
-Cuando leas la posición y postura del robot desde el sensor de odometría (`/odom`) o las transformadas del sistema (`/tf`), notarás que la orientación no se entrega en grados de Roll, Pitch y Yaw, sino en formato de **cuaternión** `[x, y, z, w]`.
+Vas a ver `linear.x` constante en `0.2` y `linear.y` alternando entre `0.2` y `-0.2` cada dos segundos.
 
-| Método | Parámetros | Ventajas | Desventajas |
-| --- | --- | --- | --- |
-| **Ángulos de Euler** (Roll, Pitch, Yaw) | 3 | Muy intuitivo para humanos. | Sufre de **Gimbal Lock** (pérdida de un grado de libertad al alinearse dos ejes) y discontinuidades cíclicas. |
-| **Matriz de Rotación** | 9 | Sin singularidades. | Redundante (9 números para 3 grados de libertad) e ineficiente para cálculos continuos. |
-| **Cuaterniones** | 4 | Compactos, sin singularidades, linealizables e ideales para interpolar rotaciones suaves (SLERP). | Poco intuitivos para visualización directa. |
+En RViz podés agregar una visualización de `Odometry` y seleccionar `/odom`. Eso permite revisar la pose y la orientación estimadas del robot; RViz no dibuja por sí solo un rastro histórico del recorrido.
 
-### Cómo convertir un Cuaternión a ángulo Yaw en Python
-Para saber hacia dónde apunta el robot en un plano 2D, solo necesitás extraer el ángulo **Yaw** (rotación sobre el eje Z) a partir de los 4 componentes del cuaternión:
+> [!CHECK]
+> Si el robot avanza pero no se desplaza lateralmente, confirmá que el nodo publique en `/cmd_vel` y que `linear.y` cambie de signo.
+
+## Explicación: orientación y cuaterniones
+
+Los mensajes de odometría (`/odom`) y las transformaciones (`/tf`) representan la orientación con un cuaternión `[x, y, z, w]`, no directamente con ángulos de *roll*, *pitch* y *yaw*.
+
+| Representación | Valores | Ventaja | Límite |
+| --- | ---: | --- | --- |
+| Ángulos de Euler | 3 | Resultan fáciles de interpretar | Pueden sufrir *gimbal lock* y discontinuidades |
+| Matriz de rotación | 9 | No tiene singularidades | Usa más valores de los necesarios |
+| Cuaternión | 4 | Es compacto y permite interpolaciones suaves | No se interpreta a simple vista |
+
+Para obtener el ángulo de giro sobre el plano, podés convertir el cuaternión a *yaw*:
 
 ```python
 import math
 
 
 def quaternion_to_yaw(x: float, y: float, z: float, w: float) -> float:
-    """Convierte un cuaternión [x, y, z, w] en ángulo Yaw en radianes."""
+    """Convierte un cuaternión [x, y, z, w] a yaw en radianes."""
     siny_cosp = 2.0 * (w * z + x * y)
     cosy_cosp = 1.0 - 2.0 * (y * y + z * z)
     return math.atan2(siny_cosp, cosy_cosp)
 ```
 
----
+Para esta práctica el valor debería mantenerse cerca del ángulo inicial, porque el comando deja `angular.z` en `0`.
 
 ## Desafío extra
 
-Modificá `zigzag.py` para agregarle una velocidad angular suave (`angular.z = 0.3 * self.direction`). Observá en el simulador cómo el zigzag deja de ser una traslación pura y pasa a describir curvas sinuosas combinando rotación con movimiento holonómico.
+Agregá una velocidad angular suave con `msg.angular.z = 0.3 * self.direction`. Volvé a ejecutar el nodo y compará el resultado: la traslación lateral ahora se combina con el giro del chasis y produce curvas en lugar de un zigzag paralelo.

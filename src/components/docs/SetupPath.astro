@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import { withBase } from '../../config/site';
+
+const docs = await getCollection('docs');
+const summarizeOutcome = (outcome?: string) => {
+  if (!outcome) return undefined;
+  const summary = outcome.replace(/^Al terminar,\s*/i, '');
+  return summary.charAt(0).toUpperCase() + summary.slice(1);
+};
+const steps = [
+  { id: 'setup/ros2-humble', href: '/setup/ros2-humble/' },
+  { id: 'setup/gazebo-rviz', href: '/setup/gazebo-rviz/' },
+  { id: 'setup/simulador', href: '/setup/simulador/' },
+]
+  .map((step) => ({ ...step, entry: docs.find((doc) => doc.id === step.id) }))
+  .filter((step) => step.entry !== undefined);
+---
+
+<section class="doc-index" aria-labelledby="setup-path-title">
+  <header class="doc-index-heading">
+    <p>Recorrido recomendado</p>
+    <h2 id="setup-path-title">Tres pasos para ponerlo a funcionar.</h2>
+  </header>
+  <ol class="doc-index-list">
+    {
+      steps.map((step, index) => (
+        <li>
+          <a href={withBase(step.href)}>
+            <span class="doc-index-number">{String(index + 1).padStart(2, '0')}</span>
+            <span class="doc-index-main">
+              <strong>{step.entry?.data.title}</strong>
+              {step.entry?.data.outcome && <span>{summarizeOutcome(step.entry.data.outcome)}</span>}
+            </span>
+            <span class="doc-index-meta">{step.entry?.data.duration}</span>
+            <span class="doc-index-arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+</section>

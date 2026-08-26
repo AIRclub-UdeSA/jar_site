@@ -1,0 +1,72 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+const sections = headings.filter((heading) => heading.depth === 2);
+---
+
+{
+  sections.length > 0 && (
+    <section class="doc-guide-index" aria-labelledby="doc-guide-index-title">
+      <header>
+        <p id="doc-guide-index-title">En esta guía</p>
+        <span>{sections.length.toString().padStart(2, '0')} secciones</span>
+      </header>
+      <nav aria-label="Contenido de esta página">
+        <ol>
+          {sections.map((heading, index) => (
+            <li>
+              <a href={`#${heading.slug}`} data-doc-toc-link={heading.slug}>
+                <span>{String(index + 1).padStart(2, '0')}</span>
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </section>
+  )
+}
+
+<script>
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-doc-toc-link]'));
+  const sectionIds = [...new Set(links.map((link) => link.dataset.docTocLink).filter(Boolean))] as string[];
+  const sections = sectionIds
+    .map((id) => document.getElementById(id))
+    .filter((section): section is HTMLElement => section !== null);
+
+  let frame = 0;
+
+  const updateCurrentSection = () => {
+    frame = 0;
+    const marker = Math.min(window.innerHeight * 0.3, 190);
+    let current = sections[0]?.id;
+
+    sections.forEach((section) => {
+      if (section.getBoundingClientRect().top <= marker) current = section.id;
+    });
+
+    links.forEach((link) => {
+      if (link.dataset.docTocLink === current) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+  };
+
+  const queueUpdate = () => {
+    if (!frame) frame = window.requestAnimationFrame(updateCurrentSection);
+  };
+
+  if (sections.length) {
+    updateCurrentSection();
+    window.addEventListener('scroll', queueUpdate, { passive: true });
+    window.addEventListener('resize', queueUpdate);
+  }
+</script>

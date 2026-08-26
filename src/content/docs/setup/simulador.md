@@ -1,25 +1,43 @@
 ---
 title: "Levantar el simulador"
-description: "Clonar, compilar y correr el simulador del ROSMASTER X3."
+description: "Cloná, compilá y ejecutá el simulador de Donatello."
 status: listo
+duration: "aprox. 20–40 min"
+level: inicial
+outcome: "Al terminar, vas a poder mover Donatello desde el teclado y comprobar sus interfaces principales."
+prerequisites:
+  - "ROS 2 Humble"
+  - "Gazebo Fortress y RViz"
 ---
 
-Con ROS 2 y Gazebo listos, en esta página vas a clonar el repositorio del simulador, compilarlo con colcon y lanzar el ROSMASTER X3 en el mundo del desafío de comportamiento robótico.
+Ahora vamos a crear un workspace, compilar el repositorio y abrir Donatello en Gazebo y RViz. Hacé este recorrido desde una terminal nueva para trabajar con el entorno de ROS 2 ya cargado.
 
-## 1. Crear el workspace
+## Qué vas a dejar funcionando
+
+Donatello va a quedar compilado dentro de tu workspace, abierto en Gazebo y RViz, y listo para recibir comandos de velocidad desde el teclado.
+
+## Qué necesitás
+
+- ROS 2 Humble, Gazebo y RViz funcionando.
+- `git`, `rosdep` y `colcon` instalados.
+- Aproximadamente 15 GB libres para dependencias, compilación y archivos del simulador.
+
+## Pasos
+
+### 1. Crear el workspace
 
 ```bash
 mkdir -p ~/rosmaster_ws/src
 cd ~/rosmaster_ws/src
 ```
 
-## 2. Clonar el repositorio
+### 2. Clonar el repositorio
 
 ```bash
 git clone https://github.com/AIRclub-UdeSA/yahboom_rosmaster.git
 ```
 
-## 3. Instalar dependencias
+### 3. Instalar dependencias
 
 ```bash
 source /opt/ros/humble/setup.bash
@@ -28,77 +46,98 @@ rosdep update
 rosdep install --from-paths src --ignore-src -r -y --rosdistro humble
 ```
 
-Este comando recorre todos los paquetes del workspace e instala las dependencias externas que falten.
+`rosdep` revisa los paquetes del workspace e instala las dependencias externas que todavía no están en tu máquina.
 
-## 4. Compilar
-
-Desde la raíz del workspace:
+### 4. Compilar
 
 ```bash
+cd ~/rosmaster_ws
 colcon build --symlink-install
 source install/setup.bash
 ```
 
-Importante: en cada terminal nueva tenés que cargar AMBOS entornos para poder usar el simulador:
+En cada terminal nueva necesitás cargar ROS 2 y el overlay del workspace:
 
 ```bash
 source /opt/ros/humble/setup.bash
 source ~/rosmaster_ws/install/setup.bash
 ```
 
-Si seguiste el paso 4 de la [guía de ROS 2 Humble](../ros2-humble/), el primero se carga solo desde `~/.bashrc`.
+Si agregaste el primer comando a `.bashrc` durante la instalación de ROS 2, solo tenés que ejecutar el segundo.
 
-## 5. Lanzar la simulación
+### 5. Lanzar la simulación
 
 ```bash
-ros2 launch yahboom_rosmaster_gazebo rosmaster_gazebo_fortress.launch.py
+ros2 launch yahboom_rosmaster_bringup rosmaster_x3_sim.launch.py
 ```
 
-Este comando arranca Gazebo y RViz juntos. El arranque es escalonado, así que tené paciencia: esperá a ver en la terminal estos mensajes antes de intentar mover el robot:
+El arranque es escalonado: primero abre Gazebo, después crea el robot y finalmente inicia sus interfaces y RViz. Esperá estos mensajes antes de intentar moverlo:
 
 ```text
 Configured and activated joint_state_broadcaster
-Publishing wheel-state odometry
+Publishing wheel-state odometry from /joint_states to /odom
 ```
 
-Cuando aparezcan, el robot está listo y sus sensores publicando.
+> [!CHECK]
+> Donatello debería aparecer en Gazebo y RViz. Cuando la odometría empieza a publicarse, el robot está listo para recibir comandos.
 
-## 6. Teleoperación
+### 6. Moverlo desde el teclado
 
-Instalá el nodo de teleoperación por teclado:
+Instalá el nodo de teleoperación:
 
 ```bash
-sudo apt install ros-humble-teleop-twist-keyboard
+sudo apt install -y ros-humble-teleop-twist-keyboard
 ```
 
-En otra terminal (recordá sourcer `/opt/ros/humble` y el overlay del workspace), corré:
+En una segunda terminal con los dos entornos cargados, ejecutá:
 
 ```bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
 ```
 
-Con esa terminal enfocada:
+La propia herramienta imprime el mapa de teclas. Usá `i`, `j`, `l` y `,` para el movimiento convencional. Para desplazarte de costado o en diagonal sin girar, mantené `Shift` y usá las combinaciones holonómicas en mayúscula que aparecen bajo **Holonomic mode**.
 
-- `i` avanza hacia adelante y `,` retrocede.
-- `j` gira hacia la izquierda y `l` hacia la derecha.
-- Al ser un chasis mecanum con movimiento holonómico, también puede strafear: usá `u`/`o` para avanzar en diagonal y `,`/`.` para retroceder; con las teclas de strafe laterales el robot se desplaza de costado sin girar.
+Mantené enfocada esa terminal mientras manejás y dejá espacio libre alrededor del robot.
 
-Mantené presionada la tecla mientras mirás el robot en Gazebo o RViz.
+## Qué deberías ver
 
-## Topics principales
+- En Gazebo, el chasis se mueve y las ruedas mecanum responden al comando.
+- En RViz, cambian la pose y la odometría mientras llegan nuevas mediciones.
+- En la terminal de teleoperación, la velocidad actual se actualiza con cada tecla.
+
+Podés inspeccionar el comando enviado desde una tercera terminal:
+
+```bash
+ros2 topic echo /cmd_vel
+```
+
+### Interfaces principales
 
 | Topic | Tipo de mensaje | Qué publica |
 | --- | --- | --- |
-| `/cmd_vel` | `geometry_msgs/msg/Twist` | Comando de velocidad para mover el robot |
+| `/cmd_vel` | `geometry_msgs/msg/Twist` | Comandos de velocidad para mover el robot |
+| `/joint_states` | `sensor_msgs/msg/JointState` | Posición y velocidad de las ruedas |
 | `/scan` | `sensor_msgs/msg/LaserScan` | Lecturas del LiDAR 2D |
 | `/cam_1/color/image_raw` | `sensor_msgs/msg/Image` | Imagen RGB de la cámara RGB-D |
-| `/cam_1/depth/image_raw` | `sensor_msgs/msg/Image` | Mapa de profundidad de la cámara RGB-D |
-| `/odom` | `nav_msgs/msg/Odometry` | Odometría estimada del robot |
+| `/cam_1/depth/image_raw` | `sensor_msgs/msg/Image` | Profundidad de la cámara RGB-D |
+| `/odom` | `nav_msgs/msg/Odometry` | Odometría calculada desde las ruedas |
 | `/imu/data` | `sensor_msgs/msg/Imu` | Orientación y aceleraciones del IMU |
+| `/tf` | `tf2_msgs/msg/TFMessage` | Transformaciones dinámicas del robot |
 | `/clock` | `rosgraph_msgs/msg/Clock` | Reloj de la simulación |
 
-Podés inspeccionarlos con `ros2 topic list` y `ros2 topic echo <topic>`.
+Listá las interfaces disponibles con:
 
-## Troubleshooting y argumentos de lanzamiento
+```bash
+ros2 topic list
+```
 
-Para troubleshooting avanzado y para conocer los argumentos disponibles del launch file (`world`, `rviz`, `headless`, `motion_profile`, entre otros), consultá el [README del repositorio del simulador](https://github.com/AIRclub-UdeSA/yahboom_rosmaster).
+## Problemas frecuentes
+
+- Si el launch no encuentra un paquete, volvé a ejecutar `source ~/rosmaster_ws/install/setup.bash`.
+- Si modificaste o actualizaste el repositorio, compilá otra vez con `colcon build --symlink-install`.
+- Si Gazebo abre pero el robot no responde, esperá los mensajes de activación y revisá que `/cmd_vel` aparezca en `ros2 topic list`.
+- Para argumentos como `world`, `rviz`, `headless` o `motion_profile`, consultá el [README del simulador](https://github.com/AIRclub-UdeSA/yahboom_rosmaster).
+
+## Próximo paso
+
+Con Donatello funcionando, empezá por [01 · Talkers y listeners](../../workshops/semana-01-talkers-listeners/) para entender cómo se comunican los nodos que después van a controlarlo.

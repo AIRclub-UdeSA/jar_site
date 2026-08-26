@@ -9,7 +9,6 @@ export const SITE = {
   githubOrg: 'https://github.com/AIRclub-UdeSA',
   simRepo: 'https://github.com/AIRclub-UdeSA/yahboom_rosmaster',
   workshopsRepo: 'https://github.com/AIRclub-UdeSA/jar_workshops',
-  editBaseUrl: 'https://github.com/AIRclub-UdeSA/jar_site/edit/main/src/content/docs/',
   applyUrl: 'https://forms.gle/2zkW6gwJQptUzbXn6',
   event: {
     city: 'Rosario',

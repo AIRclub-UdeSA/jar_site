@@ -2,6 +2,7 @@
 title: "03 · Próximamente"
 description: "Próximamente publicaremos el siguiente workshop práctico para el Challenge JAR."
 status: proximamente
+outcome: "Este módulo se va a publicar cuando el contenido esté listo para practicar."
 ---
 
 El contenido de este workshop se publicará próximamente a medida que avance el programa de preparación.

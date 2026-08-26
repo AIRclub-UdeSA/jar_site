@@ -1,23 +1,16 @@
 ---
 title: "Workshops asincrónicos"
-description: "Programa de mini-proyectos para aprender ROS 2 con el simulador."
+description: "Mini-proyectos para aprender ROS 2 mientras trabajás con el simulador."
 status: listo
+outcome: "El recorrido te lleva desde tu primer mensaje en ROS 2 hasta controlar el movimiento de Donatello."
 ---
 
-Los workshops son mini-proyectos prácticos pensados para hacer a tu ritmo. Cada uno trae código de ejemplo para correr contra el simulador y ver cómo se comporta el robot en tiempo real.
+## Antes de empezar
 
-Van de simple a complejo: arrancás publicando tu primer mensaje en un topic y terminás armando una solución completa del desafío de comportamiento robótico.
+Necesitás tener el entorno funcionando. Si todavía no lo preparaste, empezá por la [guía de instalación](../setup/).
 
-## Prerrequisito
+El código que acompaña las prácticas vive en el repositorio [jar_workshops](https://github.com/AIRclub-UdeSA/jar_workshops).
 
-Necesitás tener el setup listo antes de arrancar: seguí la [guía de instalación](../setup/) si todavía no lo hiciste.
+## Cómo trabajar con los módulos
 
-El código de cada workshop vive en el repo [jar_workshops](https://github.com/AIRclub-UdeSA/jar_workshops).
-
-## Programa
-
-| Módulo | Tema | Estado |
-| --- | --- | --- |
-| [01](./semana-01-talkers-listeners/) | Talkers y listeners | Listo |
-| [02](./semana-02-zigzag-mecanum/) | Zigzag mecanum | Listo |
-| [03](./semana-03-slam-mapeo/) | Próximamente | Próximamente |
+Leé primero el resultado esperado, ejecutá los pasos en orden y detenete en cada comprobación. Si algo no coincide con lo que muestra la guía, resolvelo antes de avanzar: los workshops siguientes asumen que el anterior ya funciona.

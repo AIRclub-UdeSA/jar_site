@@ -1,27 +1,24 @@
 ---
 title: "Guía de instalación"
-description: "Requisitos y pasos para instalar ROS 2 Humble, Gazebo y levantar el simulador del ROSMASTER X3."
+description: "Prepará ROS 2 Humble, Gazebo, RViz y el simulador de Donatello en Ubuntu 22.04."
 status: listo
+duration: "aprox. 60–120 min"
+outcome: "Al terminar, vas a tener el simulador listo para practicar desde tu compu."
 ---
 
-Al final de esta guía vas a tener un entorno completo de simulación corriendo en tu máquina: ROS 2 Humble instalado, Gazebo Fortress con RViz funcionando y el robot ROSMASTER X3 navegando por el mundo del desafío de comportamiento robótico, listo para que lo controles desde tu teclado.
+## Qué vas a dejar funcionando
 
-## Requisitos
+Al terminar vas a tener ROS 2 Humble instalado, Gazebo Fortress y RViz abriendo sin errores, y el simulador compilado dentro de tu propio workspace. También vas a poder mover el robot desde el teclado y revisar los datos que publica.
 
-- Ubuntu 22.04 LTS (nativo o dual boot).
+## Qué necesitás
+
+- Ubuntu 22.04 LTS, preferentemente nativo o en dual boot.
 - Aproximadamente 15 GB libres en disco.
-- Conexión a internet para descargar paquetes.
-- No hace falta GPU dedicada, pero ayuda si la tenés.
+- Conexión a internet para descargar paquetes y clonar los repositorios.
+- Una GPU dedicada no es obligatoria, aunque puede mejorar el rendimiento del simulador.
 
-### Sobre el sistema operativo
+## Plataforma soportada
 
-Toda esta guía asume **Ubuntu 22.04**, que es la plataforma oficial de ROS 2 Humble. Es lo
-que recomendamos y lo único que damos soporte.
+El recorrido está probado para **Ubuntu 22.04**, la plataforma oficial de ROS 2 Humble y la única que podemos acompañar directamente desde el club.
 
-Si no contás con **Ubuntu 22.04**, existen algunas alternativas: WSL2 con Ubuntu para Windows, guías para instalación en macOS, o una máquina virtual con Ubuntu.
-
-## Pasos
-
-1. **Instalar ROS 2 Humble**: seguí la guía paso a paso en [Instalar ROS 2 Humble](./ros2-humble/).
-2. **Instalar Gazebo Fortress y RViz**: continuá con [Gazebo Fortress y RViz](./gazebo-rviz/).
-3. **Clonar y compilar el simulador**: terminá con [Levantar el simulador](./simulador/).
+Si usás WSL2, macOS o una máquina virtual, algunas partes pueden requerir ajustes adicionales. Podés probarlas, pero conviene completar primero el camino recomendado si tenés esa posibilidad.

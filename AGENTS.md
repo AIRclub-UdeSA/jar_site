@@ -25,6 +25,7 @@ Ecosistema de 3 repos de la org [AIRclub-UdeSA](https://github.com/AIRclub-UdeSA
 - `src/pages/`: `index.astro` compone la landing y `[...slug].astro` sirve los docs.
 - `src/layouts/`: layouts Base y Doc.
 - `src/components/`: Nav, Footer, Sidebar y shell compartido.
+- `src/components/docs/`: tabla de contenidos e índices editoriales generados desde la colección.
 - `src/components/landing/`: capítulos de la landing (`LandingHero`, `DonatelloProfile`, `ChallengeOverview`, `ObservationPlate`, `Roadmap`, `EventDetails`, `Resources`, `ApplicationBand`, `Closing`).
 - `src/config/site.ts`: navegación del sidebar (secciones fijas; los workshops se autogeneran desde archivos `semana-*.md`) y metadatos.
 - `src/content/docs/`: contenido markdown en subcarpetas `setup/`, `workshops/`.
@@ -33,7 +34,7 @@ Ecosistema de 3 repos de la org [AIRclub-UdeSA](https://github.com/AIRclub-UdeSA
 - `src/styles/landing.css`: estilos exclusivos de la landing, importados solo desde `index.astro`; prefijo de selectores `landing-`.
 - `public/models/rosmaster_unified.glb`: modelo CAD optimizado que usa el visor actual.
 - `public/models/rosmaster/`: URDF de referencia; ya no es el asset cargado por la landing.
-- `public/media/`: videos y posters optimizados de Gazebo/RViz usados por `ObservationPlate`.
+- `public/media/`: videos y posters optimizados de Gazebo/RViz usados por `ObservationPlate`; `public/media/docs/` contiene figuras SVG propias de las guías.
 - `scripts/sync-robot.sh`: regenera el modelo 3D desde un workspace ROS local.
 
 # Confidencialidad
@@ -42,10 +43,13 @@ Ecosistema de 3 repos de la org [AIRclub-UdeSA](https://github.com/AIRclub-UdeSA
 
 # Convenciones de contenido
 
-- Frontmatter schema: `title` requerido, `description` opcional, `status`: `listo` | `proximamente` (default `listo`). Con `status: proximamente` se muestra un badge "Próximamente" y un punto punteado en el sidebar.
+- Frontmatter schema: `title` requerido; `description`, `duration`, `outcome` y `prerequisites` opcionales; `level`: `inicial` | `intermedio` | `avanzado`; `status`: `listo` | `proximamente` (default `listo`). Los índices de Setup y Workshops consumen estos datos directamente de la colección, por lo que no se duplican a mano.
 - Links entre páginas markdown SIEMPRE relativos (`./x/` o `../seccion/x/`), porque el sitio vive bajo `/jar_site`.
 - Archivos nuevos de workshop: prefijo `semana-NN-` con dos dígitos → entran solos al sidebar, ordenados alfabéticamente.
 - Comandos de código siempre probados para Ubuntu 22.04 + ROS 2 Humble + Gazebo Fortress.
+- Callouts Markdown admitidos: `[!NOTE]` (Nota), `[!CHECK]` (Comprobá esto), `[!WARNING]` (Atención) y `[!QUESTION]` (Para pensar). Se escriben como blockquotes y nunca deben contener información confidencial.
+- Los fences usan el lenguaje real: `bash` se presenta como Terminal, `python` como Python y `text` como Salida esperada. No agregar hostnames ficticios, traffic lights ni chrome de terminal decorativo.
+- Las figuras de documentación necesitan texto alternativo, caption, dimensiones y `loading="lazy"`. Los SVG code-native van en `public/media/docs/`, con fondo transparente y sin grillas, glow, HUD ni marcos ornamentales.
 - Si agregás estilos, respetá los tokens existentes. El sitio es dark-only: no hay tema claro que probar. Los cambios exclusivos de landing van en `landing.css`; los de docs o shell compartido, en `global.css`.
 
 # Tono y copy público
@@ -72,16 +76,16 @@ El visor vive en `src/components/landing/LandingHero.astro` y usa three.js + `GL
 
 `public/models/rosmaster/` y `scripts/sync-robot.sh` conservan el flujo de referencia desde un workspace ROS local (`~/Documents/rosmaster_ws`), pero la landing no carga actualmente el URDF. Si se vuelve a sincronizar el robot, mantener la corrección de cámara y verificar el encuadre completo en hero y Donatello antes de reemplazar el GLB.
 
-# Próximo foco de trabajo
+# Documentación actual
 
-La próxima revisión es el diseño de **Setup y Workshops** para alinearlos con lo aprendido en la landing:
-
-- conservar la estética Black Void/editorial, hairlines, tipografía y jerarquías compartidas;
-- priorizar lectura, orientación y ejecución de pasos por encima de la escala escultórica propia del hero;
-- revisar `Doc.astro`, `Sidebar.astro` y los estilos markdown sin reescribir contenido técnico que no esté en alcance;
-- quitar chrome decorativo o repetición de cajas donde no comunique una acción/estado real;
-- validar navegación, código, callouts, tablas y estados `proximamente` en mobile y desktop;
-- mantener intactos links relativos, comandos validados y la confidencialidad del challenge.
+- `Doc.astro` compone un manual técnico con lógica de dossier editorial. En mobile y tablet usa una columna con selector de sección superpuesto; desde `64rem` suma un único sidebar izquierdo y una portada asimétrica que reparte título y resumen. No hay rail derecho.
+- La lectura narrativa se limita a unos `65ch`; código, tablas y figuras pueden ampliar el área técnica sin ensanchar el viewport. Código y tablas desplazan únicamente su propia superficie.
+- El sidebar usa filas numeradas planas y hairlines. El verde marca ubicación o acción real; el ámbar se reserva para `proximamente` y advertencias.
+- Las guías largas convierten los headings H2 de `render(entry)` en un índice numerado visible dentro del flujo, inmediatamente después del encabezado. Desde `48rem` se lee primero la columna izquierda completa y después la derecha. Los anchors funcionan sin JavaScript; el script solo agrega scrollspy, feedback de copiado y el cierre accesible del selector mobile.
+- La duración se presenta como una indicación natural (`Calculá aprox. …`) junto al nivel; el resultado ocupa la columna de resumen y se distingue con una única regla verde, sin etiqueta ni caja propia. Los prerequisitos no se repiten en esta portada: cada guía los desarrolla en su sección “Antes de empezar”.
+- Los índices de Setup y Workshops colocan su recorrido generado inmediatamente después del encabezado. Setup se organiza como tres guías y Workshops como un catálogo sincronizado por archivos `semana-NN-*`, título, metadata y estado.
+- Los callouts se transforman durante el build mediante el plugin Sätteri local `src/markdown/callouts.mjs`.
+- No reintroducir grilla global, tarjetas repetidas, acordeones dentro del flujo, HUDs, terminales ficticias ni el enlace “Editar en GitHub” al final de la documentación. En estas páginas mandan la lectura, la orientación y la ejecución de pasos.
 
 # Verificación obligatoria
 

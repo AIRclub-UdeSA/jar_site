@@ -3,10 +3,11 @@ import RobotMark from './RobotMark.astro';
 import { NAV_LINKS, SITE, withBase } from '../config/site';
 
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const homePath = withBase('/').replace(/\/+$/, '') || '/';
 
 const isActive = (href: string): boolean => {
   const target = withBase(href).replace(/\/+$/, '') || '/';
-  return path === target || (target !== '/' && path.startsWith(`${target}/`));
+  return path === target || (target !== homePath && path.startsWith(`${target}/`));
 };
 ---
 
@@ -21,7 +22,11 @@ const isActive = (href: string): boolean => {
       {
         NAV_LINKS.map((link) => (
           <li>
-            <a href={withBase(link.href)} class:list={[{ active: isActive(link.href) }]}>
+            <a
+              href={withBase(link.href)}
+              class:list={[{ active: isActive(link.href) }]}
+              aria-current={isActive(link.href) ? 'page' : undefined}
+            >
               {link.label}
             </a>
           </li>

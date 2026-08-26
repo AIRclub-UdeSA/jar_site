@@ -1,30 +1,62 @@
 <!--
 Copiá este archivo a src/content/docs/workshops/semana-NN-slug.md (NN con dos dígitos).
-El título aparece solo en el sidebar. Cambiá status a listo cuando publiques.
+El título y la metadata alimentan automáticamente el sidebar y el catálogo.
+Cambiá status a listo cuando publiques. Los links internos siempre son relativos.
 -->
 
 ---
 title: "NN · Título"
-description: "..."
+description: "Una frase breve que explique la práctica."
 status: proximamente
+duration: "aprox. XX–YY min"
+level: inicial
+outcome: "El resultado concreto que queda funcionando."
+prerequisites:
+  - "Setup completo"
 ---
 
-## Objetivo
+Una introducción corta que conecte la práctica con el trabajo sobre el robot.
 
-Una línea con lo que va a aprender a hacer quien complete el workshop.
+## Resultado de la práctica
+
+Qué va a quedar funcionando al terminar.
 
 ## Antes de empezar
 
-Tené el simulador levantado antes de arrancar: seguí la guía de [levantar el simulador](../setup/simulador/).
+Qué debe estar instalado, compilado o abierto. Usá links relativos, por ejemplo la [guía del simulador](../../setup/simulador/).
 
-## Mini-proyecto
+> [!CHECK]
+> Una comprobación rápida antes de continuar.
 
-El código y los pasos del mini-proyecto, con instrucciones para correrlo contra el sim.
+## Concepto mínimo
 
-## Qué observar en el sim
+Solo la teoría necesaria para entender la implementación. Este es el lugar previsto para una figura con texto alternativo y caption.
 
-Qué mirar en Gazebo y RViz mientras corre el código.
+## Implementación
+
+El código y las decisiones necesarias para completar la práctica.
+
+> [!NOTE]
+> Un dato complementario que ayude a entender el paso.
+
+## Ejecución
+
+Comandos y orden de terminales para correrlo contra el simulador.
+
+## Comprobación
+
+Qué mirar en el simulador, RViz y la terminal para saber que funciona.
+
+> [!WARNING]
+> Un riesgo o error frecuente que conviene evitar.
+
+## Explicación
+
+Qué ocurrió y cómo se conecta con el resto del sistema.
+
+> [!QUESTION]
+> Una pregunta concreta para interpretar el resultado.
 
 ## Desafío extra
 
-Un extra opcional para profundizar.
+Una variación opcional que profundice el mismo concepto.

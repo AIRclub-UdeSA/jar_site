@@ -1,26 +1,36 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
+import DocToc from '../components/docs/DocToc.astro';
+import SetupPath from '../components/docs/SetupPath.astro';
+import WorkshopCatalog from '../components/docs/WorkshopCatalog.astro';
 import Sidebar from '../components/Sidebar.astro';
-import { DOC_SECTIONS, SITE, withBase } from '../config/site';
+import { DOC_SECTIONS, withBase } from '../config/site';
 import Base from './Base.astro';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
 
 interface Props {
   entry: CollectionEntry<'docs'>;
+  headings: Heading[];
 }
 
-const { entry } = Astro.props;
-const { title, description, status } = entry.data;
+const { entry, headings } = Astro.props;
+const { title, description, status, duration, level, outcome } = entry.data;
 
 const allDocs = await getCollection('docs');
 const weeks = allDocs
-  .filter((d) => d.id.startsWith('workshops/semana-'))
+  .filter((doc) => doc.id.startsWith('workshops/semana-'))
   .sort((a, b) => a.id.localeCompare(b.id));
 
 const flat = [
-  ...DOC_SECTIONS.flatMap((s) => s.items),
+  ...DOC_SECTIONS.flatMap((section) => section.items),
   { label: 'Sobre los workshops', href: '/workshops/' },
-  ...weeks.map((w) => ({ label: w.data.title, href: `/${w.id}/` })),
+  ...weeks.map((week) => ({ label: week.data.title, href: `/${week.id}/` })),
 ];
 
 const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
@@ -31,102 +41,152 @@ const normalized = flat.map((item) => ({
 const index = normalized.findIndex((item) => item.url === currentPath);
 const prev = index > 0 ? normalized[index - 1] : undefined;
 const next = index >= 0 && index < normalized.length - 1 ? normalized[index + 1] : undefined;
-
-const editUrl = `${SITE.editBaseUrl}${entry.id}.md`;
+const currentLabel = normalized[index]?.label ?? title;
+const isSetupIndex = entry.id === 'setup' || entry.id === 'setup/index';
+const isWorkshopIndex = entry.id === 'workshops' || entry.id === 'workshops/index';
+const isSetup = isSetupIndex || entry.id.startsWith('setup/');
+const sectionLabel = isSetup ? 'Setup' : 'Workshops';
 ---
 
-<Base title={title} description={description}>
+<Base title={title} description={description} bodyClass="docs-body">
   <div class="doc-shell">
-    <aside class="doc-side">
+    <aside class="doc-side" aria-label="Secciones de la documentación">
       <Sidebar />
     </aside>
-    <main id="main-content">
-      <details class="mobile-doc-nav">
-        <summary>Navegación</summary>
-        <Sidebar />
+
+    <main id="main-content" class="doc-main">
+      <details class="doc-section-switcher" data-doc-switcher>
+        <summary>
+          <span>{sectionLabel}</span>
+          <strong>{currentLabel}</strong>
+          <span class="doc-switcher-arrow" aria-hidden="true">↓</span>
+        </summary>
+        <div class="doc-switcher-panel">
+          <Sidebar />
+        </div>
       </details>
+
       <article class="prose">
         <header class="doc-head">
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px;">
-            <p class="sys-label" style="margin-bottom: 0;">
-              {entry.id.startsWith('setup') ? '[ 01 // setup ]' : '[ 02 // workshop ]'}
-            </p>
-            {status === 'proximamente' && (
-              <span class="tag" style="color: var(--amber); background: rgba(251, 191, 36, 0.08); border-color: rgba(251, 191, 36, 0.2);">
-                Próximamente
-              </span>
-            )}
+          <div class="doc-head-topline">
+            <p class="doc-kicker">{sectionLabel}</p>
+            <div class="doc-head-facts">
+              {
+                duration && (
+                  <span>Calculá {duration}</span>
+                )
+              }
+              {
+                level && (
+                  <span>Nivel {level}</span>
+                )
+              }
+              {status === 'proximamente' && <span class="doc-status upcoming">Próximamente</span>}
+            </div>
           </div>
-          <h1 class="doc-title">{title}</h1>
-          {description && <p class="doc-desc">{description}</p>}
+          <div class="doc-head-layout">
+            <h1 class="doc-title">{title}</h1>
+            <div class="doc-head-summary">
+              {description && <p class="doc-desc">{description}</p>}
+              {outcome && <p class="doc-outcome">{outcome}</p>}
+            </div>
+          </div>
         </header>
+
+        {isSetupIndex && <SetupPath />}
+        {isWorkshopIndex && <WorkshopCatalog />}
+        {!isSetupIndex && !isWorkshopIndex && <DocToc headings={headings} />}
         <slot />
       </article>
+
       {
         (prev || next) && (
-          <nav class="pager">
+          <nav class="pager" aria-label="Páginas anterior y siguiente">
             {prev ? (
               <a href={prev.url} rel="prev">
-                <span class="pager-label">← Anterior</span>
+                <span class="pager-label">Anterior</span>
                 <span class="pager-title">{prev.label}</span>
               </a>
             ) : (
               <span />
             )}
             {next && (
-              <a href={next.url} rel="next" style="text-align:right">
-                <span class="pager-label">Siguiente →</span>
+              <a class="next" href={next.url} rel="next">
+                <span class="pager-label">Siguiente</span>
                 <span class="pager-title">{next.label}</span>
               </a>
             )}
           </nav>
         )
       }
-      <a class="edit-link" href={editUrl} target="_blank" rel="noopener">
-        Editar esta página en GitHub ↗
-      </a>
     </main>
   </div>
 </Base>
 
 <script>
+  const codeLabels: Record<string, string> = {
+    bash: 'Terminal',
+    sh: 'Terminal',
+    shell: 'Terminal',
+    python: 'Python',
+    py: 'Python',
+    text: 'Salida esperada',
+    plaintext: 'Salida esperada',
+  };
+
   document.querySelectorAll<HTMLElement>('.prose pre').forEach((pre) => {
-    if (!pre.querySelector('code')) return;
+    if (!pre.querySelector('code') || pre.closest('.doc-code')) return;
 
-    const fig = document.createElement('figure');
-    fig.className = 'term';
+    const language = pre.getAttribute('data-language') ?? 'text';
+    const label = codeLabels[language.toLowerCase()] ?? language.toUpperCase();
+    const figure = document.createElement('figure');
+    figure.className = 'doc-code';
 
-    const cap = document.createElement('figcaption');
+    const caption = document.createElement('figcaption');
+    caption.className = 'doc-code-caption';
 
-    const dots = document.createElement('span');
-    dots.className = 'term-dots';
-    dots.innerHTML = '<i></i><i></i><i></i>';
+    const title = document.createElement('span');
+    title.className = 'doc-code-title';
+    title.textContent = label;
 
-    const termTitle = document.createElement('span');
-    termTitle.className = 'term-title';
-    const lang = pre.getAttribute('data-language') ?? 'sh';
-    termTitle.textContent = `guest@jar26 — ${lang}`;
-
-    const btn = document.createElement('button');
-    btn.className = 'copy-btn';
-    btn.textContent = 'copiar';
-    btn.addEventListener('click', async () => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'copy-btn';
+    button.textContent = 'Copiar';
+    button.setAttribute('aria-label', `Copiar bloque de ${label}`);
+    button.setAttribute('aria-live', 'polite');
+    button.addEventListener('click', async () => {
       const code = pre.querySelector('code')?.innerText ?? '';
       try {
         await navigator.clipboard.writeText(code);
+        button.textContent = 'Copiado';
+        button.classList.add('copied');
+        window.setTimeout(() => {
+          button.textContent = 'Copiar';
+          button.classList.remove('copied');
+        }, 1800);
       } catch {
-        return;
+        button.textContent = 'No se pudo copiar';
       }
-      btn.textContent = '¡copiado!';
-      btn.classList.add('copied');
-      setTimeout(() => {
-        btn.textContent = 'copiar';
-        btn.classList.remove('copied');
-      }, 2000);
     });
 
-    cap.append(dots, termTitle, btn);
-    pre.replaceWith(fig);
-    fig.append(cap, pre);
+    caption.append(title, button);
+    pre.replaceWith(figure);
+    figure.append(caption, pre);
   });
+
+  const switcher = document.querySelector<HTMLDetailsElement>('[data-doc-switcher]');
+  if (switcher) {
+    const closeSwitcher = () => switcher.removeAttribute('open');
+    switcher.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeSwitcher));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && switcher.open) {
+        closeSwitcher();
+        switcher.querySelector<HTMLElement>('summary')?.focus();
+      }
+    });
+    document.addEventListener('pointerdown', (event) => {
+      if (switcher.open && event.target instanceof Node && !switcher.contains(event.target)) closeSwitcher();
+    });
+  }
 </script>

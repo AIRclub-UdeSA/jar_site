@@ -1,0 +1,50 @@
+---
+import { getCollection } from 'astro:content';
+import { withBase } from '../../config/site';
+
+const workshops = (await getCollection('docs'))
+  .filter((doc) => doc.id.startsWith('workshops/semana-'))
+  .sort((a, b) => a.id.localeCompare(b.id));
+
+const titleParts = (title: string) => {
+  const match = title.match(/^(\d{2}) · (.+)$/);
+  return match ? { number: match[1], title: match[2] } : { number: '—', title };
+};
+
+const summarizeOutcome = (outcome?: string) => {
+  if (!outcome) return undefined;
+  const summary = outcome.replace(/^Al terminar,\s*/i, '');
+  return summary.charAt(0).toUpperCase() + summary.slice(1);
+};
+---
+
+<section class="doc-index doc-workshop-index" aria-labelledby="workshop-catalog-title">
+  <header class="doc-index-heading">
+    <p>Programa</p>
+    <h2 id="workshop-catalog-title">Prácticas para avanzar con una base firme.</h2>
+  </header>
+  <ol class="doc-index-list">
+    {
+      workshops.map((workshop) => {
+        const parts = titleParts(workshop.data.title);
+        return (
+          <li>
+            <a href={withBase(`/${workshop.id}/`)}>
+              <span class="doc-index-number">{parts.number}</span>
+              <span class="doc-index-main">
+                <strong>{parts.title}</strong>
+                {workshop.data.outcome && <span>{summarizeOutcome(workshop.data.outcome)}</span>}
+              </span>
+              <span class:list={['doc-index-status', { upcoming: workshop.data.status === 'proximamente' }]}> 
+                {workshop.data.status === 'proximamente'
+                  ? 'Próximamente'
+                  : [workshop.data.duration, workshop.data.level].filter(Boolean).join(' · ')}
+              </span>
+              <span class="doc-index-arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        );
+      })
+    }
+  </ol>
+</section>

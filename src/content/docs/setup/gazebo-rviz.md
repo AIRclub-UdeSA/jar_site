@@ -1,48 +1,94 @@
 ---
 title: "Gazebo Fortress y RViz"
-description: "Instalación de la integración Gazebo-ROS 2 y verificación de RViz."
+description: "Instalá la integración con ROS 2 y comprobá que Gazebo y RViz abran correctamente."
 status: listo
+duration: "aprox. 10–20 min"
+level: inicial
+outcome: "Al terminar, Gazebo Fortress y RViz van a abrir sin errores de renderizado."
+prerequisites:
+  - "ROS 2 Humble instalado"
 ---
 
-Este desafío usa Gazebo Fortress (la versión "nueva" de Ignition) y NO Gazebo Classic: el movimiento mecanum del ROSMASTER X3 se simula con física real de contactos entre ruedas y suelo, algo que Fortress resuelve mucho mejor que Classic.
+Gazebo simula el robot y su entorno; RViz permite mirar los datos que ROS 2 recibe de sensores, odometría y transformaciones. Antes de compilar el simulador vamos a comprobar las dos herramientas por separado.
 
-## 1. Instalar la integración Gazebo-ROS 2
+## Qué vas a dejar funcionando
+
+Gazebo Fortress y RViz van a quedar instalados y listos para abrir. Esta prueba separada permite detectar problemas gráficos antes de sumar el simulador completo.
+
+## Qué necesitás
+
+- ROS 2 Humble funcionando.
+- Una sesión gráfica de Ubuntu 22.04.
+- Aceleración 3D habilitada si trabajás dentro de una máquina virtual.
+
+El proyecto usa **Gazebo Fortress**, no Gazebo Classic. Fortress representa mejor los contactos que necesita el movimiento de las ruedas mecanum.
+
+## Pasos
+
+### 1. Instalar la integración con ROS 2
 
 ```bash
-sudo apt update && sudo apt install ros-humble-ros-gz
+sudo apt update
+sudo apt install ros-humble-ros-gz
 ```
 
-Este metapaquete trae el puente `ros_gz` y toda la integración entre ROS 2 Humble y Fortress, incluyendo los launch files que combinan ambos mundos.
+Este metapaquete instala Gazebo Fortress, el puente `ros_gz` y las herramientas necesarias para intercambiar datos con ROS 2 Humble.
 
-## 2. Verificar Gazebo
+### 2. Comprobar Gazebo
 
-Comprobá que tenés Fortress instalado:
+Revisá la versión instalada:
 
 ```bash
 ign gazebo --version
 ```
 
-La salida debe mostrar `Ignition Gazebo, version 6.x.x`, es decir, la serie Fortress. Después abrí Gazebo sin ningún robot para verificar que arranca bien:
+La salida debería indicar `Ignition Gazebo, version 6.x.x`. Después abrí un mundo vacío:
 
 ```bash
 ign gazebo -r empty.sdf
 ```
 
-Se debería abrir la ventana de Gazebo con un mundo vacío corriendo. Cuando confirmes que funciona, cerrala.
+Esperá a que aparezca la ventana y cerrala cuando confirmes que responde normalmente.
 
-## 3. Verificar RViz2
+### 3. Comprobar RViz
 
-RViz2 viene incluido con `ros-humble-desktop`. Abrilo con:
+RViz ya viene con `ros-humble-desktop`. Abrilo con:
 
 ```bash
 rviz2
 ```
 
-Debería aparecer la ventana de RViz con la vista 3D vacía y el panel de displays a la izquierda. Cerrala cuando verifiques que abre sin errores.
+Deberías ver una vista 3D vacía y el panel de displays a la izquierda. Por ahora no hace falta configurar nada.
 
-## Problemas de renderizado en máquinas virtuales
+## Qué deberías ver
 
-Si Gazebo o RViz se ven lentos, con artefactos o directamente fallan al abrir, probablemente sea por falta de aceleración gráfica en la VM. En ese caso conviene:
+Las dos aplicaciones tienen que abrir, responder normalmente y cerrarse sin errores. Cuando levantes el simulador, Gazebo va a mostrar el robot y RViz va a organizar los datos que publica ROS 2.
 
-- Usar Ubuntu nativo o dual boot, que es la opción recomendada.
-- O bien activar la aceleración 3D de la máquina virtual (en VirtualBox: Configuración > Pantalla > Habilitar aceleración 3D; en VMware: acelerar gráficos 3D en la configuración del display).
+<div class="doc-media-pair doc-figure">
+  <figure>
+    <img src="../../media/donatello-gazebo-poster.webp" alt="Donatello dentro del simulador de Gazebo" width="960" height="520" loading="lazy" />
+    <figcaption>Gazebo representa el entorno, el movimiento y los contactos del robot.</figcaption>
+  </figure>
+  <figure>
+    <img src="../../media/donatello-rviz-poster.webp" alt="Datos de Donatello visualizados en RViz" width="960" height="520" loading="lazy" />
+    <figcaption>RViz muestra la información que circula por ROS 2, como LiDAR, cámara y odometría.</figcaption>
+  </figure>
+</div>
+
+> [!CHECK]
+> Si las dos ventanas abren y podés cerrarlas sin errores, el entorno gráfico está listo para usar el simulador.
+
+## Problemas frecuentes
+
+Si Gazebo o RViz se ven lentos, muestran artefactos o fallan al abrir, la causa más común es la aceleración gráfica.
+
+- En VirtualBox: activá **Configuración → Pantalla → Habilitar aceleración 3D**.
+- En VMware: activá la aceleración 3D en la configuración de display.
+- Si el problema continúa, probá Ubuntu nativo o dual boot, que es el camino recomendado.
+
+> [!WARNING]
+> Una máquina virtual puede abrir las aplicaciones y aun así rendir demasiado lento para trabajar cómodamente con sensores y física en tiempo real.
+
+## Próximo paso
+
+Con las herramientas verificadas, continuá con [Levantar el simulador](../simulador/).
