@@ -44,26 +44,20 @@ import { withBase } from '../../config/site';
       <strong id="observation-caption">El mismo entorno, visto por el robot.</strong>
       <span>Gazebo construye la escena. RViz hace visible su lectura.</span>
     </div>
-    <button type="button" data-observation-toggle aria-pressed="false" hidden>
-      <span data-observation-toggle-label>Pausar las vistas</span>
-    </button>
   </figcaption>
 </figure>
 
 <script>
   document.querySelectorAll<HTMLElement>('[data-observation]').forEach((observation) => {
     const videos = Array.from(observation.querySelectorAll<HTMLVideoElement>('[data-observation-video]'));
-    const toggle = observation.querySelector<HTMLButtonElement>('[data-observation-toggle]');
-    const toggleLabel = observation.querySelector<HTMLElement>('[data-observation-toggle-label]');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let mediaLoaded = false;
     let visible = false;
-    let userPaused = false;
 
     const pauseVideos = () => videos.forEach((video) => video.pause());
 
     const updatePlayback = () => {
-      if (!mediaLoaded || reducedMotion || userPaused || !visible || document.hidden) {
+      if (!mediaLoaded || reducedMotion || !visible || document.hidden) {
         pauseVideos();
         return;
       }
@@ -84,11 +78,7 @@ import { withBase } from '../../config/site';
       });
     };
 
-    if (reducedMotion) {
-      if (toggle) toggle.hidden = true;
-    } else {
-      if (toggle) toggle.hidden = false;
-
+    if (!reducedMotion) {
       const loadObserver = new IntersectionObserver(
         (entries) => {
           if (entries.some((entry) => entry.isIntersecting)) {
@@ -110,15 +100,6 @@ import { withBase } from '../../config/site';
       loadObserver.observe(observation);
       visibilityObserver.observe(observation);
     }
-
-    toggle?.addEventListener('click', () => {
-      userPaused = !userPaused;
-      toggle.setAttribute('aria-pressed', String(userPaused));
-      if (toggleLabel) {
-        toggleLabel.textContent = userPaused ? 'Reanudar las vistas' : 'Pausar las vistas';
-      }
-      updatePlayback();
-    });
 
     document.addEventListener('visibilitychange', updatePlayback);
   });

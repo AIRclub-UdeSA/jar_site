@@ -473,25 +473,6 @@
   line-height: 1.55;
 }
 
-.landing-observation-caption button {
-  min-width: 44px;
-  min-height: 44px;
-  width: fit-content;
-  padding: 0;
-  border: 0;
-  border-bottom: 1px solid currentColor;
-  background: transparent;
-  color: var(--text-3);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  line-height: 1.4;
-  letter-spacing: 0.04em;
-}
-
-.landing-observation-caption button:hover {
-  color: var(--landing-ink);
-}
-
 @media (min-width: 48rem) {
   .landing-observation-view {
     width: 92%;
@@ -501,11 +482,6 @@
     justify-self: end;
   }
 
-  .landing-observation-caption {
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: end;
-    gap: 2rem;
-  }
 }
 
 /* Roadmap */

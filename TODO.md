@@ -5,6 +5,7 @@ Backlog compartido para quienes sigan trabajando en el sitio. Antes de arrancar:
 ## Contenido
 
 - [ ] **Revisar todos los textos** — recorrer landing + docs puliendo redacción (rioplatense, voseo). Los stubs tienen blockquotes `> TODO:` marcando lo pendiente de definición.
+- [x] **Pase de redacción natural en la landing** — reemplazo de “flota”, “gemelo digital”, “hardware físico” y otros giros rígidos por un recorrido más directo entre simulador, competencia y JAR; requisitos de selección y presencialidad explicitados en la postulación.
 - [x] **Bloque de info de la JAR** — sección monumental dedicada a la JAR 2026 (Rosario, 3–6 nov 2026) con titular geográfico, split descriptivo y links directos a `jar.net.ar` y a la UNR.
 - [x] **Sección "Acerca de nosotros"** — bloque de manifiesto del AIR Club UdeSA con declaración de misión institucional y links al sitio oficial y al GitHub de la organización.
 - [ ] **Setup family-friendly** — repasar `src/content/docs/setup/`: explicar cada concepto la primera vez que aparece, capturas de pantalla por paso, no asumir experiencia previa con ROS ni Linux.
