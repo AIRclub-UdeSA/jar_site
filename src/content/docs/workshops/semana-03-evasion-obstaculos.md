@@ -26,7 +26,7 @@ Necesitás el Workshop 01 (timers) y 02 (`Twist` y `/cmd_vel`) completados — e
 
 ## Concepto mínimo: por qué una máquina de estados
 
-El comportamiento que buscamos (avanzar, y cuando corresponda girar) tiene dos modos claramente distintos, y en cada momento el robot solo puede estar haciendo uno de los dos. La tentación, sin pensarlo como una máquina de estados, es ir agregando variables booleanas sueltas (`girando`, `bloqueado`...) e `if`s repartidos por todo el nodo a medida que aparecen casos nuevos — funciona al principio, pero rápido se vuelve difícil de leer y de debuggear.
+El comportamiento que buscamos (avanzar, y cuando corresponda girar) tiene dos modos claramente distintos, y en cada momento el robot solo puede estar haciendo uno de los dos. La tentación, sin pensarlo como una máquina de estados, es ir agregando variables booleanas sueltas (`girando`, `bloqueado`...) y sentencias `if` repartidas por todo el nodo a medida que aparecen casos nuevos — funciona al principio, pero rápido se vuelve difícil de leer y de debuggear.
 
 Pensar el problema como una máquina de estados obliga a responder dos preguntas separadas: **¿en qué estado estoy?** y **¿qué hace que pase de uno a otro?** Un **estado** representa la situación actual del sistema (acá, `ESTADO_AVANZAR` o `ESTADO_GIRAR` — excluyentes, nunca "un poco en cada uno"). Una **transición** es el cambio de un estado a otro, disparado por un evento, sensor o temporizador.
 

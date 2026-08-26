@@ -13,7 +13,7 @@ Este es el primer workshop, pensado para alguien que nunca tocó ROS 2. La idea 
 
 ## Resultado de la práctica
 
-Al terminar vas a tener dos nodos comunicándose por el topic `mensaje`: un talker que publica un `std_msgs/String` una vez por segundo, y un listener que se suscribe y lo recibe. Los vas a completar vos: el código trae `TODO`s comentados en el lugar exacto donde falta una línea.
+Al terminar vas a tener dos nodos comunicándose por el topic `mensaje`: un talker que publica un `std_msgs/String` una vez por segundo, y un listener que se suscribe y lo recibe. Los vas a completar vos: el código trae comentarios `TODO` en el lugar exacto donde falta una línea.
 
 ## Antes de empezar
 
@@ -46,11 +46,11 @@ Esto le dice a ROS 2 "llamá a `self.publicar` cada 1.0 segundos mientras el nod
 
 ## Implementación
 
-Los dos archivos del paquete `talkers_listeners`, [`talker.py`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-01-talkers-listeners/talkers_listeners/talkers_listeners/talker.py) y [`listener.py`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-01-talkers-listeners/talkers_listeners/talkers_listeners/listener.py), tienen `TODO`s simples: líneas ya escritas, comentadas, que solo hay que descomentar en el lugar indicado. No hay que escribir código nuevo — la idea es que el primer contacto sea leer y entender qué hace cada línea.
+Los dos archivos del paquete `talkers_listeners`, [`talker.py`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-01-talkers-listeners/talkers_listeners/talkers_listeners/talker.py) y [`listener.py`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-01-talkers-listeners/talkers_listeners/talkers_listeners/listener.py), tienen comentarios `TODO` simples: líneas ya escritas, comentadas, que solo hay que descomentar en el lugar indicado. No hay que escribir código nuevo — la idea es que el primer contacto sea leer y entender qué hace cada línea.
 
 Completalos en este orden, probando cada uno antes de pasar al siguiente:
 
-1. **`talker.py` primero.** Tiene 3 `TODO`s: crear el publisher, crear el timer, y publicar el mensaje dentro de `publicar()`. Compilá y corré *solo* el talker, y confirmá con `ros2 topic echo /mensaje` que está publicando antes de tocar el listener.
+1. **`talker.py` primero.** Tiene 3 comentarios `TODO`: crear el publisher, crear el timer, y publicar el mensaje dentro de `publicar()`. Compilá y corré *solo* el talker, y confirmá con `ros2 topic echo /mensaje` que está publicando antes de tocar el listener.
 2. **`listener.py`, después.** Tiene 1 `TODO`: suscribirse al topic `mensaje`. Con el talker ya andando en una terminal, corré el listener en otra y confirmá en sus logs que va recibiendo cada mensaje.
 
 > [!NOTE]
