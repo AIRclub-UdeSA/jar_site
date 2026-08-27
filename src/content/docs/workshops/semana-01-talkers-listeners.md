@@ -9,23 +9,74 @@ prerequisites:
   - "Setup completo"
 ---
 
-Este es el primer workshop, pensado para alguien que nunca tocó ROS 2. La idea es armar el ejemplo más chico posible que igual use las piezas que se van a repetir en todos los workshops que siguen: un nodo que publica algo a frecuencia fija (`talker.py`) y otro que lo escucha y lo loguea (`listener.py`). No hay lidar, ni cámara, ni robot moviéndose — a propósito: la meta acá no es resolver un problema de robótica, es entender cómo se comunican dos programas de ROS 2 entre sí, sin que un sensor real complique el ejemplo.
+## La práctica
 
-## Resultado de la práctica
+<section class="doc-practice-plate" aria-labelledby="la-práctica">
+  <div class="doc-practice-intro">
+    <p class="doc-practice-statement">Publicar.<br />Escuchar.<br />Comprobar.</p>
+    <p class="doc-practice-note">Empezamos con el caso más chico posible: un nodo publica y otro recibe. Sin sensores ni movimiento, para mirar solamente cómo se comunican dos programas de ROS 2.</p>
+  </div>
 
-Al terminar vas a tener dos nodos comunicándose por el topic `mensaje`: un talker que publica un `std_msgs/String` una vez por segundo, y un listener que se suscribe y lo recibe. Los vas a completar vos: el código trae comentarios `TODO` en el lugar exacto donde falta una línea.
+  <dl class="doc-practice-facts">
+    <div>
+      <dt>Topic</dt>
+      <dd><code>mensaje</code></dd>
+    </div>
+    <div>
+      <dt>Tipo</dt>
+      <dd><code>std_msgs/String</code></dd>
+    </div>
+    <div>
+      <dt>Ritmo</dt>
+      <dd><code>1 Hz</code></dd>
+    </div>
+    <div>
+      <dt>Código</dt>
+      <dd>4 comentarios <code>TODO</code></dd>
+    </div>
+  </dl>
+
+  <figure class="doc-practice-graph">
+    <img src="../../media/docs/ros-graph.svg" alt="Un nodo Talker publica mensajes en el topic mensaje y un nodo Listener los recibe" width="960" height="360" loading="lazy" />
+    <figcaption>El talker y el listener no se llaman entre sí: los dos se conectan al mismo topic.</figcaption>
+  </figure>
+</section>
 
 ## Antes de empezar
 
-`rclpy` y `std_msgs` ya vienen con `ros-humble-desktop`, así que no hace falta instalar nada extra esta semana. Cloná el repo de workshops dentro de tu workspace (el mismo donde tenés `yahboom_rosmaster`):
+<ol class="doc-preflight" aria-label="Preparación del workshop">
+  <li>
+    <span class="doc-preflight-index" aria-hidden="true">01</span>
+    <div class="doc-preflight-copy">
+      <h3>Entorno</h3>
+      <p><code>rclpy</code> y <code>std_msgs</code> ya vienen con <code>ros-humble-desktop</code>. No hace falta instalar nada extra esta semana.</p>
+    </div>
+  </li>
+  <li>
+    <span class="doc-preflight-index" aria-hidden="true">02</span>
+    <div class="doc-preflight-copy">
+      <h3>Repositorio</h3>
+      <p>Si todavía no tenés el repo de workshops, clonalo dentro de tu workspace, junto a <code>yahboom_rosmaster</code>.</p>
+    </div>
+  </li>
+  <li>
+    <span class="doc-preflight-index" aria-hidden="true">03</span>
+    <div class="doc-preflight-copy">
+      <h3>Workspace</h3>
+      <p>Cargá el entorno y confirmá que ROS 2 responda antes de continuar.</p>
+    </div>
+  </li>
+</ol>
 
 ```bash
+# Solo si todavía no clonaste el repo de workshops
 cd ~/rosmaster_ws/src
 git clone https://github.com/AIRclub-UdeSA/jar_workshops.git
-```
 
-> [!CHECK]
-> Con el workspace armado, ejecutá `source ~/rosmaster_ws/install/setup.bash` y confirmá que `ros2 node list` responda sin errores.
+# Cargá el workspace y comprobá que ROS 2 responda
+source ~/rosmaster_ws/install/setup.bash
+ros2 node list
+```
 
 ## Concepto mínimo: nodos, topics y timers
 
@@ -42,7 +93,7 @@ self.timer = self.create_timer(1.0, self.publicar)
 Esto le dice a ROS 2 "llamá a `self.publicar` cada 1.0 segundos mientras el nodo esté vivo". Usar un timer en vez de, por ejemplo, un `while True` con `time.sleep(1.0)` es lo que se repite en todos los workshops siguientes: le deja a ROS 2 el control de cuándo se ejecuta cada cosa, y permite que un mismo nodo tenga varios timers y callbacks corriendo intercalados sin pisarse.
 
 > [!NOTE]
-> Una regla que va a importar desde la semana 03 en adelante, cuando aparezcan sensores reales: **el callback de un sensor solo debería guardar el último dato recibido en una variable, nunca decidir ni actuar ahí adentro.** La lógica que decide va en un timer callback aparte, a una frecuencia fija y conocida — porque distintos sensores publican a ritmos distintos e impredecibles entre sí.
+> Desde la semana 03 vamos a usar una convención: el callback de cada sensor guarda el último dato recibido y un timer separado toma las decisiones a una frecuencia conocida. No es la única arquitectura posible en ROS 2, pero nos permite combinar sensores que publican a ritmos diferentes sin atar el comportamiento del robot a uno de ellos.
 
 ## Implementación
 
@@ -53,6 +104,22 @@ Completalos en este orden, probando cada uno antes de pasar al siguiente:
 1. **`talker.py` primero.** Tiene 3 comentarios `TODO`: crear el publisher, crear el timer, y publicar el mensaje dentro de `publicar()`. Compilá y corré *solo* el talker, y confirmá con `ros2 topic echo /mensaje` que está publicando antes de tocar el listener.
 2. **`listener.py`, después.** Tiene 1 `TODO`: suscribirse al topic `mensaje`. Con el talker ya andando en una terminal, corré el listener en otra y confirmá en sus logs que va recibiendo cada mensaje.
 
+En `talker.py` vas a habilitar estas tres líneas:
+
+```python
+self.publisher_ = self.create_publisher(String, 'mensaje', 10)
+self.timer = self.create_timer(1.0, self.publicar)
+self.publisher_.publish(msg)
+```
+
+En `listener.py`, vas a habilitar la suscripción:
+
+```python
+self.subscription = self.create_subscription(
+    String, 'mensaje', self.recibir, 10
+)
+```
+
 > [!NOTE]
 > Todo paquete `ament_python` necesita [`package.xml`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-01-talkers-listeners/talkers_listeners/package.xml) (declara dependencias con `<depend>`) y [`setup.py`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-01-talkers-listeners/talkers_listeners/setup.py) (registra en `entry_points` qué ejecutables expone el paquete). Esta semana ya vienen completos — alcanza con mirarlos una vez, porque de acá en adelante los vas a tener que tocar vos.
 
@@ -61,47 +128,61 @@ Completalos en este orden, probando cada uno antes de pasar al siguiente:
 ```bash
 # Terminal 1 — build
 cd ~/rosmaster_ws
-colcon build --packages-select talkers_listeners
-source install/setup.bash
+colcon build --symlink-install --packages-select talkers_listeners
+source ~/rosmaster_ws/install/setup.bash
 ```
 
 ```bash
 # Terminal 2 — el talker (probalo solo, primero)
-source install/setup.bash
+source ~/rosmaster_ws/install/setup.bash
 ros2 run talkers_listeners talker
 ```
 
 ```bash
 # Terminal 3 — chequeo mientras el talker corre solo
+source ~/rosmaster_ws/install/setup.bash
 ros2 topic echo /mensaje
 ```
 
-Una vez confirmado que el talker publica, y con `listener.py` ya completado:
+Una vez confirmado que el talker publica, detené `echo` con `Ctrl+C`. Con `listener.py` ya completado, reutilizá esa terminal:
 
 ```bash
 # Terminal 3 — el listener
-source install/setup.bash
+source ~/rosmaster_ws/install/setup.bash
 ros2 run talkers_listeners listener
 ```
 
 ## Comprobación
 
-Con las dos terminales corriendo a la vez, cada mensaje que loguea el talker debería aparecer logueado como recibido en el listener, un segundo después: `Publiqué: "Hola desde el talker, mensaje N"` de un lado, `Recibí: "..."` del otro, con `N` incrementando.
+Con las dos terminales corriendo a la vez, cada mensaje del talker debería aparecer en el listener apenas se publica. Vas a ver un par nuevo por segundo: `Publiqué: "Hola desde el talker, mensaje N"` de un lado y `Recibí: "..."` del otro, con `N` incrementando.
+
+Abrí una cuarta terminal para inspeccionar el sistema mientras los dos nodos siguen activos:
+
+```bash
+source ~/rosmaster_ws/install/setup.bash
+ros2 topic list
+ros2 topic info /mensaje
+ros2 topic hz /mensaje
+```
+
+`ros2 topic list` debería incluir `/mensaje`; `ros2 topic info` debería encontrar un publisher y una suscripción; y `ros2 topic hz` debería medir una frecuencia cercana a `1 Hz`.
 
 > [!QUESTION]
 > Cerrá el talker y dejá el listener corriendo. ¿Qué cambia en `ros2 topic info /mensaje`? El topic sigue declarado por el suscriptor, pero deja de recibir datos hasta que aparece otro publisher.
 
 ## Explicación: el mismo patrón con Donatello
 
-Con el simulador levantado (ver la [guía del simulador](../../setup/simulador/#6-teleoperación)), sumá una tercera terminal con la teleoperación por teclado:
+Con el simulador levantado (ver la [guía del simulador](../../setup/simulador/#6-moverlo-desde-el-teclado)), abrí otra terminal para la teleoperación por teclado:
 
 ```bash
+source ~/rosmaster_ws/install/setup.bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
 ```
 
-Y en una cuarta, inspeccioná el topic real del robot mientras manejás:
+En otra terminal, inspeccioná el topic real del robot mientras manejás:
 
 ```bash
+source ~/rosmaster_ws/install/setup.bash
 ros2 topic echo /cmd_vel
 ```
 
@@ -109,4 +190,15 @@ Es el mismo patrón que tu talker y listener, pero con un topic real: `teleop_tw
 
 ## Desafío extra
 
-Modificá `listener.py` para que en vez de suscribirse a `mensaje` escuche `/cmd_vel` (tipo `geometry_msgs/Twist`) y loguee `linear.x`, `linear.y` y `angular.z` cada vez que llega un mensaje. Corré tu listener modificado mientras manejás con el teleclado y confirmá que ves los mismos valores que en `ros2 topic echo /cmd_vel`.
+Modificá `listener.py` para que en vez de suscribirse a `mensaje` escuche `/cmd_vel` (tipo `geometry_msgs/Twist`) y loguee `linear.x`, `linear.y` y `angular.z` cada vez que llega un mensaje. Agregá también `<depend>geometry_msgs</depend>` a `package.xml`, porque el nodo ahora importa ese paquete.
+
+Volvé a compilar, cargá el overlay y corré tu listener modificado mientras manejás con la teleoperación por teclado:
+
+```bash
+cd ~/rosmaster_ws
+colcon build --symlink-install --packages-select talkers_listeners
+source ~/rosmaster_ws/install/setup.bash
+ros2 run talkers_listeners listener
+```
+
+Confirmá que ves los mismos valores que en `ros2 topic echo /cmd_vel`.
