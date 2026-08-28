@@ -22,7 +22,7 @@ prerequisites:
   <dl class="doc-practice-facts">
     <div>
       <dt>Herramientas</dt>
-      <dd>Launch file + config RViz</dd>
+      <dd>Launch file + configuración de RViz</dd>
     </div>
     <div>
       <dt>Lanza</dt>
@@ -67,9 +67,42 @@ prerequisites:
 
 ## Concepto mínimo: qué describe un launch file
 
-Un [launch file](https://docs.ros.org/en/lyrical/Tutorials/Intermediate/Launch/Launch-Main.html) es un archivo de Python que **describe** qué procesos hay que lanzar — no es un script que corre de arriba a abajo, es una descripción que el sistema de launch lee y ejecuta por su cuenta. Tres reglas lo definen: el archivo termina en `.launch.py`, adentro hay una función `generate_launch_description()` sin argumentos, y esa función devuelve un `LaunchDescription`. Ya lo veniás usando sin darte cuenta: es lo que hacía `ros2 launch yahboom_rosmaster_gazebo rosmaster_gazebo_fortress.launch.py`.
+Un [launch file](https://docs.ros.org/en/humble/Tutorials/Intermediate/Launch/Launch-Main.html) es un archivo de Python que **describe** qué procesos hay que lanzar — no es un script que corre de arriba a abajo, es una descripción que el sistema de launch lee y ejecuta por su cuenta. Tres reglas lo definen: el archivo termina en `.launch.py`, adentro hay una función `generate_launch_description()` sin argumentos, y esa función devuelve un `LaunchDescription`. Ya lo veniás usando sin darte cuenta: es lo que hace `ros2 launch yahboom_rosmaster_bringup rosmaster_x3_sim.launch.py`.
 
 `launch_rviz` no tiene código Python propio, ningún nodo — solo launch files y configuraciones de RViz. Este tipo de paquete es tan común en ROS 2 que tiene nombre propio, **bringup** ("levantar el sistema"), y se lo suele nombrar `algo_bringup` — como `yahboom_rosmaster_bringup`, mismo patrón con otro nombre.
+
+### Una entrada, tres partes
+
+<figure class="doc-launch-map" aria-labelledby="launch-map-caption">
+  <div class="doc-launch-map-root">
+    <span>Paquete bringup</span>
+    <code>launch_rviz</code>
+  </div>
+  <ol>
+    <li>
+      <span>01</span>
+      <div>
+        <strong>Simulador</strong>
+        <small>Incluye <code>rosmaster_x3_sim.launch.py</code>.</small>
+      </div>
+    </li>
+    <li>
+      <span>02</span>
+      <div>
+        <strong>Nodos</strong>
+        <small>Inicia el comportamiento del workshop.</small>
+      </div>
+    </li>
+    <li>
+      <span>03</span>
+      <div>
+        <strong>RViz</strong>
+        <small>Abre la vista con su configuración guardada.</small>
+      </div>
+    </li>
+  </ol>
+  <figcaption id="launch-map-caption">El launch no reemplaza esos procesos: coordina cómo arrancan y qué configuración recibe cada uno.</figcaption>
+</figure>
 
 Cada nodo se declara con `Node(...)`, el equivalente declarado de un `ros2 run`:
 
@@ -82,6 +115,8 @@ evasor = Node(
     parameters=parametros_evasor,  # los mismos que antes iban en --ros-args -p
 )
 ```
+
+### Argumentos y parámetros
 
 Dos cosas que suelen confundir al principio:
 
@@ -105,6 +140,8 @@ simulador = IncludeLaunchDescription(
 
 **Parámetro ROS vs. argumento de launch** son dos cosas parecidas pero distintas: un argumento de launch (`DeclareLaunchArgument`) lo lee el launch file y se pasa con `ros2 launch ... x:=2.0`; un parámetro ROS (`self.declare_parameter`) lo lee el nodo y se pasa con `--ros-args -p x:=2.0`. Se usan juntos para evitar repetir un valor en varios nodos: declarás el argumento una vez y lo enchufás como parámetro de cada uno con `LaunchConfiguration('x')`. Ojo: `LaunchConfiguration` siempre devuelve texto, así que si el nodo espera un `float` hay que convertirlo con `ParameterValue(LaunchConfiguration('x'), value_type=float)`.
 
+### Tiempo simulado y archivos instalados
+
 > [!NOTE]
 > Cuando corre el simulador hay **dos relojes**: el de tu computadora y el de la simulación (que Gazebo publica en `/clock`). Si un nodo usa el reloj equivocado, los timestamps no coinciden y aparecen síntomas raros — RViz parpadea, o una transformada tf2 "no se encuentra". La solución es pasarle `parameters=[{'use_sim_time': True}]` a **todos** los nodos, RViz incluido, siempre que el simulador esté corriendo.
 
@@ -122,7 +159,7 @@ El **Fixed Frame** (en Global Options) es el marco de referencia contra el que s
 | `base_footprint` / `base_link` | el robot; se mueve respecto de `odom` |
 | `laser_link` | el lidar, montado sobre el robot |
 
-Cada **display** dibuja un tópico. Los que usás en estos workshops:
+Muchos **displays** consumen un tópico; otros, como `TF` y `Grid`, muestran referencias o transformadas del sistema. Los que usás en estos workshops:
 
 | Display | Tópico | Para qué |
 | --- | --- | --- |
@@ -136,7 +173,7 @@ Cada **display** dibuja un tópico. Los que usás en estos workshops:
 
 El truco que se repite en estos workshops: mostrar dos `LaserScan` superpuestos, el `/scan` completo (chico, gris) y una versión filtrada del mismo scan en otro color y más grande (`/scan_cono` en semana 03, `/scan_rojo` en semana 04) — así se ve de un vistazo qué subconjunto de rayos está usando el nodo para decidir algo.
 
-Si un tópico publica (confirmado con `ros2 topic hz`) pero el display no muestra nada sin marcar error de transformada, es casi siempre [**QoS**](https://docs.ros.org/en/lyrical/Concepts/Intermediate/About-Quality-of-Service-Settings.html): los sensores publican con *Reliability* en `Best Effort` (así llega `/scan`, desde el bridge de Gazebo), y un display en `Reliable` nunca se conecta a un publisher `Best Effort`. La solución es abrir el display, ir a **Topic** y poner *Reliability Policy* en `Best Effort` — pero solo si el nodo del otro lado también lo usa; `/scan_cono`, por ejemplo, lo publica `evasor.py` sin tocar el QoS, así que queda en `Reliable` por default (distinto de `/scan`).
+Si un tópico publica (confirmado con `ros2 topic hz`) pero el display no muestra nada sin marcar error de transformada, es casi siempre [**QoS**](https://docs.ros.org/en/humble/Concepts/Intermediate/About-Quality-of-Service-Settings.html): los sensores publican con *Reliability* en `Best Effort` (así llega `/scan`, desde el bridge de Gazebo), y un display en `Reliable` nunca se conecta a un publisher `Best Effort`. La solución es abrir el display, ir a **Topic** y poner *Reliability Policy* en `Best Effort` — pero solo si el nodo del otro lado también lo usa; `/scan_cono`, por ejemplo, lo publica `evasor.py` sin tocar el QoS, así que queda en `Reliable` por default (distinto de `/scan`).
 
 ## Implementación
 
@@ -195,7 +232,7 @@ Semana 04:
 ```bash
 ros2 node list                          # tienen que estar todos los nodos del launch
 ros2 topic hz /cam_1/color/image_raw    # confirma que la cámara publica
-ros2 topic hz /scan_rojo                # solo aparece mientras hay rojo a la vista
+ros2 topic hz /scan_rojo                # publica siempre; solo hay rangos finitos donde detecta rojo
 ```
 
 `ros2 param get <nombre> use_sim_time` es el mejor chequeo cuando algo parpadea en RViz o tf2 se queja de transformadas: si dice `False`, falta ese parámetro en ese nodo.

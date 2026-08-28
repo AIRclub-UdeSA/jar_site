@@ -192,7 +192,7 @@ En RViz podés agregar una visualización de `Odometry` y seleccionar `/odom`. E
 
 ## Explicación: orientación y cuaterniones
 
-Los mensajes de [odometría](https://docs.ros2.org/latest/api/nav_msgs/msg/Odometry.html) (`/odom`) y las [transformaciones](https://docs.ros.org/en/lyrical/Tutorials/Intermediate/Tf2/Tf2-Main.html) (`/tf`) representan la orientación con un [cuaternión](https://docs.ros.org/en/lyrical/Tutorials/Intermediate/Tf2/Quaternion-Fundamentals.html) `[x, y, z, w]`, no directamente con ángulos de *roll*, *pitch* y *yaw*.
+Los mensajes de [odometría](https://docs.ros2.org/latest/api/nav_msgs/msg/Odometry.html) (`/odom`) y las [transformaciones](https://docs.ros.org/en/humble/Tutorials/Intermediate/Tf2/Tf2-Main.html) (`/tf`) representan la orientación con un [cuaternión](https://docs.ros.org/en/humble/Tutorials/Intermediate/Tf2/Quaternion-Fundamentals.html) `[x, y, z, w]`, no directamente con ángulos de *roll*, *pitch* y *yaw*.
 
 | Representación | Valores | Ventaja | Límite |
 | --- | :---: | --- | --- |

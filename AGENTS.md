@@ -86,6 +86,7 @@ El visor vive en `src/components/landing/LandingHero.astro` y usa three.js + `GL
 - La duración se presenta como una indicación natural (`Calculá aprox. …`) junto al nivel; el resultado ocupa la columna de resumen y se distingue con una única regla verde, sin etiqueta ni caja propia. Los prerequisitos no se repiten en esta portada: cada guía los desarrolla en su sección “Antes de empezar”.
 - Los índices de Setup y Workshops colocan su recorrido generado inmediatamente después del encabezado. Setup se organiza como tres guías y Workshops como un catálogo sincronizado por archivos `semana-NN-*`, título, metadata y estado.
 - Los callouts se transforman durante el build mediante el plugin Sätteri local `src/markdown/callouts.mjs`.
+- Las tablas Markdown se envuelven durante el build mediante `src/markdown/table-scroll.mjs`; el wrapper es la superficie de scroll y el `<table>` conserva su layout semántico. No volver a aplicar `overflow` directamente sobre `display: table`.
 - No reintroducir grilla global, tarjetas repetidas, acordeones dentro del flujo, HUDs, terminales ficticias ni el enlace “Editar en GitHub” al final de la documentación. En estas páginas mandan la lectura, la orientación y la ejecución de pasos.
 
 # Verificación obligatoria

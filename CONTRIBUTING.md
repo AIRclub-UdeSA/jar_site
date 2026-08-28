@@ -58,10 +58,12 @@ Ver [Estructura del repo](README.md#estructura-del-repo) en el README.
   "La práctica" con resultado y datos técnicos reales, "Antes de empezar"
   como lista de pasos, teoría mínima, y comandos de terminal con
   `source ~/rosmaster_ws/install/setup.bash` en ruta absoluta.
-- Los links a documentación externa (ROS 2, OpenCV) van a la versión
-  vigente de cada doc — para ROS 2 eso es `docs.ros.org/en/lyrical/...`,
-  salvo en la guía de instalación, que está pineada a Humble porque es la
-  versión que corren los robots del club.
+- Los links a documentación externa de ROS 2 apuntan siempre a
+  `docs.ros.org/en/humble/...`, porque Ubuntu 22.04 + ROS 2 Humble es el
+  entorno que usan los participantes y los robots del club. Aunque la web de
+  ROS sugiera una distribución más nueva, no mezclar documentación entre
+  versiones. Para otras herramientas, como OpenCV, usar la documentación
+  vigente que corresponda al ejemplo.
 - Preferí commits chicos y revisables.
 
 ## Pull requests

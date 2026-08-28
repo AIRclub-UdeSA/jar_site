@@ -39,7 +39,12 @@ prerequisites:
   </dl>
 
   <figure class="doc-practice-graph">
-    <img src="../../media/docs/maquina-estados-animada.svg" alt="Animación de la máquina de estados: a la izquierda los estados Avanzar y Girar se activan por turnos, a la derecha un robot esquemático avanza, detecta un obstáculo, gira en el lugar y retoma el avance" width="1720" height="500" loading="lazy" />
+    <picture>
+      <source media="(prefers-reduced-motion: reduce) and (max-width: 47.999rem)" srcset="../../media/docs/maquina-estados-mobile.svg" />
+      <source media="(prefers-reduced-motion: reduce)" srcset="../../media/docs/maquina-estados-estatica.svg" />
+      <source media="(max-width: 47.999rem)" srcset="../../media/docs/maquina-estados-mobile.svg" />
+      <img src="../../media/docs/maquina-estados-animada.svg" alt="La máquina de estados alterna entre Avanzar y Girar: cuando el lidar detecta un obstáculo, Donatello cambia de rumbo y después retoma el avance" width="1720" height="500" loading="lazy" />
+    </picture>
     <figcaption>Dos estados excluyentes y dos transiciones: hay_obstaculo() lleva de Avanzar a Girar; girar lo suficiente vuelve a Avanzar.</figcaption>
   </figure>
 </section>
@@ -128,7 +133,7 @@ Podés elegir cualquiera; acá usamos `cafe.world` como ejemplo porque tiene mue
 ```bash
 # Terminal 2 — simulador, con un mundo con obstáculos (acá, cafe.world)
 source ~/rosmaster_ws/install/setup.bash
-ros2 launch yahboom_rosmaster_gazebo rosmaster_gazebo_fortress.launch.py \
+ros2 launch yahboom_rosmaster_bringup rosmaster_x3_sim.launch.py \
   world:="$(ros2 pkg prefix yahboom_rosmaster_gazebo)/share/yahboom_rosmaster_gazebo/worlds/cafe.world" \
   motion_profile:=ideal
 ```

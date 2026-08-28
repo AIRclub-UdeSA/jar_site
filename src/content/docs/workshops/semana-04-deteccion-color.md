@@ -105,7 +105,7 @@ Podés elegir cualquiera de los `_victimas`; acá usamos `laberinto_simple_victi
 ```bash
 # Terminal 2 — simulador, con un mundo con cuadrados de color
 source ~/rosmaster_ws/install/setup.bash
-ros2 launch yahboom_rosmaster_gazebo rosmaster_gazebo_fortress.launch.py \
+ros2 launch yahboom_rosmaster_bringup rosmaster_x3_sim.launch.py \
   world:="$(ros2 pkg prefix yahboom_rosmaster_gazebo)/share/yahboom_rosmaster_gazebo/worlds/laberinto_simple_victimas.world" \
   motion_profile:=ideal
 ```
@@ -128,7 +128,7 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard
 
 `detector.py` contesta una pregunta binaria — ¿hay rojo ahora? — pero no dice **dónde** está el cuadrado respecto del robot. El lidar sí mide distancia y ángulo con precisión, pero no tiene idea de colores. Esta parte se resuelve en [`detector_scan.py`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-04-deteccion-color/deteccion_color/deteccion_color/detector_scan.py), combinando los dos sensores: para cada punto que devuelve el lidar, preguntarse "si la cámara estuviera mirando justo donde apunta este rayo, ¿qué píxel le tocaría?", y mirar si ese píxel es rojo.
 
-Para proyectar un punto 3D a un píxel hacen falta dos cosas: dónde está la cámara respecto del lidar (la transformada entre `laser_link` y el frame óptico de la cámara, que `robot_state_publisher` ya publica en [tf2](https://docs.ros.org/en/lyrical/Tutorials/Intermediate/Tf2/Tf2-Main.html) a partir del URDF — no hace falta medirla a mano), y el modelo *pinhole* de la cámara (`u = fx * x/z + cx`, `v = fy * y/z + cy`, con los intrínsecos publicados en `sensor_msgs/CameraInfo`). Con eso, cada punto del `/scan` (polar, en el frame del lidar) se pasa a cartesiano, se rota/traslada al frame de la cámara, y se proyecta a un píxel.
+Para proyectar un punto 3D a un píxel hacen falta dos cosas: dónde está la cámara respecto del lidar (la transformada entre `laser_link` y el frame óptico de la cámara, que `robot_state_publisher` ya publica en [tf2](https://docs.ros.org/en/humble/Tutorials/Intermediate/Tf2/Tf2-Main.html) a partir del URDF — no hace falta medirla a mano), y el modelo *pinhole* de la cámara (`u = fx * x/z + cx`, `v = fy * y/z + cy`, con los intrínsecos publicados en `sensor_msgs/CameraInfo`). Con eso, cada punto del `/scan` (polar, en el frame del lidar) se pasa a cartesiano, se rota/traslada al frame de la cámara, y se proyecta a un píxel.
 
 <figure class="doc-figure">
   <img src="../../media/docs/proyeccion-lidar-camara.svg" alt="Animación de los 360° del lidar alrededor del robot: casi todos los rayos llegan al límite del rango sin encontrar nada, salvo tres que pegan contra el cuadrado rojo y quedan prendidos, junto con los puntos correspondientes en la vista de cámara" width="860" height="520" loading="lazy" />
@@ -161,7 +161,7 @@ source ~/rosmaster_ws/install/setup.bash
 ```bash
 # Terminal 2 — simulador, con un mundo con cuadrados de color
 source ~/rosmaster_ws/install/setup.bash
-ros2 launch yahboom_rosmaster_gazebo rosmaster_gazebo_fortress.launch.py \
+ros2 launch yahboom_rosmaster_bringup rosmaster_x3_sim.launch.py \
   world:="$(ros2 pkg prefix yahboom_rosmaster_gazebo)/share/yahboom_rosmaster_gazebo/worlds/laberinto_simple_victimas.world" \
   motion_profile:=ideal
 ```

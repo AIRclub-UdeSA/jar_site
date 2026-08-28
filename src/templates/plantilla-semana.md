@@ -38,7 +38,9 @@ prerequisites:
        que explica el resultado antes de entrar en la teoría (como el grafo de
        la semana 01 o la máquina de estados de la semana 03). Si el diagrama
        explica un concepto puntual de la implementación, va en "Concepto
-       mínimo" en su lugar, no acá. -->
+       mínimo" en su lugar, no acá. Los diagramas panorámicos necesitan una
+       variante mobile legible y, si tienen movimiento, una fuente estática
+       para prefers-reduced-motion. -->
 </section>
 
 ## Antes de empezar
