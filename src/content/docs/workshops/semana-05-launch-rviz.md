@@ -11,22 +11,65 @@ prerequisites:
   - "Workshop 04"
 ---
 
-Esta semana no suma un tema nuevo de robótica: aprendés las dos herramientas que veníamos esquivando a mano y que de acá en adelante se usan en todos los workshops — **launch files** para levantar varios nodos con sus parámetros de una sola vez, y **configuraciones de RViz** para no rearmar la vista cada vez que la abrís. Lo hacés una sola vez, acá, y después lo reusás: los workshops que siguen van a decir simplemente "agregá tu nodo al launch" o "agregá este display a tu RViz".
+## La práctica
 
-## Resultado de la práctica
+<section class="doc-practice-plate" aria-labelledby="la-práctica">
+  <div class="doc-practice-intro">
+    <p class="doc-practice-statement">Lanzar.<br />Visualizar.<br />Reusar.</p>
+    <p class="doc-practice-note">Aprendés las dos herramientas que veníamos esquivando a mano: launch files para levantar varios nodos de una sola vez, y configuraciones de RViz para no rearmar la vista cada vez que la abrís.</p>
+  </div>
 
-Al terminar vas a poder levantar simulador, nodo y RViz —ya con los displays correctos— con un solo `ros2 launch`, tanto para el evasor de la semana 03 como para la detección de color de la semana 04.
+  <dl class="doc-practice-facts">
+    <div>
+      <dt>Herramientas</dt>
+      <dd>Launch file + config RViz</dd>
+    </div>
+    <div>
+      <dt>Lanza</dt>
+      <dd>Simulador + nodos + RViz</dd>
+    </div>
+    <div>
+      <dt>Reusa</dt>
+      <dd>Semana 03 (ejemplo resuelto) y 04 (el ejercicio)</dd>
+    </div>
+    <div>
+      <dt>Comando</dt>
+      <dd><code>ros2 launch</code></dd>
+    </div>
+  </dl>
+</section>
 
 ## Antes de empezar
 
-Necesitás las semanas 03 y 04 completas y funcionando: acá no se resuelve ningún workshop nuevo, se lanzan los que ya hiciste.
-
-> [!CHECK]
-> Confirmá que podés correr `evasor` y `detector`/`detector_scan` a mano, como en las semanas anteriores, antes de empezar a automatizarlo.
+<ol class="doc-preflight" aria-label="Preparación del workshop">
+  <li>
+    <span class="doc-preflight-index" aria-hidden="true">01</span>
+    <div class="doc-preflight-copy">
+      <h3>Semana 03</h3>
+      <p>Necesitás el evasor de la <a href="../semana-03-evasion-obstaculos/">semana 03</a> completo y funcionando.</p>
+    </div>
+  </li>
+  <li>
+    <span class="doc-preflight-index" aria-hidden="true">02</span>
+    <div class="doc-preflight-copy">
+      <h3>Semana 04</h3>
+      <p>Necesitás la detección de color de la <a href="../semana-04-deteccion-color/">semana 04</a> completa y funcionando — acá no se resuelve ningún workshop nuevo, se lanzan los que ya hiciste.</p>
+    </div>
+  </li>
+  <li>
+    <span class="doc-preflight-index" aria-hidden="true">03</span>
+    <div class="doc-preflight-copy">
+      <h3>Chequeo</h3>
+      <p>Confirmá que podés correr <code>evasor</code> y <code>detector</code>/<code>detector_scan</code> a mano, como en las semanas anteriores, antes de empezar a automatizarlo.</p>
+    </div>
+  </li>
+</ol>
 
 ## Concepto mínimo: qué describe un launch file
 
-Un [launch file](https://docs.ros.org/en/humble/Tutorials/Launch/Launch-Main.html) es un archivo de Python que **describe** qué procesos hay que lanzar — no es un script que corre de arriba a abajo, es una descripción que el sistema de launch lee y ejecuta por su cuenta. Tres reglas lo definen: el archivo termina en `.launch.py`, adentro hay una función `generate_launch_description()` sin argumentos, y esa función devuelve un `LaunchDescription`. Ya lo veniás usando sin darte cuenta: es lo que hacía `ros2 launch yahboom_rosmaster_gazebo rosmaster_gazebo_fortress.launch.py`.
+Un [launch file](https://docs.ros.org/en/lyrical/Tutorials/Intermediate/Launch/Launch-Main.html) es un archivo de Python que **describe** qué procesos hay que lanzar — no es un script que corre de arriba a abajo, es una descripción que el sistema de launch lee y ejecuta por su cuenta. Tres reglas lo definen: el archivo termina en `.launch.py`, adentro hay una función `generate_launch_description()` sin argumentos, y esa función devuelve un `LaunchDescription`. Ya lo veniás usando sin darte cuenta: es lo que hacía `ros2 launch yahboom_rosmaster_gazebo rosmaster_gazebo_fortress.launch.py`.
+
+`launch_rviz` no tiene código Python propio, ningún nodo — solo launch files y configuraciones de RViz. Este tipo de paquete es tan común en ROS 2 que tiene nombre propio, **bringup** ("levantar el sistema"), y se lo suele nombrar `algo_bringup` — como `yahboom_rosmaster_bringup`, mismo patrón con otro nombre.
 
 Cada nodo se declara con `Node(...)`, el equivalente declarado de un `ros2 run`:
 
@@ -40,7 +83,25 @@ evasor = Node(
 )
 ```
 
-`LaunchDescription` no es una secuencia de pasos: lanza todo en paralelo, que es justo lo que querés porque son procesos independientes que se encuentran solos a través de los tópicos. Y RViz también es un nodo — se lanza con el mismo `Node(...)`, con `package` y `executable` en `'rviz2'`.
+Dos cosas que suelen confundir al principio:
+
+- **`LaunchDescription` no es una secuencia de pasos**: lanza todo en paralelo, que es justo lo que querés porque son procesos independientes que se encuentran solos a través de los tópicos. Y RViz también es un nodo — se lanza con el mismo `Node(...)`, con `package` y `executable` en `'rviz2'`.
+- **`output='screen'` no es decorativo**: sin eso, los logs del nodo van a un archivo y parece que no hace nada.
+
+El `simulador` que se suma al `LaunchDescription` no es un `Node` nuevo, es el launch del simulador entero, metido adentro con `IncludeLaunchDescription` en vez de reescribirlo:
+
+```python
+simulador = IncludeLaunchDescription(
+    PythonLaunchDescriptionSource(launch_simulador),
+    launch_arguments={
+        'world': LaunchConfiguration('world'),
+        'motion_profile': 'ideal',
+        'rviz': 'false',
+    }.items(),
+)
+```
+
+`launch_arguments` espera pares clave-valor (de ahí el `.items()` final), los valores van siempre como texto —hasta los booleanos: `'false'` entre comillas, no `False` de Python— y `rviz:='false'` es clave: el launch del simulador trae su propio RViz, y si no lo apagás se te abren dos.
 
 **Parámetro ROS vs. argumento de launch** son dos cosas parecidas pero distintas: un argumento de launch (`DeclareLaunchArgument`) lo lee el launch file y se pasa con `ros2 launch ... x:=2.0`; un parámetro ROS (`self.declare_parameter`) lo lee el nodo y se pasa con `--ros-args -p x:=2.0`. Se usan juntos para evitar repetir un valor en varios nodos: declarás el argumento una vez y lo enchufás como parámetro de cada uno con `LaunchConfiguration('x')`. Ojo: `LaunchConfiguration` siempre devuelve texto, así que si el nodo espera un `float` hay que convertirlo con `ParameterValue(LaunchConfiguration('x'), value_type=float)`.
 
@@ -51,7 +112,9 @@ evasor = Node(
 
 ### RViz: dibuja lo que ya está publicado
 
-RViz no simula nada — solo dibuja lo que ya está en los tópicos. Si algo no aparece, hay dos causas distintas: o el dato no se está publicando (se chequea con `ros2 topic hz`), o se publica pero RViz no lo dibuja (problema de configuración). El **Fixed Frame** (en Global Options) es el marco de referencia contra el que se dibuja todo lo demás — acá va en `odom`, porque con `base_link` el robot queda quieto en el centro y el mundo se mueve alrededor.
+**Gazebo** simula: tiene la física, los objetos, el robot, y genera los datos. **RViz** no simula nada — solo dibuja lo que ya está publicado en los tópicos. Si algo no aparece, hay dos causas distintas: o el dato no se está publicando (se chequea con `ros2 topic hz`), o se publica pero RViz no lo dibuja (problema de configuración). Si RViz directamente no te abre, es un problema de setup y no de este workshop — lo cubre la página "Gazebo y RViz" de la [guía de instalación](../../setup/).
+
+El **Fixed Frame** (en Global Options) es el marco de referencia contra el que se dibuja todo lo demás — acá va en `odom`, porque con `base_link` el robot queda quieto en el centro y el mundo se mueve alrededor.
 
 | Frame | Qué es |
 | --- | --- |
@@ -59,9 +122,21 @@ RViz no simula nada — solo dibuja lo que ya está en los tópicos. Si algo no 
 | `base_footprint` / `base_link` | el robot; se mueve respecto de `odom` |
 | `laser_link` | el lidar, montado sobre el robot |
 
-Cada **display** dibuja un tópico. El truco que se repite en estos workshops: mostrar dos `LaserScan` superpuestos, el `/scan` completo (chico, gris) y una versión filtrada del mismo scan en otro color y más grande (`/scan_cono` en semana 03, `/scan_rojo` en semana 04) — así se ve de un vistazo qué subconjunto de rayos está usando el nodo para decidir algo.
+Cada **display** dibuja un tópico. Los que usás en estos workshops:
 
-Si un tópico publica (confirmado con `ros2 topic hz`) pero el display no muestra nada sin marcar error de transformada, es casi siempre **QoS**: los sensores publican con *Reliability* en `Best Effort`, y un display en `Reliable` nunca se conecta a un publisher `Best Effort`. La solución es abrir el display, ir a **Topic** y poner *Reliability Policy* en `Best Effort` — pero solo si el nodo del otro lado también lo usa; `/scan_cono`, por ejemplo, lo publica `evasor.py` sin tocar el QoS, así que queda en `Reliable` por default.
+| Display | Tópico | Para qué |
+| --- | --- | --- |
+| `LaserScan` | `/scan` | lo que ve el lidar (semana 03) |
+| `LaserScan` | `/scan_cono` | solo los rayos dentro del cono que usa el evasor para decidir choque (semana 03) |
+| `LaserScan` | `/scan_rojo` | solo los rayos que dieron contra algo rojo (semana 04) |
+| `Image` | `/cam_1/color/image_raw` | lo que ve la cámara (semana 04) |
+| `RobotModel` | `/robot_description` | el robot dibujado |
+| `TF` | — | los ejes de cada frame |
+| `Grid` | — | el piso, como referencia |
+
+El truco que se repite en estos workshops: mostrar dos `LaserScan` superpuestos, el `/scan` completo (chico, gris) y una versión filtrada del mismo scan en otro color y más grande (`/scan_cono` en semana 03, `/scan_rojo` en semana 04) — así se ve de un vistazo qué subconjunto de rayos está usando el nodo para decidir algo.
+
+Si un tópico publica (confirmado con `ros2 topic hz`) pero el display no muestra nada sin marcar error de transformada, es casi siempre [**QoS**](https://docs.ros.org/en/lyrical/Concepts/Intermediate/About-Quality-of-Service-Settings.html): los sensores publican con *Reliability* en `Best Effort` (así llega `/scan`, desde el bridge de Gazebo), y un display en `Reliable` nunca se conecta a un publisher `Best Effort`. La solución es abrir el display, ir a **Topic** y poner *Reliability Policy* en `Best Effort` — pero solo si el nodo del otro lado también lo usa; `/scan_cono`, por ejemplo, lo publica `evasor.py` sin tocar el QoS, así que queda en `Reliable` por default (distinto de `/scan`).
 
 ## Implementación
 
@@ -81,12 +156,15 @@ Abrí después [`evasion.launch.py`](https://github.com/AIRclub-UdeSA/jar_worksh
 
 Y además, armar `rviz/deteccion_color.rviz` **desde la GUI** (no se escriben a mano): con el launch corriendo, agregá los displays `Image` en `/cam_1/color/image_raw`, `LaserScan` en `/scan` (gris, chico) y en `/scan_rojo` (rojo, grande), más `RobotModel` y `Grid`, con Fixed Frame en `odom`. Usá [`evasion.rviz`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-05-launch-rviz/launch_rviz/rviz/evasion.rviz) (que ya viene armado) de referencia. Guardalo con **`File > Save Config As`** — nunca `Save Config` a secas, que guarda en tu config personal y no viaja con el repo — dentro de `launch_rviz/rviz/deteccion_color.rviz`, y volvé a compilar.
 
+> [!NOTE]
+> Aunque no se escriban a mano, conviene abrir un `.rviz` con un editor de texto una vez: es YAML, y se reconoce sin problema qué tocaste en la GUI (`Fixed Frame: odom`, `Value: /scan` de cada tópico, los colores en RGB) — deja de ser una caja negra.
+
 ## Ejecución
 
 ```bash
 cd ~/rosmaster_ws
 colcon build --packages-select launch_rviz
-source install/setup.bash
+source ~/rosmaster_ws/install/setup.bash
 ```
 
 ```bash
@@ -103,10 +181,21 @@ Los argumentos de launch se pasan igual que ya veías con `world:=`, por ejemplo
 
 ## Comprobación
 
+Semana 03:
+
 ```bash
 ros2 node list                          # tienen que estar todos los nodos del launch
 ros2 topic hz /scan                     # si no publica, el problema no es de RViz
+ros2 topic hz /scan_cono                # solo se publica desde adentro de hay_obstaculo()
 ros2 param get /evasor use_sim_time     # tiene que decir True
+```
+
+Semana 04:
+
+```bash
+ros2 node list                          # tienen que estar todos los nodos del launch
+ros2 topic hz /cam_1/color/image_raw    # confirma que la cámara publica
+ros2 topic hz /scan_rojo                # solo aparece mientras hay rojo a la vista
 ```
 
 `ros2 param get <nombre> use_sim_time` es el mejor chequeo cuando algo parpadea en RViz o tf2 se queja de transformadas: si dice `False`, falta ese parámetro en ese nodo.
@@ -117,3 +206,5 @@ ros2 param get /evasor use_sim_time     # tiene que decir True
 ## Explicación: infraestructura para lo que sigue
 
 Esto no es un tema cerrado, es la infraestructura que los workshops siguientes dan por sentada. De acá en adelante, cuando un workshop diga "agregá tu nodo al launch" es sumar un `Node(...)` a un archivo de `launch_rviz/launch/`; cuando diga "agregá este display a tu RViz" es agregarlo desde la GUI y volver a guardar con `Save Config As`. En vez de cuatro terminales con comandos largos repetidos a mano —y el riesgo de que un parámetro quede desincronizado entre dos de ellas—, correr Donatello contra cualquier workshop nuevo va a ser, de ahora en más, un solo `ros2 launch`.
+
+Dos displays más van a aparecer más adelante y ya tienen dónde enchufarse: el `Map` (cuando haya un mapa que mostrar) y el `Pose` del robot en el frame `map` (workshop de localización).
