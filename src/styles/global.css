@@ -1240,19 +1240,12 @@ footer.site-footer {
   width: 100%;
   max-width: 100%;
   margin: 0 0 1.75rem;
-  display: block;
+  display: table;
   overflow-x: auto;
   border-collapse: collapse;
+  table-layout: auto;
   font-size: 0.88rem;
   scrollbar-width: thin;
-}
-
-.docs-body .prose thead,
-.docs-body .prose tbody {
-  min-width: max-content;
-  width: 100%;
-  display: table;
-  table-layout: auto;
 }
 
 .docs-body .prose tr {
