@@ -949,7 +949,7 @@ footer.site-footer {
 .docs-body .prose > ul,
 .docs-body .prose > ol,
 .docs-body .prose > blockquote:not(.doc-callout) {
-  max-width: 65ch;
+  max-width: 90ch;
 }
 
 .docs-body .prose h2 {

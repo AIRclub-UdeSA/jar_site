@@ -62,16 +62,18 @@ Deberías ver una vista 3D vacía y el panel de displays a la izquierda. Por aho
 
 ## Qué deberías ver
 
-Las dos aplicaciones tienen que abrir, responder normalmente y cerrarse sin errores. Cuando levantes el simulador, Gazebo va a mostrar el robot y RViz va a organizar los datos que publica ROS 2.
+Las dos aplicaciones tienen que abrir, responder normalmente y cerrarse sin errores.
+
+Por ahora las dos se ven vacías: Gazebo con un mundo sin nada y RViz con la vista 3D en gris, sin ningún dato. Está bien que sea así, porque todavía no hay un robot ni nadie publicando. Recién cuando levantes el simulador y avances con los workshops las vas a ver como en estas capturas:
 
 <div class="doc-media-pair doc-figure">
   <figure>
     <img src="../../media/donatello-gazebo-poster.webp" alt="Donatello dentro del simulador de Gazebo" width="960" height="520" loading="lazy" />
-    <figcaption>Gazebo representa el entorno, el movimiento y los contactos del robot.</figcaption>
+    <figcaption>Más adelante: Gazebo con Donatello en el mundo del desafío, simulando movimiento y contactos.</figcaption>
   </figure>
   <figure>
     <img src="../../media/donatello-rviz-poster.webp" alt="Datos de Donatello visualizados en RViz" width="960" height="520" loading="lazy" />
-    <figcaption>RViz muestra la información que circula por ROS 2, como LiDAR, cámara y odometría.</figcaption>
+    <figcaption>Más adelante: RViz mostrando lo que publica el robot, como el LiDAR, la cámara y la odometría.</figcaption>
   </figure>
 </div>
 
