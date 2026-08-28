@@ -28,20 +28,20 @@ npm run check
 
 ## Buenas primeras contribuciones
 
-- 📝 **Agregar un workshop nuevo.** Copiá `src/templates/plantilla-semana.md`
+- **Agregar un workshop nuevo.** Copiá `src/templates/plantilla-semana.md`
   a `src/content/docs/workshops/semana-NN-slug.md` y seguí la guía en
   [Agregar un workshop semanal](README.md#agregar-un-workshop-semanal) del
   README. El código correspondiente va en
   [`jar_workshops`](https://github.com/AIRclub-UdeSA/jar_workshops).
-- 🎨 **Mantener el patrón editorial.** Las semanas publicadas siguen una
+- **Mantener el patrón editorial.** Las semanas publicadas siguen una
   misma estructura (resultado primero, preparación escaneable, teoría solo
   cuando ayuda a ejecutar, artefactos visuales únicamente cuando explican
   algo). Si encontrás una semana que no la sigue, es una buena oportunidad
   de alinearla con el resto.
-- 🔗 **Sincronizar contenido con `jar_workshops`.** Los README de cada
+- **Sincronizar contenido con `jar_workshops`.** Los README de cada
   semana en `jar_workshops` y las páginas acá deberían decir lo mismo. Si
   cambia uno, conviene revisar el otro.
-- ♿ **Accesibilidad y mobile.** El sitio usa componentes semánticos propios
+- **Accesibilidad y mobile.** El sitio usa componentes semánticos propios
   (`doc-practice-plate`, `doc-preflight`, etc.) — revisar que se vean bien
   en mobile y con lector de pantalla es siempre bienvenido.
 
