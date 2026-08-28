@@ -264,7 +264,7 @@
 
 .landing-viewer-status {
   position: absolute;
-  inset: 50% auto auto calc(50% + var(--landing-visual-shift));
+  inset: 50% auto auto 50%;
   z-index: 4;
   width: min(90%, 28rem);
   color: var(--text-3);
@@ -272,7 +272,7 @@
   line-height: 1.6;
   letter-spacing: 0.06em;
   text-align: center;
-  transform: translate(-50%, -50%);
+  transform: translate(calc(-50% + var(--landing-visual-shift)), -50%);
   transition: opacity 0.25s var(--ease);
 }
 
@@ -287,7 +287,7 @@
 .landing-viewer-caption {
   position: absolute;
   z-index: 4;
-  left: calc(50% + var(--landing-visual-shift));
+  left: 50%;
   bottom: -3rem;
   min-height: 44px;
   width: min(calc(100% - (var(--landing-gutter) * 2)), 34rem);
@@ -299,8 +299,7 @@
   line-height: 1.5;
   text-align: center;
   opacity: var(--landing-viewer-caption-opacity);
-  transform: translateX(-50%);
-  transition: opacity 0.2s var(--ease);
+  transform: translateX(calc(-50% + var(--landing-visual-shift)));
 }
 
 .landing-viewer-caption-touch {

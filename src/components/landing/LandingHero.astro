@@ -60,6 +60,10 @@ import { SITE, withBase } from '../../config/site';
   const story = stage?.closest<HTMLElement>('.landing-donatello-story') ?? null;
   const status = stage?.querySelector<HTMLElement>('.landing-viewer-status') ?? null;
   const controlSurface = story?.querySelector<HTMLElement>('[data-robot-controls]') ?? null;
+  // Las custom properties se escriben en cada frame de scroll. Setearlas en <figure>
+  // y no en .landing-donatello-story limita el recálculo de estilos a los tres hijos
+  // del visor, en vez de invalidar todo el subárbol de la sección (hero + perfil).
+  const viewer = stage?.closest<HTMLElement>('.landing-viewer') ?? null;
 
   const reportError = (message: string) => {
     if (!status) return;
@@ -155,6 +159,7 @@ import { SITE, withBase } from '../../config/site';
       let resumeRotationTimer = 0;
       let stageWidth = 1;
       let stageHeight = 1;
+      let loopRunning = false;
 
       const draw = () => {
         renderer.render(scene, camera);
@@ -252,11 +257,12 @@ import { SITE, withBase } from '../../config/site';
         camera.setViewOffset(stageWidth, stageHeight, -visualShift, 0, stageWidth, stageHeight);
         camera.updateProjectionMatrix();
 
-        story?.style.setProperty('--landing-visual-shift', `${visualShift.toFixed(2)}px`);
-        story?.style.setProperty('--landing-viewer-caption-opacity', captionOpacity.toFixed(3));
-        stage.dataset.storyProgress = storyProgress.toFixed(3);
+        viewer?.style.setProperty('--landing-visual-shift', `${visualShift.toFixed(2)}px`);
+        viewer?.style.setProperty('--landing-viewer-caption-opacity', captionOpacity.toFixed(3));
 
-        if (modelReady && viewerVisible && !document.hidden) draw();
+        // Si el loop de animación ya está corriendo, él dibuja el frame: pintar acá
+        // además duplica el render en cada scroll.
+        if (modelReady && viewerVisible && !document.hidden && !loopRunning) draw();
       };
 
       const updateStoryProgress = () => {
@@ -289,7 +295,10 @@ import { SITE, withBase } from '../../config/site';
 
       const syncRenderLoop = () => {
         const shouldLoop = modelReady && !reducedMotion && viewerVisible && !document.hidden;
-        renderer.setAnimationLoop(shouldLoop ? renderFrame : null);
+        if (shouldLoop !== loopRunning) {
+          loopRunning = shouldLoop;
+          renderer.setAnimationLoop(shouldLoop ? renderFrame : null);
+        }
         if (modelReady && viewerVisible && !shouldLoop && !document.hidden) draw();
       };
 
@@ -371,7 +380,7 @@ import { SITE, withBase } from '../../config/site';
           viewerVisible = entry?.isIntersecting ?? false;
           syncRenderLoop();
         },
-        { threshold: 0.05 }
+        { rootMargin: '15% 0px' }
       );
       visibilityObserver.observe(stage);
       document.addEventListener('visibilitychange', syncRenderLoop);
