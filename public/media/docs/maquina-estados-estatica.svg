@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1720 500" role="img" aria-labelledby="title desc">
+  <title id="title">Máquina de estados de evasión de obstáculos</title>
+  <desc id="desc">Los estados Avanzar y Girar se conectan mediante las transiciones hay_obstaculo y giro_completo. A la derecha, un robot esquemático detecta un obstáculo y cambia de rumbo.</desc>
+  <defs>
+    <marker id="arrow-green-static" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10Z" fill="#4ade80"/>
+    </marker>
+    <marker id="arrow-white-static" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10Z" fill="#f2f6f1"/>
+    </marker>
+  </defs>
+
+  <line x1="1010" y1="10" x2="1010" y2="490" stroke="#f2f6f1" stroke-opacity=".1"/>
+
+  <g transform="translate(20 20)" font-family="'JetBrains Mono', 'Courier New', monospace">
+    <text x="60" y="32" fill="#8d9892" font-size="19" letter-spacing="1.5">MÁQUINA DE ESTADOS</text>
+    <path d="M311.6 176.3 Q480 40 648.4 176.3" fill="none" stroke="#4ade80" stroke-opacity=".65" stroke-width="2" marker-end="url(#arrow-green-static)"/>
+    <path d="M648.4 323.7 Q480 420 311.6 323.7" fill="none" stroke="#f2f6f1" stroke-opacity=".3" stroke-width="2" marker-end="url(#arrow-white-static)"/>
+    <text x="480" y="94" fill="#4ade80" font-size="21" font-weight="600" text-anchor="middle">hay_obstaculo()</text>
+    <text x="480" y="402" fill="#8d9892" font-size="21" text-anchor="middle">giro_completo()</text>
+    <circle cx="260" cy="250" r="90" fill="#07100c" stroke="#4ade80" stroke-width="3"/>
+    <circle cx="700" cy="250" r="90" fill="#07100c" stroke="#f2f6f1" stroke-opacity=".3" stroke-width="2"/>
+    <text x="260" y="259" fill="#f2f6f1" font-size="27" font-weight="600" text-anchor="middle">AVANZAR</text>
+    <text x="700" y="259" fill="#f2f6f1" font-size="27" font-weight="600" text-anchor="middle">GIRAR</text>
+  </g>
+
+  <g transform="translate(1050 10)" font-family="'JetBrains Mono', 'Courier New', monospace">
+    <text x="10" y="26" fill="#8d9892" font-size="17" letter-spacing="1.5">SECUENCIA DE EJEMPLO</text>
+    <rect x="10" y="40" width="620" height="430" fill="none" stroke="#f2f6f1" stroke-opacity=".12"/>
+    <path d="M110 260 C220 260 310 260 400 215" fill="none" stroke="#4ade80" stroke-width="2" stroke-dasharray="8 10" marker-end="url(#arrow-green-static)"/>
+    <g transform="translate(110 260)">
+      <path d="M23 0 92 -34 92 34Z" fill="#4ade80" fill-opacity=".14"/>
+      <rect x="-23" y="-15" width="46" height="30" rx="8" fill="#07100c" stroke="#4ade80" stroke-width="2"/>
+      <path d="M23 -6 23 6 33 0Z" fill="#4ade80"/>
+    </g>
+    <rect x="430" y="155" width="44" height="44" rx="6" fill="#0b120f" stroke="#fbbf24" stroke-width="2"/>
+    <text x="452" y="224" fill="#8d9892" font-size="14" letter-spacing="1.2" text-anchor="middle">OBSTÁCULO</text>
+    <text x="76" y="406" fill="#4ade80" font-size="18">01</text>
+    <text x="112" y="406" fill="#f2f6f1" font-size="18">AVANZA</text>
+    <text x="260" y="406" fill="#4ade80" font-size="18">02</text>
+    <text x="296" y="406" fill="#f2f6f1" font-size="18">DETECTA</text>
+    <text x="458" y="406" fill="#4ade80" font-size="18">03</text>
+    <text x="494" y="406" fill="#f2f6f1" font-size="18">GIRA</text>
+  </g>
+</svg>

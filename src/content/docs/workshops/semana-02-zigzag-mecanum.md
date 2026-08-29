@@ -10,22 +10,63 @@ prerequisites:
   - "Workshop 01"
 ---
 
-En esta práctica vas a publicar comandos de velocidad en `/cmd_vel` para que Donatello avance mientras se desplaza de un lado al otro. El ejercicio aprovecha el movimiento holonómico de sus ruedas mecanum.
+## La práctica
 
-## Resultado de la práctica
+<section class="doc-practice-plate" aria-labelledby="la-práctica">
+  <div class="doc-practice-intro">
+    <p class="doc-practice-statement">Avanzar.<br />Desplazar.<br />Repetir.</p>
+    <p class="doc-practice-note">Publicás comandos de velocidad en <code>/cmd_vel</code> para que Donatello avance mientras se desplaza de un lado al otro, aprovechando el movimiento holonómico de sus ruedas mecanum.</p>
+  </div>
 
-Al terminar vas a tener un nodo que publica una trayectoria en zigzag a `10 Hz`. Vas a poder verla en el simulador, inspeccionar los comandos y reconocer cómo ROS 2 representa la orientación del robot.
+  <dl class="doc-practice-facts">
+    <div>
+      <dt>Topic</dt>
+      <dd><code>/cmd_vel</code></dd>
+    </div>
+    <div>
+      <dt>Tipo</dt>
+      <dd><code>geometry_msgs/Twist</code></dd>
+    </div>
+    <div>
+      <dt>Ritmo</dt>
+      <dd><code>10 Hz</code></dd>
+    </div>
+    <div>
+      <dt>Patrón</dt>
+      <dd>Zigzag lateral</dd>
+    </div>
+  </dl>
+</section>
 
 ## Antes de empezar
 
-Completá el [Workshop 01](../semana-01-talkers-listeners/) y levantá el simulador con la [guía de Setup](../../setup/simulador/).
-
-> [!CHECK]
-> Mové el robot con `teleop_twist_keyboard` y comprobá que `ros2 topic echo /cmd_vel` muestre valores mientras mantenés una tecla presionada.
+<ol class="doc-preflight" aria-label="Preparación del workshop">
+  <li>
+    <span class="doc-preflight-index" aria-hidden="true">01</span>
+    <div class="doc-preflight-copy">
+      <h3>Workshop 01</h3>
+      <p>Completá el <a href="../semana-01-talkers-listeners/">Workshop 01</a> — acá vas a reusar el mismo patrón de nodo con timer.</p>
+    </div>
+  </li>
+  <li>
+    <span class="doc-preflight-index" aria-hidden="true">02</span>
+    <div class="doc-preflight-copy">
+      <h3>Simulador</h3>
+      <p>Levantá el simulador con la <a href="../../setup/simulador/">guía de Setup</a>.</p>
+    </div>
+  </li>
+  <li>
+    <span class="doc-preflight-index" aria-hidden="true">03</span>
+    <div class="doc-preflight-copy">
+      <h3>Chequeo</h3>
+      <p>Con <code>teleop_twist_keyboard</code> corriendo, confirmá en otra terminal que <code>ros2 topic echo /cmd_vel</code> muestra valores mientras mantenés una tecla presionada.</p>
+    </div>
+  </li>
+</ol>
 
 ## Concepto mínimo: velocidad y movimiento mecanum
 
-ROS 2 usa mensajes `geometry_msgs/msg/Twist` para indicar la velocidad deseada de una base móvil. Cada mensaje contiene dos vectores:
+ROS 2 usa mensajes [`geometry_msgs/msg/Twist`](https://docs.ros2.org/latest/api/geometry_msgs/msg/Twist.html) para indicar la velocidad deseada de una base móvil. Cada mensaje contiene dos vectores:
 
 ```text
 Twist
@@ -50,7 +91,7 @@ Una base diferencial puede avanzar y girar, pero no moverse directamente de cost
 
 ## Implementación
 
-Creá `zigzag.py` dentro del paquete `zigzag_mecanum`:
+Creá [`zigzag.py`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-02-zigzag-mecanum/zigzag_mecanum/zigzag_mecanum/zigzag.py) dentro del paquete `zigzag_mecanum`:
 
 ```python
 #!/usr/bin/env python3
@@ -116,14 +157,16 @@ El nodo mantiene `linear.x` en `0.2 m/s` y cambia el signo de `linear.y` cada do
 Compilá el paquete y cargá el overlay:
 
 ```bash
+# Terminal 1 — build
 cd ~/rosmaster_ws
 colcon build --packages-select zigzag_mecanum
-source install/setup.bash
+source ~/rosmaster_ws/install/setup.bash
 ```
 
 Con el simulador abierto, ejecutá el nodo en otra terminal:
 
 ```bash
+# Terminal 2 — el nodo
 source ~/rosmaster_ws/install/setup.bash
 ros2 run zigzag_mecanum zigzag
 ```
@@ -149,10 +192,10 @@ En RViz podés agregar una visualización de `Odometry` y seleccionar `/odom`. E
 
 ## Explicación: orientación y cuaterniones
 
-Los mensajes de odometría (`/odom`) y las transformaciones (`/tf`) representan la orientación con un cuaternión `[x, y, z, w]`, no directamente con ángulos de *roll*, *pitch* y *yaw*.
+Los mensajes de [odometría](https://docs.ros2.org/latest/api/nav_msgs/msg/Odometry.html) (`/odom`) y las [transformaciones](https://docs.ros.org/en/humble/Tutorials/Intermediate/Tf2/Tf2-Main.html) (`/tf`) representan la orientación con un [cuaternión](https://docs.ros.org/en/humble/Tutorials/Intermediate/Tf2/Quaternion-Fundamentals.html) `[x, y, z, w]`, no directamente con ángulos de *roll*, *pitch* y *yaw*.
 
 | Representación | Valores | Ventaja | Límite |
-| --- | ---: | --- | --- |
+| --- | :---: | --- | --- |
 | Ángulos de Euler | 3 | Resultan fáciles de interpretar | Pueden sufrir *gimbal lock* y discontinuidades |
 | Matriz de rotación | 9 | No tiene singularidades | Usa más valores de los necesarios |
 | Cuaternión | 4 | Es compacto y permite interpolaciones suaves | No se interpreta a simple vista |

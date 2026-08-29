@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 760" role="img" aria-labelledby="title desc">
+  <title id="title">Máquina de estados de evasión de obstáculos</title>
+  <desc id="desc">Los estados Avanzar y Girar se conectan mediante las transiciones hay_obstaculo y giro_completo. Debajo, una secuencia muestra al robot avanzando, detectando un obstáculo y cambiando de rumbo.</desc>
+
+  <defs>
+    <marker id="arrow-green-mobile" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10Z" fill="#4ade80"/>
+    </marker>
+    <marker id="arrow-white-mobile" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10Z" fill="#f2f6f1"/>
+    </marker>
+  </defs>
+
+  <g font-family="'JetBrains Mono', 'Courier New', monospace">
+    <text x="30" y="42" fill="#8d9892" font-size="22" letter-spacing="2">MÁQUINA DE ESTADOS</text>
+
+    <path d="M188 156 Q300 64 412 156" fill="none" stroke="#4ade80" stroke-opacity=".65" stroke-width="2.5" marker-end="url(#arrow-green-mobile)"/>
+    <path d="M412 264 Q300 344 188 264" fill="none" stroke="#f2f6f1" stroke-opacity=".38" stroke-width="2.5" marker-end="url(#arrow-white-mobile)"/>
+
+    <text x="300" y="96" fill="#4ade80" font-size="22" font-weight="600" text-anchor="middle">hay_obstaculo()</text>
+    <text x="300" y="332" fill="#8d9892" font-size="22" text-anchor="middle">giro_completo()</text>
+
+    <circle cx="145" cy="210" r="78" fill="#07100c" stroke="#4ade80" stroke-width="3"/>
+    <circle cx="455" cy="210" r="78" fill="#07100c" stroke="#f2f6f1" stroke-opacity=".38" stroke-width="2.5"/>
+    <text x="145" y="220" fill="#f2f6f1" font-size="27" font-weight="600" text-anchor="middle">AVANZAR</text>
+    <text x="455" y="220" fill="#f2f6f1" font-size="27" font-weight="600" text-anchor="middle">GIRAR</text>
+
+    <line x1="30" y1="380" x2="570" y2="380" stroke="#f2f6f1" stroke-opacity=".12"/>
+    <text x="30" y="424" fill="#8d9892" font-size="22" letter-spacing="2">SECUENCIA</text>
+
+    <rect x="30" y="452" width="540" height="205" fill="none" stroke="#f2f6f1" stroke-opacity=".12"/>
+    <path d="M122 555 C210 555 300 555 390 530" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-dasharray="8 9" marker-end="url(#arrow-green-mobile)"/>
+
+    <g transform="translate(118 555)">
+      <path d="M26 0 106 -38 106 38Z" fill="#4ade80" fill-opacity=".14"/>
+      <rect x="-28" y="-19" width="56" height="38" rx="9" fill="#07100c" stroke="#4ade80" stroke-width="3"/>
+      <path d="M28 -7 28 7 40 0Z" fill="#4ade80"/>
+    </g>
+
+    <rect x="420" y="490" width="48" height="48" rx="6" fill="#0b120f" stroke="#fbbf24" stroke-width="2.5"/>
+    <text x="444" y="560" fill="#8d9892" font-size="17" letter-spacing="1.5" text-anchor="middle">OBSTÁCULO</text>
+
+    <text x="66" y="705" fill="#4ade80" font-size="20">01</text>
+    <text x="104" y="705" fill="#f2f6f1" font-size="20">AVANZA</text>
+    <text x="238" y="705" fill="#4ade80" font-size="20">02</text>
+    <text x="276" y="705" fill="#f2f6f1" font-size="20">DETECTA</text>
+    <text x="426" y="705" fill="#4ade80" font-size="20">03</text>
+    <text x="464" y="705" fill="#f2f6f1" font-size="20">GIRA</text>
+  </g>
+</svg>

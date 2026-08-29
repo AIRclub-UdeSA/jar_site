@@ -11,29 +11,75 @@ prerequisites:
   - "Workshop 02"
 ---
 
-Esta semana armás una máquina de estados de 2 estados para que el robot avance en línea recta, detecte con el lidar que está por chocar, gire un ángulo fijo, y siga avanzando — repitiendo esto para esquivar los obstáculos que se cruce en el camino.
+## La práctica
 
-## Resultado de la práctica
+<section class="doc-practice-plate" aria-labelledby="la-práctica">
+  <div class="doc-practice-intro">
+    <p class="doc-practice-statement">Avanzar.<br />Detectar.<br />Girar.</p>
+    <p class="doc-practice-note">Una máquina de estados de 2 estados: Donatello avanza en línea recta hasta que el lidar detecta un obstáculo, gira un ángulo fijo, y retoma el avance — repitiendo esto por todo el mundo.</p>
+  </div>
 
-Al terminar vas a tener a Donatello moviéndose solo por un mundo con obstáculos, alternando entre avanzar y girar cada vez que el lidar detecta algo demasiado cerca dentro de un cono frontal configurable.
+  <dl class="doc-practice-facts">
+    <div>
+      <dt>Estados</dt>
+      <dd>2 · Avanzar / Girar</dd>
+    </div>
+    <div>
+      <dt>Sensor</dt>
+      <dd><code>/scan</code> (lidar)</dd>
+    </div>
+    <div>
+      <dt>Cono</dt>
+      <dd><code>60°</code></dd>
+    </div>
+    <div>
+      <dt>Choque</dt>
+      <dd><code>0.6 m</code></dd>
+    </div>
+  </dl>
+
+  <figure class="doc-practice-graph">
+    <picture>
+      <source media="(prefers-reduced-motion: reduce) and (max-width: 47.999rem)" srcset="../../media/docs/maquina-estados-mobile.svg" />
+      <source media="(prefers-reduced-motion: reduce)" srcset="../../media/docs/maquina-estados-estatica.svg" />
+      <source media="(max-width: 47.999rem)" srcset="../../media/docs/maquina-estados-mobile.svg" />
+      <img src="../../media/docs/maquina-estados-animada.svg" alt="La máquina de estados alterna entre Avanzar y Girar: cuando el lidar detecta un obstáculo, Donatello cambia de rumbo y después retoma el avance" width="1720" height="500" loading="lazy" />
+    </picture>
+    <figcaption>Dos estados excluyentes y dos transiciones: hay_obstaculo() lleva de Avanzar a Girar; girar lo suficiente vuelve a Avanzar.</figcaption>
+  </figure>
+</section>
 
 ## Antes de empezar
 
-Necesitás el Workshop 01 (timers) y 02 (`Twist` y `/cmd_vel`) completados — esta semana combina las dos ideas. Cloná o actualizá el repo de workshops dentro de tu workspace si todavía no lo hiciste.
-
-> [!CHECK]
-> Con el simulador levantado, confirmá que `ros2 topic hz /scan` y `ros2 topic hz /odom` respondan con datos antes de arrancar.
+<ol class="doc-preflight" aria-label="Preparación del workshop">
+  <li>
+    <span class="doc-preflight-index" aria-hidden="true">01</span>
+    <div class="doc-preflight-copy">
+      <h3>Workshops previos</h3>
+      <p>Necesitás el <a href="../semana-01-talkers-listeners/">Workshop 01</a> (timers) y el <a href="../semana-02-zigzag-mecanum/">Workshop 02</a> (<code>Twist</code> y <code>/cmd_vel</code>) completados — esta semana combina las dos ideas.</p>
+    </div>
+  </li>
+  <li>
+    <span class="doc-preflight-index" aria-hidden="true">02</span>
+    <div class="doc-preflight-copy">
+      <h3>Repositorio</h3>
+      <p>Cloná o actualizá el repo de workshops dentro de tu workspace si todavía no lo hiciste.</p>
+    </div>
+  </li>
+  <li>
+    <span class="doc-preflight-index" aria-hidden="true">03</span>
+    <div class="doc-preflight-copy">
+      <h3>Chequeo</h3>
+      <p>Con el simulador levantado, confirmá que <code>ros2 topic hz /scan</code> y <code>ros2 topic hz /odom</code> respondan con datos antes de arrancar.</p>
+    </div>
+  </li>
+</ol>
 
 ## Concepto mínimo: por qué una máquina de estados
 
 El comportamiento que buscamos (avanzar, y cuando corresponda girar) tiene dos modos claramente distintos, y en cada momento el robot solo puede estar haciendo uno de los dos. La tentación, sin pensarlo como una máquina de estados, es ir agregando variables booleanas sueltas (`girando`, `bloqueado`...) y sentencias `if` repartidas por todo el nodo a medida que aparecen casos nuevos — funciona al principio, pero rápido se vuelve difícil de leer y de debuggear.
 
-Pensar el problema como una máquina de estados obliga a responder dos preguntas separadas: **¿en qué estado estoy?** y **¿qué hace que pase de uno a otro?** Un **estado** representa la situación actual del sistema (acá, `ESTADO_AVANZAR` o `ESTADO_GIRAR` — excluyentes, nunca "un poco en cada uno"). Una **transición** es el cambio de un estado a otro, disparado por un evento, sensor o temporizador.
-
-<figure class="doc-figure">
-  <img src="../../media/docs/maquina-estados-animada.svg" alt="Animación de la máquina de estados: a la izquierda los estados Avanzar y Girar se activan por turnos, a la derecha un robot esquemático avanza, detecta un obstáculo, gira en el lugar y retoma el avance" width="1720" height="500" loading="lazy" />
-  <figcaption>Dos estados excluyentes y dos transiciones: hay_obstaculo() lleva de Avanzar a Girar; girar lo suficiente vuelve a Avanzar.</figcaption>
-</figure>
+Pensar el problema como una máquina de estados obliga a responder dos preguntas separadas: **¿en qué estado estoy?** y **¿qué hace que pase de uno a otro?** Un **estado** representa la situación actual del sistema (acá, `ESTADO_AVANZAR` o `ESTADO_GIRAR` — excluyentes, nunca "un poco en cada uno"). Una **transición** es el cambio de un estado a otro, disparado por un evento, sensor o temporizador — la misma que viste arriba, en el gráfico de "La práctica".
 
 Para que esto funcione bien arriba de un robot conviene seguir algunas reglas de diseño:
 
@@ -73,26 +119,28 @@ Todos los parámetros son configurables vía `--ros-args -p <nombre>:=<valor>`:
 # Terminal 1 — build
 cd ~/rosmaster_ws
 colcon build --packages-select evasion_obstaculos
-source install/setup.bash
+source ~/rosmaster_ws/install/setup.bash
 ```
 
-El simulador trae varios mundos con obstáculos para esquivar. Para ver cuáles hay instalados:
+`cafe.world` no es el único mundo con obstáculos para esquivar — hay otros (los `maze_*`, por ejemplo). Para ver cuáles hay instalados:
 
 ```bash
 ls "$(ros2 pkg prefix yahboom_rosmaster_gazebo)/share/yahboom_rosmaster_gazebo/worlds/"
 ```
 
+Podés elegir cualquiera; acá usamos `cafe.world` como ejemplo porque tiene muebles a distintas distancias, bueno para probar el cono de detección.
+
 ```bash
 # Terminal 2 — simulador, con un mundo con obstáculos (acá, cafe.world)
-source install/setup.bash
-ros2 launch yahboom_rosmaster_gazebo rosmaster_gazebo_fortress.launch.py \
+source ~/rosmaster_ws/install/setup.bash
+ros2 launch yahboom_rosmaster_bringup rosmaster_x3_sim.launch.py \
   world:="$(ros2 pkg prefix yahboom_rosmaster_gazebo)/share/yahboom_rosmaster_gazebo/worlds/cafe.world" \
   motion_profile:=ideal
 ```
 
 ```bash
 # Terminal 3 — nuestro nodo
-source install/setup.bash
+source ~/rosmaster_ws/install/setup.bash
 ros2 run evasion_obstaculos evasor --ros-args \
   -p angulo_vision_deg:=90.0 -p distancia_choque_m:=0.6 -p angulo_giro_deg:=110.0
 ```

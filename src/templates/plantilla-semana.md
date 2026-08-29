@@ -15,18 +15,59 @@ prerequisites:
   - "Setup completo"
 ---
 
-Una introducción corta que conecte la práctica con el trabajo sobre el robot.
+## La práctica
 
-## Resultado de la práctica
+<section class="doc-practice-plate" aria-labelledby="la-práctica">
+  <div class="doc-practice-intro">
+    <p class="doc-practice-statement">Frase corta.<br />Orientada al resultado.</p>
+    <p class="doc-practice-note">Una nota breve (hasta ~34 caracteres por línea) que conecte la práctica con el trabajo sobre el robot.</p>
+  </div>
 
-Qué va a quedar funcionando al terminar.
+  <dl class="doc-practice-facts">
+    <div>
+      <dt>Dato</dt>
+      <dd>Valor técnico real, ej. un topic o un tipo de mensaje</dd>
+    </div>
+    <div>
+      <dt>Dato</dt>
+      <dd>Otro dato técnico real</dd>
+    </div>
+  </dl>
+
+  <!-- Sumá acá un <figure class="doc-practice-graph"> SOLO si hay un diagrama
+       que explica el resultado antes de entrar en la teoría (como el grafo de
+       la semana 01 o la máquina de estados de la semana 03). Si el diagrama
+       explica un concepto puntual de la implementación, va en "Concepto
+       mínimo" en su lugar, no acá. Los diagramas panorámicos necesitan una
+       variante mobile legible y, si tienen movimiento, una fuente estática
+       para prefers-reduced-motion. -->
+</section>
 
 ## Antes de empezar
 
-Qué debe estar instalado, compilado o abierto. Usá links relativos, por ejemplo la [guía del simulador](../../setup/simulador/).
-
-> [!CHECK]
-> Una comprobación rápida antes de continuar.
+<ol class="doc-preflight" aria-label="Preparación del workshop">
+  <li>
+    <span class="doc-preflight-index" aria-hidden="true">01</span>
+    <div class="doc-preflight-copy">
+      <h3>Título corto</h3>
+      <p>Qué debe estar instalado, completado o clonado. Usá links relativos, por ejemplo la <a href="../../setup/simulador/">guía del simulador</a>.</p>
+    </div>
+  </li>
+  <li>
+    <span class="doc-preflight-index" aria-hidden="true">02</span>
+    <div class="doc-preflight-copy">
+      <h3>Título corto</h3>
+      <p>Qué debe estar levantado o abierto antes de empezar.</p>
+    </div>
+  </li>
+  <li>
+    <span class="doc-preflight-index" aria-hidden="true">03</span>
+    <div class="doc-preflight-copy">
+      <h3>Chequeo</h3>
+      <p>Una comprobación rápida antes de continuar.</p>
+    </div>
+  </li>
+</ol>
 
 ## Concepto mínimo
 
@@ -41,7 +82,7 @@ El código y las decisiones necesarias para completar la práctica.
 
 ## Ejecución
 
-Comandos y orden de terminales para correrlo contra el simulador.
+Comandos y orden de terminales para correrlo contra el simulador. Un bloque de código por terminal (comentá `# Terminal N — qué hace`); si dos comandos corren en la misma terminal y forman parte de la misma secuencia, van en el mismo bloque. Siempre `source ~/rosmaster_ws/install/setup.bash` con ruta absoluta, nunca relativa — cada bloque tiene que poder pegarse en una terminal nueva sin depender de un `cd` previo.
 
 ## Comprobación
 
