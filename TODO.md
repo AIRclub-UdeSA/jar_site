@@ -30,7 +30,7 @@ Backlog compartido para quienes sigan trabajando en el sitio. Antes de arrancar:
 
 - [x] **Optimizar meshes 3D e integrar modelo CAD unificado** — integró el modelo CAD unificado de alta fidelidad en `public/models/rosmaster_unified.glb` (7.8 MB, bajando de ~32 MB de mallas URDF dispersas), con ajuste de la cámara RGB-D (-1 cm Z) para resolver la interferencia con el bulón de fijación.
 - [ ] **Revisar la estructura superior del URDF** — en el visor sobresale un mástil con caños sobre el chasis. Confirmar que es parte real del xacro y no algo que convenga ocultar para la web (el loader permite ocultar links puntuales).
-- [ ] **Página 404** — crear `src/pages/404.astro` amigable; GitHub Pages la sirve automáticamente si está en el build.
+- [x] **Página 404** — `src/pages/404.astro` con ilustración del robot fuera del mapa (`public/media/404/robot-perdido.svg`) y accesos a inicio, setup y workshops; GitHub Pages la sirve automáticamente desde el build.
 - [ ] **sitemap + robots.txt** — integración `@astrojs/sitemap` y `robots.txt` en `public/`.
 - [x] **Warning de THREE.Clock y optimización del visor** — reemplazo de APIs obsoletas, zoom condicional (`isMouseDown`), centrado y escalado automático optimizado.
 
