@@ -32,7 +32,7 @@ Backlog compartido para quienes sigan trabajando en el sitio. Antes de arrancar:
 - [ ] **Revisar la estructura superior del URDF** — en el visor sobresale un mástil con caños sobre el chasis. Confirmar que es parte real del xacro y no algo que convenga ocultar para la web (el loader permite ocultar links puntuales).
 - [ ] **Página 404** — crear `src/pages/404.astro` amigable; GitHub Pages la sirve automáticamente si está en el build.
 - [x] **Sitemap para buscadores** — integración `@astrojs/sitemap` con las 11 rutas públicas y sin duplicar la landing.
-- [ ] **robots.txt en la raíz de GitHub Pages** — requiere crear el sitio de organización `AIRclub-UdeSA/airclub-udesa.github.io`; seguimiento en [`AIRclub-UdeSA/.github#1`](https://github.com/AIRclub-UdeSA/.github/issues/1).
+- [ ] **robots.txt en la raíz de GitHub Pages** — el sitio de organización `AIRclub-UdeSA/airclub-udesa.github.io` ya está publicado y su `robots.txt` responde 200 con la línea `Sitemap:`; queda verificar que el sitemap responda 200 al integrar este PR. Seguimiento en [`AIRclub-UdeSA/.github#1`](https://github.com/AIRclub-UdeSA/.github/issues/1).
 - [x] **Warning de THREE.Clock y optimización del visor** — reemplazo de APIs obsoletas, zoom condicional (`isMouseDown`), centrado y escalado automático optimizado.
 
 ## Comunidad e inscripción
