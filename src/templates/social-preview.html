@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Social preview · Challenge JAR</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 1200px;
+        height: 630px;
+        margin: 0;
+        overflow: hidden;
+        background: #000;
+      }
+
+      .preview {
+        width: 1200px;
+        height: 630px;
+        display: grid;
+        place-items: center;
+      }
+
+      .preview-art {
+        width: 1200px;
+        height: 630px;
+        display: block;
+        object-fit: contain;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview">
+      <img class="preview-art" src="/media/social-preview-source.png" alt="" />
+    </main>
+
+    <script>
+      const preview = document.querySelector('.preview-art');
+      preview.decode().then(() => {
+        window.__SOCIAL_PREVIEW_READY__ = true;
+      });
+    </script>
+  </body>
+</html>

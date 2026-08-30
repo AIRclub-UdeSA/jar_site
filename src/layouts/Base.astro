@@ -12,6 +12,10 @@ interface Props {
 
 const { title, description = SITE.description, bodyClass } = Astro.props;
 const fullTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} · ${SITE.tagline}`;
+const siteUrl = Astro.site ?? new URL(Astro.url.origin);
+const pageUrl = new URL(Astro.url.pathname, siteUrl).href;
+const socialImageUrl = new URL(withBase('/og.png'), siteUrl).href;
+const socialImageAlt = 'Challenge JAR 2026 del AIR Club UdeSA, en Rosario del 3 al 6 de noviembre';
 ---
 
 <!doctype html>
@@ -21,7 +25,7 @@ const fullTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} · ${SITE.t
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <link rel="icon" type="image/png" sizes="16x16" href={withBase('/favicon-16x16.png')} />
     <link rel="icon" type="image/png" sizes="32x32" href={withBase('/favicon-32x32.png')} />
     <link rel="shortcut icon" href={withBase('/favicon.ico')} />
     <link rel="apple-touch-icon" sizes="192x192" href={withBase('/favicon-192x192.png')} />
@@ -29,6 +33,20 @@ const fullTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} · ${SITE.t
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:image" content={socialImageUrl} />
+    <meta property="og:image:secure_url" content={socialImageUrl} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={socialImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageUrl} />
+    <meta name="twitter:image:alt" content={socialImageAlt} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

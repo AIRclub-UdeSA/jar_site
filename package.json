@@ -7,7 +7,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "brand:icons": "node scripts/generate-brand-assets.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
@@ -18,6 +19,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
     "@types/three": "^0.185.4",
+    "sharp": "^0.35.3",
     "typescript": "^5.9.3"
   },
   "allowScripts": {

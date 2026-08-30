@@ -1,47 +1,30 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
-  <!-- Background Badge with Dark Emerald Border -->
-  <rect width="128" height="128" rx="28" fill="#08120c"/>
-  <rect x="2" y="2" width="124" height="124" rx="26" stroke="#4ade80" stroke-opacity="0.4" stroke-width="3"/>
+  <rect width="128" height="128" rx="28" fill="#07100b"/>
+  <rect x="2" y="2" width="124" height="124" rx="26" stroke="#4ade80" stroke-opacity=".48" stroke-width="3"/>
 
-  <!-- Top LiDAR (Laser Link) -->
-  <rect x="46" y="14" width="36" height="15" rx="4" fill="#1b2a20" stroke="#4ade80" stroke-width="2"/>
-  <line x1="52" y1="29" x2="52" y2="38" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
-  <line x1="76" y1="29" x2="76" y2="38" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
-  <circle cx="64" cy="21.5" r="3" fill="#4ade80"/>
+  <rect x="44" y="12" width="40" height="16" rx="5" fill="#132018" stroke="#4ade80" stroke-width="3"/>
+  <circle cx="64" cy="20" r="3.5" fill="#4ade80"/>
+  <path d="M53 29v8M75 29v8" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
 
-  <!-- Top Deck (Green Acrylic Plate) -->
-  <polygon points="30,38 98,38 92,47 24,47" fill="#4ade80"/>
-  <polygon points="24,47 92,47 92,51 24,51" fill="#22c55e"/>
+  <path d="M28 36h72l-8 13H20l8-13Z" fill="#4ade80"/>
+  <path d="M20 49h72v4H20z" fill="#22c55e"/>
 
-  <!-- RGB-D Camera (Astra / RealSense) -->
-  <rect x="34" y="53" width="60" height="15" rx="6" fill="#111c15" stroke="#86efac" stroke-width="2"/>
-  <circle cx="45" cy="60.5" r="3.5" fill="#050807" stroke="#4ade80" stroke-width="1.8"/>
-  <circle cx="64" cy="60.5" r="3" fill="#050807" stroke="#86efac" stroke-width="1.5"/>
-  <circle cx="83" cy="60.5" r="3.5" fill="#050807" stroke="#4ade80" stroke-width="1.8"/>
+  <rect x="29" y="51" width="70" height="21" rx="10.5" fill="#0d1811" stroke="#86efac" stroke-width="3"/>
+  <circle cx="43" cy="61.5" r="4.5" fill="#050807" stroke="#4ade80" stroke-width="3"/>
+  <circle cx="64" cy="61.5" r="3.5" fill="#86efac"/>
+  <circle cx="85" cy="61.5" r="4.5" fill="#050807" stroke="#4ade80" stroke-width="3"/>
 
-  <!-- Standoffs between decks -->
-  <line x1="28" y1="51" x2="28" y2="69" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
-  <line x1="100" y1="51" x2="100" y2="69" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
+  <path d="M17 72h94l-10 13H7l10-13Z" fill="#4ade80"/>
+  <path d="M7 85h94v4H7z" fill="#16a34a"/>
 
-  <!-- Middle Deck (Main Chassis Green Plate) -->
-  <polygon points="20,69 108,69 100,79 12,79" fill="#4ade80"/>
-  <polygon points="12,79 100,79 100,83 12,83" fill="#16a34a"/>
+  <rect x="34" y="84" width="60" height="25" rx="6" fill="#203127" stroke="#86efac" stroke-width="3"/>
+  <path d="M44 94h40M50 101h28" stroke="#07100b" stroke-width="3" stroke-linecap="round"/>
 
-  <!-- Front Chassis Bracket / Bumper -->
-  <rect x="38" y="83" width="52" height="22" rx="3" fill="#24372c" stroke="#86efac" stroke-width="1.8"/>
-  <line x1="46" y1="89" x2="82" y2="89" stroke="#08120c" stroke-width="2.5" stroke-linecap="round"/>
-  <line x1="50" y1="96" x2="78" y2="96" stroke="#08120c" stroke-width="2.5" stroke-linecap="round"/>
-
-  <!-- Mecanum Wheels (Front Left & Front Right with roller ribs) -->
-  <!-- Left Wheel -->
-  <rect x="8" y="73" width="20" height="40" rx="6" fill="#15221a" stroke="#4ade80" stroke-width="2.2"/>
-  <line x1="10" y1="81" x2="26" y2="90" stroke="#86efac" stroke-width="2" stroke-linecap="round"/>
-  <line x1="10" y1="93" x2="26" y2="102" stroke="#86efac" stroke-width="2" stroke-linecap="round"/>
-  <circle cx="18" cy="93" r="3.5" fill="#4ade80"/>
-
-  <!-- Right Wheel -->
-  <rect x="100" y="73" width="20" height="40" rx="6" fill="#15221a" stroke="#4ade80" stroke-width="2.2"/>
-  <line x1="118" y1="81" x2="102" y2="90" stroke="#86efac" stroke-width="2" stroke-linecap="round"/>
-  <line x1="118" y1="93" x2="102" y2="102" stroke="#86efac" stroke-width="2" stroke-linecap="round"/>
-  <circle cx="110" cy="93" r="3.5" fill="#4ade80"/>
+  <g fill="#132018" stroke="#4ade80" stroke-width="3">
+    <rect x="6" y="78" width="23" height="39" rx="8"/>
+    <rect x="99" y="78" width="23" height="39" rx="8"/>
+  </g>
+  <g stroke="#86efac" stroke-width="3" stroke-linecap="round">
+    <path d="m9 87 17 10M9 100l17 10M119 87l-17 10M119 100l-17 10"/>
+  </g>
 </svg>
