@@ -63,6 +63,7 @@
   margin-bottom: clamp(3rem, 7vw, 5.5rem);
 }
 
+.landing-section-heading h1,
 .landing-section-heading h2,
 .landing-event-heading h2,
 .landing-application h2,
@@ -72,6 +73,7 @@
   letter-spacing: -0.04em;
 }
 
+.landing-section-heading h1,
 .landing-section-heading h2 {
   max-width: 12ch;
   color: var(--landing-ink);

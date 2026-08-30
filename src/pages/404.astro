@@ -1,0 +1,79 @@
+---
+import '../styles/landing.css';
+import Base from '../layouts/Base.astro';
+import { withBase } from '../config/site';
+---
+
+<Base title="Página no encontrada" bodyClass="landing-body">
+  <main id="main-content" class="landing-page">
+    <section class="landing-section" aria-labelledby="notfound-title">
+      <div class="landing-shell notfound-layout">
+        <div class="notfound-copy">
+          <header class="landing-section-heading">
+            <p class="landing-eyebrow">Error 404</p>
+            <h1 id="notfound-title">Esta página no existe.</h1>
+            <p>
+              Puede que la dirección esté mal escrita o que el contenido haya cambiado de lugar.
+              Desde acá volvés al recorrido principal del Challenge JAR.
+            </p>
+          </header>
+
+          <nav class="landing-actions" aria-label="Salidas desde el error">
+            <a class="landing-action landing-action-primary" href={withBase('/')}>
+              Ir al inicio
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+            </a>
+            <a class="landing-action landing-action-secondary" href={withBase('/setup/')}>
+              Preparar el entorno
+            </a>
+            <a class="landing-action landing-action-secondary" href={withBase('/workshops/')}>
+              Ver los workshops
+            </a>
+          </nav>
+        </div>
+
+        <figure class="notfound-figure">
+          <img
+            src={withBase('/media/404/robot-perdido.svg')}
+            alt="El recorrido de Donatello sale del mapa conocido y el robot queda afuera, confundido"
+            width="510"
+            height="290"
+            loading="lazy"
+          />
+        </figure>
+      </div>
+    </section>
+  </main>
+</Base>
+
+<style>
+  .notfound-layout {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 4.5rem);
+    align-items: center;
+  }
+
+  .notfound-copy .landing-section-heading {
+    margin-bottom: clamp(2rem, 4vw, 2.75rem);
+  }
+
+  .notfound-figure {
+    margin: 0;
+  }
+
+  .notfound-figure img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  @media (min-width: 56rem) {
+    .notfound-layout {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
+    }
+
+    .notfound-figure {
+      order: 2;
+    }
+  }
+</style>
