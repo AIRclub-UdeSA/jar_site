@@ -68,8 +68,8 @@ Ver [Estructura del repo](README.md#estructura-del-repo) en el README.
 
 ## Pull requests
 
-La rama `main` está protegida en GitHub (branch protection rule, classic).
-Todo cambio a `main` tiene que pasar por un pull request:
+La rama `main` está protegida en GitHub mediante un ruleset. Todo cambio
+a `main` tiene que pasar por un pull request:
 
 1. Creá una branch para tu cambio (`git checkout -b feature/mi-cambio`) y
    subila.
@@ -80,10 +80,9 @@ Todo cambio a `main` tiene que pasar por un pull request:
 4. Resolvé todos los comentarios de revisión antes de mergear.
 5. Si se suben commits nuevos después de una aprobación, esa aprobación se
    invalida y hay que volver a pedir revisión.
-6. El último commit del PR también tiene que estar aprobado por alguien
-   distinto de quien lo subió.
-7. No se puede pushear directo a `main`, ni siquiera los admins del repo
-   pueden saltearse estas reglas.
+6. No se puede pushear directo a `main` por default; el rol de admin del
+   repo puede saltear esta regla mediante el bypass del ruleset, pero
+   conviene reservarlo para emergencias, no para el flujo normal.
 
 ## Reglas generales
 
