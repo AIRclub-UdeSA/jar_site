@@ -24,7 +24,7 @@ Backlog compartido para quienes sigan trabajando en el sitio. Antes de arrancar:
 - [x] **Favicon con el ROSMASTER** — el tab usa el robot pixel-art de `public/favicon-source.png` y `npm run brand:icons` genera 16/32/192/512 px e ICO; `RobotMark.astro` conserva el SVG simplificado para nav y footer.
 - [x] **Rediseño hero fullscreen "mission control"** — hero interactivo 100vh con micro-animaciones escalonadas (`anim-fade-up`), badge del evento con glassmorphism, botones con glow verde, encuadre 3D a la derecha en desktop mediante `camera.setViewOffset`, y zoom con rueda condicional al click presionado para no bloquear el scroll de la página.
 - [ ] **Capturas adicionales del simulador** — el setup ya reutiliza los posters públicos de Gazebo y RViz como díptico; faltan capturas específicas para algunos pasos de instalación y comprobación.
-- [ ] **Social preview y refinamiento del símbolo** — implementación local lista: imagen OG (`public/og.png`, 1200×630), metadata Open Graph/Twitter absoluta, SVG compartido por el shell y favicons regenerables. Falta publicar los cambios y subir la misma imagen como banner del repo en Settings → Social preview.
+- [x] **Social preview y refinamiento del símbolo** — imagen OG de 1200×630 publicada como banner del repositorio, metadata Open Graph/Twitter absoluta compatible con el base path, composición maestra versionada y favicons pixel-art regenerables; el shell conserva su símbolo vectorial compartido.
 
 ## Técnica
 
