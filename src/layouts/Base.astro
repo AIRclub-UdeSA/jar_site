@@ -9,9 +9,10 @@ interface Props {
   title?: string;
   description?: string;
   bodyClass?: string;
+  noindex?: boolean;
 }
 
-const { title, description = SITE.description, bodyClass } = Astro.props;
+const { title, description = SITE.description, bodyClass, noindex = false } = Astro.props;
 const fullTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} · ${SITE.tagline}`;
 const siteUrl = Astro.site ?? new URL(Astro.url.origin);
 const pageUrl = new URL(Astro.url.pathname, siteUrl).href;
@@ -26,6 +27,7 @@ const socialImageAlt = 'Challenge JAR 2026 del AIR Club UdeSA, en Rosario del 3 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={pageUrl} />}
     <link rel="icon" type="image/png" sizes="16x16" href={withBase('/tab-icon-v2-16x16.png')} />
     <link rel="icon" type="image/png" sizes="32x32" href={withBase('/tab-icon-v2-32x32.png')} />
     <link rel="icon" type="image/svg+xml" sizes="any" href={withBase('/tab-icon-v2.svg')} />
@@ -35,7 +37,7 @@ const socialImageAlt = 'Challenge JAR 2026 del AIR Club UdeSA, en Rosario del 3 
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={pageUrl} />
+    {!noindex && <meta property="og:url" content={pageUrl} />}
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:locale" content="es_AR" />
     <meta property="og:image" content={socialImageUrl} />

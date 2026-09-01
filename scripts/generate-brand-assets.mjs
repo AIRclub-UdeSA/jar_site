@@ -2,7 +2,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import sharp from 'sharp';
 
 const projectRoot = new URL('../', import.meta.url);
-const sourceUrl = new URL('public/favicon-source.png', projectRoot);
+const sourceUrl = new URL('brand/favicon-source.png', projectRoot);
 const source = await readFile(sourceUrl);
 const tabIconSource = await readFile(new URL('public/tab-icon-v2.svg', projectRoot));
 
@@ -61,7 +61,7 @@ const renderIcon = (size) =>
     .png({ compressionLevel: 9 })
     .toBuffer();
 
-const [png192, png512] = await Promise.all([192, 512].map(renderIcon));
+const [png192] = await Promise.all([192].map(renderIcon));
 
 const renderTabIcon = (size) =>
   sharp(tabIconSource, { density: 384 })
@@ -73,7 +73,6 @@ const [png16, png32] = await Promise.all([16, 32].map(renderTabIcon));
 
 await Promise.all([
   writeFile(new URL('public/favicon-192x192.png', projectRoot), png192),
-  writeFile(new URL('public/favicon-512x512.png', projectRoot), png512),
   writeFile(new URL('public/tab-icon-v2-16x16.png', projectRoot), png16),
   writeFile(new URL('public/tab-icon-v2-32x32.png', projectRoot), png32),
 ]);
@@ -99,9 +98,6 @@ writeIcoEntry(22, 32, png32, icoHeader.length + png16.length);
 
 const ico = Buffer.concat([icoHeader, png16, png32]);
 
-await Promise.all([
-  writeFile(new URL('public/favicon.ico', projectRoot), ico),
-  writeFile(new URL('public/tab-icon-v2.ico', projectRoot), ico),
-]);
+await writeFile(new URL('public/tab-icon-v2.ico', projectRoot), ico);
 
 console.log('Generated transparent brand assets and circular high-contrast tab icons.');
