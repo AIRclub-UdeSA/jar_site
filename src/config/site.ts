@@ -20,6 +20,12 @@ export const SITE = {
   },
 };
 
+export const FEEDBACK_FORM = {
+  baseUrl:
+    'https://docs.google.com/forms/d/e/1FAIpQLSeJ8gf2zANiKyIARlJ1w-5W6X2qYvt6t2c25PlYqyXTiDly7g/viewform',
+  pageFieldEntry: 'entry.1385103228',
+};
+
 export const withBase = (path: string): string => {
   const base = import.meta.env.BASE_URL.replace(/\/+$/, '');
   return `${base}${path}`;

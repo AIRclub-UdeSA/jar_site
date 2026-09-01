@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import FeedbackButton from '../components/FeedbackButton.astro';
 import { SITE, withBase } from '../config/site';
 
 interface Props {
@@ -41,5 +42,6 @@ const fullTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} · ${SITE.t
     <Nav />
     <slot />
     <Footer />
+    <FeedbackButton />
   </body>
 </html>
