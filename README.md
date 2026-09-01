@@ -80,6 +80,16 @@ El visor del landing carga el URDF y las meshes desde `public/models/rosmaster/`
 
 Requiere tener ROS 2 Humble instalado y el workspace compilado. Solo hace falta correrlo si cambia el URDF del robot; el resto del tiempo podés ignorarlo.
 
+## Regenerar los favicons
+
+El nav y el footer usan el robot pixel-art de `public/favicon-source.png` (variantes de 192 y 512 px); la pestaña del navegador usa la micro-marca circular de `public/tab-icon-v2.svg` (variantes de 16 y 32 px). Después de editar alguna de las dos fuentes, regenerá todas las variantes PNG y el `.ico` con:
+
+```bash
+npm run brand:icons
+```
+
+La composición maestra de la imagen social vive en `public/media/social-preview-source.png`; `src/templates/social-preview.html` la encuadra proporcionalmente sobre un canvas negro de 1200×630. Para reexportarla, serví el repo con `npx vite --host 127.0.0.1`, abrí `/src/templates/social-preview.html` con ese viewport y guardá la captura como `public/og.png`.
+
 ## Deploy
 
 Cada push a `main` dispara el workflow `.github/workflows/deploy.yml`, que hace build y publica el sitio automáticamente.

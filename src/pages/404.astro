@@ -34,11 +34,12 @@ import { withBase } from '../config/site';
 
         <figure class="notfound-figure">
           <img
-            src={withBase('/media/404/robot-perdido.svg')}
-            alt="El recorrido de Donatello sale del mapa conocido y el robot queda afuera, confundido"
-            width="510"
-            height="290"
+            src={withBase('/media/404/robot-perdido.webp')}
+            alt="Donatello intenta encontrar un recorrido entre obstáculos y señales desconocidas"
+            width="1229"
+            height="935"
             loading="lazy"
+            decoding="async"
           />
         </figure>
       </div>
@@ -59,6 +60,8 @@ import { withBase } from '../config/site';
 
   .notfound-figure {
     margin: 0;
+    width: min(100%, 44rem);
+    justify-self: center;
   }
 
   .notfound-figure img {
@@ -69,11 +72,13 @@ import { withBase } from '../config/site';
 
   @media (min-width: 56rem) {
     .notfound-layout {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
+      grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+      gap: clamp(1.5rem, 3vw, 3rem);
     }
 
     .notfound-figure {
       order: 2;
+      justify-self: end;
     }
   }
 </style>

@@ -36,6 +36,7 @@ Ecosistema de 3 repos de la org [AIRclub-UdeSA](https://github.com/AIRclub-UdeSA
 - `public/models/rosmaster/`: URDF de referencia; ya no es el asset cargado por la landing.
 - `public/media/`: videos y posters optimizados de Gazebo/RViz usados por `ObservationPlate`; `public/media/docs/` contiene figuras SVG propias de las guías.
 - `scripts/sync-robot.sh`: regenera el modelo 3D desde un workspace ROS local.
+- `scripts/generate-brand-assets.mjs`: regenera los favicons PNG/ICO desde `public/favicon-source.png`; `RobotMark.astro` (nav y footer) renderiza el PNG resultante, no queda ningún SVG vectorial del robot en el shell.
 
 # Confidencialidad
 
