@@ -146,10 +146,6 @@ nav.site-nav {
   min-height: 44px;
 }
 
-.robot-mark {
-  image-rendering: pixelated;
-}
-
 .nav-mark {
   width: 2rem;
   height: 2rem;
