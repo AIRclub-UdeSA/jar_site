@@ -61,9 +61,7 @@ const renderIcon = (size) =>
     .png({ compressionLevel: 9 })
     .toBuffer();
 
-const [, , png192, png512] = await Promise.all(
-  [16, 32, 192, 512].map(renderIcon),
-);
+const [png192, png512] = await Promise.all([192, 512].map(renderIcon));
 
 const renderTabIcon = (size) =>
   sharp(tabIconSource, { density: 384 })
@@ -74,8 +72,6 @@ const renderTabIcon = (size) =>
 const [png16, png32] = await Promise.all([16, 32].map(renderTabIcon));
 
 await Promise.all([
-  writeFile(new URL('public/favicon-16x16.png', projectRoot), png16),
-  writeFile(new URL('public/favicon-32x32.png', projectRoot), png32),
   writeFile(new URL('public/favicon-192x192.png', projectRoot), png192),
   writeFile(new URL('public/favicon-512x512.png', projectRoot), png512),
   writeFile(new URL('public/tab-icon-v2-16x16.png', projectRoot), png16),

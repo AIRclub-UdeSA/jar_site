@@ -82,7 +82,7 @@ Requiere tener ROS 2 Humble instalado y el workspace compilado. Solo hace falta 
 
 ## Regenerar los favicons
 
-El icono del navegador usa el robot pixel-art de `public/favicon-source.png`; `public/favicon.svg` queda como símbolo vectorial del nav y footer. Después de editar la fuente raster, regenerá las variantes de 16, 32, 192 y 512 px y el `.ico` con:
+El nav y el footer usan el robot pixel-art de `public/favicon-source.png` (variantes de 192 y 512 px); la pestaña del navegador usa la micro-marca circular de `public/tab-icon-v2.svg` (variantes de 16 y 32 px). Después de editar alguna de las dos fuentes, regenerá todas las variantes PNG y el `.ico` con:
 
 ```bash
 npm run brand:icons
