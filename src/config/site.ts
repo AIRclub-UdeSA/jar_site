@@ -14,9 +14,9 @@ export const SITE = {
     city: 'Rosario',
     dateRange: '3 al 6 de noviembre de 2026',
     shortDate: '03–06 nov 2026',
-    venue: 'FCEIA · UNR',
+    venue: 'Predio del CUR · "La Siberia"',
     officialUrl: 'https://jar.net.ar/',
-    venueUrl: 'https://web.fceia.unr.edu.ar/',
+    venueUrl: 'https://www.google.com/maps/place/La+Siberia+-+Centro+Universitario+Rosario+(CUR)/@-32.9666336,-60.6257725,15.63z/data=!4m6!3m5!1s0x95b7aa53ea64d915:0x3538499b08835639!8m2!3d-32.9661559!4d-60.6233572!16s%2Fg%2F1224z7kt',
   },
 };
 
