@@ -76,7 +76,7 @@ Un robot tiene (al menos) tres frames encadenados ([REP 105](https://www.ros.org
 | `odom` | arranca igual a `base_link` y deriva integrando los encoders: nunca salta, pero acumula error sin límite |
 | `base_footprint` (`base_link`) | el propio robot; todo lo demás se ubica relativo a él |
 
-`base_footprint → odom` ya te lo da gratis `wheel_state_odometry`, corriendo desde que lanzás el simulador. Lo que falta —y es el objetivo de esta semana— es `map → odom`: una transformada que corrige el error acumulado comparando el `/scan` contra el mapa conocido. Con las dos transformadas encadenadas, cualquier nodo (RViz incluido) sabe dónde está el robot en `map` sin saber cómo se calculó la corrección.
+`odom → base_footprint` ya te lo da gratis `wheel_state_odometry`, corriendo desde que lanzás el simulador. Lo que falta —y es el objetivo de esta semana— es `map → odom`: una transformada que corrige el error acumulado comparando el `/scan` contra el mapa conocido. Con las dos transformadas encadenadas, cualquier nodo (RViz incluido) sabe dónde está el robot en `map` sin saber cómo se calculó la corrección.
 
 Un **filtro de partículas** lleva, en vez de una única hipótesis de pose, cientas de ellas a la vez. En cada ciclo:
 
