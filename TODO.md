@@ -43,5 +43,5 @@ Backlog compartido para quienes sigan trabajando en el sitio. Antes de arrancar:
 ## Repos e infra
 
 - [x] **Crear el repo `jar_workshops`** — el código de las prácticas vive en `https://github.com/AIRclub-UdeSA/jar_workshops` y se mantiene enlazado desde el sitio mediante `SITE.workshopsRepo` (`src/config/site.ts`).
-- [ ] **Sincronizar el launch público en `jar_workshops`** — actualizar los ejemplos de Semana 05 para incluir `yahboom_rosmaster_bringup/launch/rosmaster_x3_sim.launch.py`, igual que la documentación pública del sitio.
+- [x] **Sincronizar el launch público en `jar_workshops`** — actualizar los ejemplos de Semana 05 para incluir `yahboom_rosmaster_bringup/launch/rosmaster_x3_sim.launch.py`, igual que la documentación pública del sitio.
 - [ ] **Probar en mobile real** — el visor usa OrbitControls táctil; validar performance y gestos en un celular físico (motivo más para decimar meshes).
