@@ -16,6 +16,11 @@ const isActive = (href: string): boolean => {
   return path === target;
 };
 
+// Sólo mostramos la sección a la que pertenece la página actual: evita que
+// Setup aparezca dentro de Workshops (y viceversa) en la barra lateral.
+const setupBase = withBase('/setup/').replace(/\/+$/, '');
+const isSetupSection = path === setupBase || path.startsWith(`${setupBase}/`);
+
 const workshopTitle = (title: string) => {
   const match = title.match(/^(\d{2}) · (.+)$/);
   return match ? { number: match[1], label: match[2] } : { number: '—', label: title };
@@ -23,51 +28,56 @@ const workshopTitle = (title: string) => {
 ---
 
 {
-  DOC_SECTIONS.map((section) => (
-    <div class="side-group">
-      <p class="side-label">{section.label}</p>
-      {section.items.map((item, index) => (
-        <a
-          class:list={['side-link', { active: isActive(item.href) }]}
-          href={withBase(item.href)}
-          aria-current={isActive(item.href) ? 'page' : undefined}
-        >
-          <span class="side-index">{String(index + 1).padStart(2, '0')}</span>
-          <span class="side-link-label">{item.label}</span>
-        </a>
-      ))}
-    </div>
-  ))
+  isSetupSection &&
+    DOC_SECTIONS.map((section) => (
+      <div class="side-group">
+        <p class="side-label">{section.label}</p>
+        {section.items.map((item, index) => (
+          <a
+            class:list={['side-link', { active: isActive(item.href) }]}
+            href={withBase(item.href)}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+          >
+            <span class="side-index">{String(index + 1).padStart(2, '0')}</span>
+            <span class="side-link-label">{item.label}</span>
+          </a>
+        ))}
+      </div>
+    ))
 }
-<div class="side-group">
-  <p class="side-label">Workshops</p>
-  <a
-    class:list={['side-link', { active: isActive('/workshops/') }]}
-    href={withBase('/workshops/')}
-    aria-current={isActive('/workshops/') ? 'page' : undefined}
-  >
-    <span class="side-index">00</span>
-    <span class="side-link-label">Sobre los workshops</span>
-  </a>
-  {
-    weeks.map((week) => {
-      const title = workshopTitle(week.data.title);
-      const active = isActive(`/${week.id}/`);
-      return (
-        <a
-          class:list={['side-link', { active }]}
-          href={withBase(`/${week.id}/`)}
-          aria-current={active ? 'page' : undefined}
-        >
-          <span class="side-index">{title.number}</span>
-          <span class="side-link-label">{title.label}</span>
-          {
-            week.data.status === 'proximamente' && (
-              <span class="soon-dot" role="img" aria-label="Próximamente" />
-            )
-          }
-        </a>
-      );
-    })
-  }
-</div>
+{
+  !isSetupSection && (
+    <div class="side-group">
+      <p class="side-label">Workshops</p>
+      <a
+        class:list={['side-link', { active: isActive('/workshops/') }]}
+        href={withBase('/workshops/')}
+        aria-current={isActive('/workshops/') ? 'page' : undefined}
+      >
+        <span class="side-index">00</span>
+        <span class="side-link-label">Sobre los workshops</span>
+      </a>
+      {
+        weeks.map((week) => {
+          const title = workshopTitle(week.data.title);
+          const active = isActive(`/${week.id}/`);
+          return (
+            <a
+              class:list={['side-link', { active }]}
+              href={withBase(`/${week.id}/`)}
+              aria-current={active ? 'page' : undefined}
+            >
+              <span class="side-index">{title.number}</span>
+              <span class="side-link-label">{title.label}</span>
+              {
+                week.data.status === 'proximamente' && (
+                  <span class="soon-dot" role="img" aria-label="Próximamente" />
+                )
+              }
+            </a>
+          );
+        })
+      }
+    </div>
+  )
+}
