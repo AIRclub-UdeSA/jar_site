@@ -5,7 +5,12 @@ name: Add to project
 on:
   issues:
     types: [opened]
-  pull_request:
+  # pull_request_target (no pull_request): los PRs que vienen de un fork no
+  # reciben los secrets del repo con pull_request, asi que el paso que
+  # genera el token de la App falla en toda contribucion externa. Es seguro
+  # aca porque este workflow nunca hace checkout del codigo del fork: solo
+  # llama a la API GraphQL de Projects.
+  pull_request_target:
     types: [opened]
 
 jobs:
