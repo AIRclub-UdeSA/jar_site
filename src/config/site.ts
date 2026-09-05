@@ -55,6 +55,7 @@ export const DOC_SECTIONS: NavSection[] = [
       { label: 'ROS 2 Humble', href: '/setup/ros2-humble/' },
       { label: 'Gazebo y RViz', href: '/setup/gazebo-rviz/' },
       { label: 'Simulador ROSMASTER', href: '/setup/simulador/' },
+      { label: 'Docker (opcional)', href: '/setup/docker/' },
     ],
   },
 ];

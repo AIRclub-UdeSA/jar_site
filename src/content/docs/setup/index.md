@@ -22,3 +22,5 @@ Al terminar vas a tener ROS 2 Humble instalado, Gazebo Fortress y RViz abriendo 
 El recorrido está probado para **Ubuntu 22.04**, la plataforma oficial de ROS 2 Humble y la única que podemos acompañar directamente desde el club.
 
 Si usás WSL2, macOS o una máquina virtual, algunas partes pueden requerir ajustes adicionales. Podés probarlas, pero conviene completar primero el camino recomendado si tenés esa posibilidad.
+
+Si tenés Linux pero no Ubuntu 22.04 nativo, hay un camino alternativo con [Docker](docker/) que evita instalar ROS 2 Humble directamente en tu sistema.
