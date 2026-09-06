@@ -100,6 +100,8 @@ Para que esto funcione bien arriba de un robot conviene seguir algunas reglas de
 
 Completalas en ese orden: `hay_obstaculo()` y las dos acciones son piezas chicas y fáciles de probar por separado, antes de escribir la máquina de estados que las usa a las tres.
 
+De lo que ya viene resuelto, hay una línea que conviene mirar: las dos suscripciones de `evasor.py` están una al lado de la otra y son distintas a propósito — `/scan` va con `qos_profile_sensor_data` y `/odom` con `10`. Es el primer workshop que toca un sensor de verdad, y ese detalle es la diferencia entre recibir datos y no recibir nada. Está explicado abajo, en *El QoS de los sensores*.
+
 > [!NOTE]
 > También hay dos `TODO` en los archivos de configuración: [`setup.py`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-03-evasion-obstaculos/evasion_obstaculos/setup.py) (registrar el ejecutable `evasor` en `entry_points`) y [`package.xml`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-03-evasion-obstaculos/evasion_obstaculos/package.xml) (declarar las dependencias que usa `evasor.py`). Sin estos dos, `colcon build` puede fallar o el ejecutable no va a existir aunque el código esté perfecto.
 
@@ -164,3 +166,35 @@ Donatello debería avanzar en línea recta hasta acercarse a un obstáculo, gira
 ## Explicación: el ángulo del lidar en Donatello
 
 El ángulo 0° de un `LaserScan` es relativo al frame del sensor (`laser_link`), no al frente del robot. En Donatello, el lidar está montado con 180° de yaw fijo (ver `lidar.urdf.xacro` en `yahboom_rosmaster_description`), así que el 0° del scan apunta para atrás — por eso `angulo_frente_deg` tiene default `180.0` y no `0.0`. Es un buen ejemplo de por qué conviene revisar siempre el frame de un sensor antes de asumir que sus ángulos coinciden con los del chasis.
+
+## Explicación: el QoS de los sensores
+
+En la [semana 01](../semana-01-talkers-listeners/) las suscripciones se crearon con `create_subscription(String, 'mensaje', self.recibir, 10)`. Ese `10` es el **tamaño de cola**: cuántos mensajes sin procesar guarda ROS 2 antes de descartar los más viejos. Pero pasar solo un número también elige, sin que se note, el resto del perfil de [**QoS**](https://docs.ros.org/en/humble/Concepts/Intermediate/About-Quality-of-Service-Settings.html) (*Quality of Service*): las políticas que publisher y subscriber negocian para poder conectarse. La que importa acá es *reliability*, y el default de rclpy es `Reliable` — reintentar hasta que el mensaje llegue.
+
+Para un `String` a 1 Hz está perfecto. Los sensores no funcionan así: el lidar publica a 5 Hz y no va a parar nunca, así que si un scan se pierde, reintentarlo no tiene sentido — ya viene el próximo, y es más nuevo. Por eso los sensores publican en `Best Effort`, tanto en el simulador como en el ROSMASTER X3 físico.
+
+> [!WARNING]
+> **Un subscriber `Reliable` no se conecta a un publisher `Best Effort`.** DDS considera los perfiles incompatibles y directamente no arma la conexión. No es un error, no es una excepción, no se cae nada: el callback simplemente no se llama nunca. El robot se queda quieto y la pantalla no dice nada.
+
+Por eso `evasor.py` suscribe el `/scan` con el perfil de sensores, que rclpy ya trae armado:
+
+```python
+from rclpy.qos import qos_profile_sensor_data
+...
+self.create_subscription(LaserScan, 'scan', self.recibir_scan, qos_profile_sensor_data)
+```
+
+La regla no es "los sensores siempre en `Best Effort`", es que **el subscriber tiene que matchear con el publisher del otro lado**, sea cual sea. `/odom` lo publica `wheel_state_odometry`, un nodo común, en `Reliable`, y por eso va con `10`. Para averiguar con qué QoS publica alguien:
+
+```bash
+ros2 topic info /scan --verbose
+```
+
+Y si un nodo no recibe nada pero `ros2 topic hz` muestra el tópico publicando perfecto, buscá esto en el log — es la única pista que da ROS 2:
+
+```text
+[evasor] New publisher discovered on topic 'scan', offering incompatible QoS.
+         No messages will be received from it. Last incompatible policy: RELIABILITY
+```
+
+En la [semana 05](../semana-05-launch-rviz/) vuelve a aparecer lo mismo, pero del lado de los displays de RViz.

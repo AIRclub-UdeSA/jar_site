@@ -82,6 +82,8 @@ Igual que en la semana 03, conviene separar quién guarda datos de quién decide
 
 Completalas en ese orden: `mascara_rojo()` es la pieza chica y fácil de probar por separado (mirando la máscara con `cv2.imshow` o contando píxeles) antes de escribir la lógica que la usa.
 
+La cámara, igual que el lidar, publica en `Best Effort`, así que la suscripción a `/cam_1/color/image_raw` viene resuelta con `qos_profile_sensor_data` y no con un `10` — lo mismo vale para las tres suscripciones de la Parte 2. Si no te suena por qué, está explicado en la [semana 03](../semana-03-evasion-obstaculos/), en *El QoS de los sensores*: es la clase de detalle que, si falta, hace que el nodo levante sin errores y no reciba ni un frame.
+
 > [!NOTE]
 > Los parámetros de HSV (`hue_rojo_bajo_1`, `hue_rojo_alto_1`, `hue_rojo_bajo_2`, `hue_rojo_alto_2`, `saturacion_min`, `valor_min`) y `area_minima_px` son todos configurables por `--ros-args -p`. Si el rojo real queda muy pálido u oscuro bajo la luz del simulador, es normal tener que calibrar `saturacion_min`/`valor_min` a ojo, mirando la imagen, en vez de confiar ciegamente en los defaults.
 
