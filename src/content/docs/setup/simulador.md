@@ -118,13 +118,23 @@ ros2 topic echo /cmd_vel
 | `/cmd_vel` | `geometry_msgs/msg/Twist` | Comandos de velocidad para mover el robot |
 | `/joint_states` | `sensor_msgs/msg/JointState` | Posición y velocidad de las ruedas |
 | `/odom` | `nav_msgs/msg/Odometry` | Odometría calculada desde las ruedas |
-| `/scan` | `sensor_msgs/msg/LaserScan` | Lecturas del LiDAR 2D |
+| `/scan` | `sensor_msgs/msg/LaserScan` | Lecturas del LiDAR 2D — **Best Effort** |
 | `/imu/data` | `sensor_msgs/msg/Imu` | Orientación y aceleraciones del IMU |
-| `/cam_1/color/image_raw` | `sensor_msgs/msg/Image` | Imagen RGB de la cámara RGB-D |
-| `/cam_1/depth/color/points` | `sensor_msgs/msg/PointCloud2` | Nube de puntos RGB-D procesada |
+| `/cam_1/color/image_raw` | `sensor_msgs/msg/Image` | Imagen RGB de la cámara — **Best Effort** |
+| `/cam_1/color/camera_info` | `sensor_msgs/msg/CameraInfo` | Intrínsecos de la cámara — **Best Effort** |
+| `/cam_1/depth/color/points` | `sensor_msgs/msg/PointCloud2` | Nube de puntos RGB-D — **Best Effort** |
 | `/tf` | `tf2_msgs/msg/TFMessage` | Transformaciones dinámicas del robot |
 | `/tf_static` | `tf2_msgs/msg/TFMessage` | Transformaciones fijas entre sus componentes |
 | `/clock` | `rosgraph_msgs/msg/Clock` | Reloj de la simulación |
+
+> [!WARNING]
+> **Los cuatro `Best Effort` de la tabla no son un detalle.** El lidar y las tres salidas de la cámara publican con esa *Reliability* ("mandá el dato, y si se pierde uno, ya viene el próximo"), igual que el ROSMASTER X3 físico. Un subscriber `Reliable` —que es lo que te da el default de rclpy, `create_subscription(Tipo, 'topico', callback, 10)`— **no se conecta** a un publisher `Best Effort`: DDS considera los perfiles incompatibles y no arma la conexión. No llega ningún mensaje, y no hay error ni excepción. Para esos cuatro tópicos suscribite con `qos_profile_sensor_data` (`from rclpy.qos import qos_profile_sensor_data`). Ojo que la regla no es "todo sensor va en Best Effort": `/imu/data` es un sensor y publica `Reliable`. `/cmd_vel` es el único que va en la otra dirección —lo publicás vos y el robot lo escucha en `Reliable`—, así que ahí el default de rclpy es el que corresponde.
+
+Para confirmar con qué QoS publica cualquier tópico:
+
+```bash
+ros2 topic info /scan --verbose
+```
 
 Listá las interfaces disponibles con:
 
