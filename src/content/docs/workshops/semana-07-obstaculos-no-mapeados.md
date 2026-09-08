@@ -80,25 +80,7 @@ Un obstáculo real casi nunca genera un solo punto "no mapeado" suelto: genera u
 
 ### Creá tu paquete
 
-Mismo procedimiento que [semana 06](../semana-06-localizacion/): el paquete no viene armado.
-
-```bash
-# Terminal 1
-cd ~/rosmaster_ws/src/jar_workshops/semana-07-obstaculos-no-mapeados
-ros2 pkg create --build-type ament_python --dependencies \
-  rclpy numpy nav_msgs sensor_msgs geometry_msgs visualization_msgs tf2_ros \
-  obstaculos_no_mapeados
-```
-
-1. Copiá [`detector_obstaculos.py`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-07-obstaculos-no-mapeados/detector_obstaculos.py) a `obstaculos_no_mapeados/obstaculos_no_mapeados/`.
-2. En `setup.py`, agregá el ejecutable a `entry_points`: `detector_obstaculos = obstaculos_no_mapeados.detector_obstaculos:main`.
-3. Revisá `package.xml`: los imports del archivo ya quedan cubiertos por las dependencias del `ros2 pkg create` de arriba.
-
-```bash
-cd ~/rosmaster_ws
-colcon build --packages-select obstaculos_no_mapeados --symlink-install
-source install/setup.bash
-```
+Creá tu paquete, llamado por ejemplo `obstaculos_no_mapeados`, y modificá los archivos correspondientes — mismo procedimiento que en [semana 06](../semana-06-localizacion/). Copiá [`detector_obstaculos.py`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-07-obstaculos-no-mapeados/detector_obstaculos.py) al paquete. Por último, hacé `colcon build --symlink-install`, otra vez, porque vas a editar los TODOs muchas veces.
 
 ### Qué hay que completar
 
@@ -118,63 +100,23 @@ Completalas en ese orden: `agrupar_en_rachas()` se puede probar aislada, sin ROS
 
 ## Ejecución
 
-Sumá `detector_obstaculos` a tu propio launch de semana 06, y a tu RViz los displays nuevos: `LaserScan` (`scan_no_mapeado`, Best Effort), `PoseArray` (`objetos_no_mapeados`) y `MarkerArray` (`objetos_no_mapeados_markers`).
+Sumá `detector_obstaculos` a tu propio launch de semana 06 (un `Node` más en la `LaunchDescription`, mismo patrón que ya usaste para agregar `localizador` y `campo_verosimilitud`). Dos cosas puntuales que cambian esta semana:
 
-```bash
-# Terminal 1 — simulador, con un mundo de víctimas
-source ~/rosmaster_ws/install/setup.bash
-ros2 launch yahboom_rosmaster_bringup rosmaster_x3_sim.launch.py \
-  world:="$(ros2 pkg prefix yahboom_rosmaster_gazebo)/share/yahboom_rosmaster_gazebo/worlds/laberinto_simple_victimas.world" \
-  motion_profile:=ideal rviz:=false
-```
+- Usá un mundo `_victimas` en vez del mundo "limpio" que veniás usando — son el mismo laberinto, pero con un par de cubos de color puestos en el mundo que **no** están en el mapa que le pasás a `map_server` (que sigue siendo el mismo `.yaml` de siempre, sin cambios). Esos cubos son justo los objetos "no mapeados" que este workshop tiene que encontrar; si corrés el mundo sin víctimas no vas a tener nada que detectar (lo cual también sirve para confirmar que no te tira falsos positivos contra las paredes reales).
 
-```bash
-# Terminal 2 — mapa (el mismo .yaml de siempre, sin víctimas)
-source ~/rosmaster_ws/install/setup.bash
-ros2 run nav2_map_server map_server --ros-args -p yaml_filename:="$(ros2 pkg prefix yahboom_rosmaster_gazebo)/share/yahboom_rosmaster_gazebo/maps/laberinto_simple.yaml"
-```
+  Para este workshop hace falta el par completo (mundo `_victimas` **y** su `.yaml`). Para ver qué pares existen:
 
-```bash
-# Terminal 3 — activar el mapa
-source ~/rosmaster_ws/install/setup.bash
-ros2 run nav2_lifecycle_manager lifecycle_manager --ros-args -p autostart:=true -p node_names:="['map_server']"
-```
+  ```bash
+  comm -12 \
+    <(ls "$(ros2 pkg prefix yahboom_rosmaster_gazebo)/share/yahboom_rosmaster_gazebo/worlds/" | grep victimas | sed 's/_victimas\.world$/.yaml/' | sort) \
+    <(ls "$(ros2 pkg prefix yahboom_rosmaster_gazebo)/share/yahboom_rosmaster_gazebo/maps/" | sort)
+  ```
 
-```bash
-# Terminal 4 — semana 06
-source ~/rosmaster_ws/install/setup.bash
-ros2 run localizacion campo_verosimilitud &
-ros2 run localizacion localizador
-```
-
-```bash
-# Terminal 5 — este workshop
-source ~/rosmaster_ws/install/setup.bash
-ros2 run obstaculos_no_mapeados detector_obstaculos
-```
-
-```bash
-# Terminal 6 — teleop
-source ~/rosmaster_ws/install/setup.bash
-ros2 run teleop_twist_keyboard teleop_twist_keyboard
-```
-
-```bash
-# Terminal 7 — tu RViz, con los displays nuevos
-source ~/rosmaster_ws/install/setup.bash
-rviz2 -d <ruta a tu config>
-```
+  (`comm -12` compara dos listas ordenadas y se queda solo con lo que aparece en las dos — acá, los mundos `_victimas` a los que les sacás el sufijo y les ponés `.yaml`, contra los mapas que existen de verdad.) De ejemplo vamos a usar `laberinto_simple.yaml`.
+- Agregale a tu config de RViz los displays nuevos: `LaserScan` (`scan_no_mapeado`, en Best Effort — mismo QoS que el `LaserScan` de `/scan` que ya tenías), `PoseArray` (`objetos_no_mapeados`) y `MarkerArray` (`objetos_no_mapeados_markers`).
 
 > [!WARNING]
-> Los mundos `_victimas` son el mismo laberinto que su versión "limpia", pero solo algunos tienen su `.yaml` de mapa correspondiente. Para ver qué pares existen:
->
-> ```bash
-> comm -12 \
->   <(ls "$(ros2 pkg prefix yahboom_rosmaster_gazebo)/share/yahboom_rosmaster_gazebo/worlds/" | grep victimas | sed 's/_victimas\.world$/.yaml/' | sort) \
->   <(ls "$(ros2 pkg prefix yahboom_rosmaster_gazebo)/share/yahboom_rosmaster_gazebo/maps/" | sort)
-> ```
->
-> Si `detector_obstaculos` arranca antes de que `map_server` esté activo o antes de la primera tf `map → odom`, vas a ver `Todavía no hay tf laser_link->map` — es esperable: en cuanto exista la tf, el nodo arranca a detectar solo.
+> Si `detector_obstaculos` arranca antes de que `map_server` esté activo o antes de que `localizador` haya publicado la primera `map → odom`, vas a ver el aviso `Todavía no hay tf laser_link->map` — es esperable, no un error: en cuanto exista esa tf, el nodo arranca a detectar solo, sin que haga falta reiniciarlo.
 
 ## Comprobación
 
