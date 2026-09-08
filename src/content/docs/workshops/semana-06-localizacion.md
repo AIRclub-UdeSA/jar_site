@@ -159,7 +159,7 @@ Agregá un display `Map` en `/likelihood_map` (mismo ajuste de QoS que el Paso 0
 
 ### Parte 2 — `localizador.py`: predicción, corrección, resampleo
 
-- **Predicción**: el movimiento entre dos lecturas de `/odom` se descompone en *rotar hacia el rumbo* (`rot1`), *avanzar* (`trans`), *rotar lo que falte* (`rot2`) — el modelo odométrico estándar (Thrun, *Probabilistic Robotics*), con ruido gaussiano proporcional a cada componente.
+- **Predicción**: el movimiento entre dos lecturas de `/odom` se descompone en tres números **en el marco del propio robot** — cuánto avanzó, cuánto se deslizó de costado y cuánto rotó — y a cada uno se le suma ruido gaussiano. Es el modelo odométrico para plataformas **holonómicas** (`sample_motion_model_odometry` mecanum), no el clásico `rot1`-`trans`-`rot2` de Thrun: ese asume un robot que para ir a algún lado tiene que apuntar primero, y el X3 puede moverse de costado sin girar.
 - **Corrección**: para cada partícula, transformar los puntos del `/scan` a su pose, leer `/likelihood_map` ahí, y combinar esas probabilidades en un peso.
 - **Resampleo**: redibujar las N partículas con reemplazo, proporcional al peso (*resampling sistemático*).
 
@@ -175,7 +175,7 @@ Toda la plomería está resuelta (parámetros, suscripciones —el `/scan` con `
 | `num_particulas` | 300 | Cuántas hipótesis mantiene el filtro. Más = más preciso, más lento. |
 | `pose_inicial_x/y/theta` | 0.0 / 0.0 / 0.0 | Pose inicial conocida (el robot spawnea en el origen, igual que el mapa). |
 | `dispersion_inicial_xy` / `dispersion_inicial_theta` | 0.3 / 0.3 | Qué tan dispersa arranca la nube. |
-| `alpha1`-`alpha4` | 0.05 c/u | Ruido del modelo de movimiento rot1-trans-rot2. |
+| `gamma1`-`gamma6` | 0.0025 c/u | Ruido del modelo de movimiento mecanum. Son **varianzas**, no desvíos, y están sin calibrar a propósito. |
 | `submuestreo_scan` | 15 | Cada cuántos rayos del `/scan` (de 1080) se usa para pesar. Bajarlo = más preciso y más lento. |
 
 ## Ejecución
@@ -231,6 +231,7 @@ rviz2 -d <ruta a tu config de semana 05>
 Manejá el robot un rato por el laberinto (con giros, no solo derecho) y mirá en RViz:
 
 - La nube de partículas (`particlecloud`) se **abre** un poco con cada movimiento y se **contrae** con cada `/scan` que corrige — se tiene que ver "respirar".
+- Movete **de costado** (en `teleop_twist_keyboard`, las mayúsculas activan el modo holonómico) y fijate que la nube **no gira**: el robot no rotó, y el modelo lo sabe.
 - `camino_odom` se va separando de `camino_real` con el tiempo — así se ve el *drift* directamente.
 - `camino_corregido` se mantiene pegado a `camino_real` todo el tiempo, a pesar de que `camino_odom` se siga alejando: esa es la comprobación central, el filtro corrige el drift, no solo lo acompaña.
 - El `/scan` se mantiene alineado con las paredes del `/map`, sin importar cuánto tiempo lleve andando.
