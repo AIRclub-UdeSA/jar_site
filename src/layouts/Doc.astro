@@ -27,8 +27,9 @@ const weeks = allDocs
   .filter((doc) => doc.id.startsWith('workshops/semana-'))
   .sort((a, b) => a.id.localeCompare(b.id));
 
+const rawItems = DOC_SECTIONS.flatMap((section) => section.items);
 const flat = [
-  ...DOC_SECTIONS.flatMap((section) => section.items),
+  ...rawItems,
   { label: 'Sobre los workshops', href: '/workshops/' },
   ...weeks.map((week) => ({ label: week.data.title, href: `/${week.id}/` })),
 ];
@@ -40,7 +41,19 @@ const normalized = flat.map((item) => ({
 }));
 const index = normalized.findIndex((item) => item.url === currentPath);
 const prev = index > 0 ? normalized[index - 1] : undefined;
-const next = index >= 0 && index < normalized.length - 1 ? normalized[index + 1] : undefined;
+let next = index >= 0 && index < normalized.length - 1 ? normalized[index + 1] : undefined;
+
+const currentRawItem = rawItems.find((item) => withBase(item.href).replace(/\/+$/, '') === currentPath);
+const branches = (currentRawItem?.branches ?? []).map((branch) => ({
+  ...branch,
+  url: withBase(branch.href).replace(/\/+$/, '') || '/',
+}));
+const branchUrls = new Set(branches.map((branch) => branch.url));
+if (next && branchUrls.has(next.url)) {
+  // A branch (e.g. the optional Docker path) sits right after this item in DOC_SECTIONS
+  // so it doesn't hijack the linear "Siguiente" — skip past it and show it separately instead.
+  next = index + 2 < normalized.length ? normalized[index + 2] : undefined;
+}
 const currentLabel = normalized[index]?.label ?? title;
 const isSetupIndex = entry.id === 'setup' || entry.id === 'setup/index';
 const isWorkshopIndex = entry.id === 'workshops' || entry.id === 'workshops/index';
@@ -100,8 +113,8 @@ const sectionLabel = isSetup ? 'Setup' : 'Workshops';
       </article>
 
       {
-        (prev || next) && (
-          <nav class="pager" aria-label="Páginas anterior y siguiente">
+        (prev || next || branches.length > 0) && (
+          <nav class:list={['pager', { 'has-branch': branches.length > 0 }]} aria-label="Páginas anterior y siguiente">
             {prev ? (
               <a href={prev.url} rel="prev">
                 <span class="pager-label">Anterior</span>
@@ -110,6 +123,12 @@ const sectionLabel = isSetup ? 'Setup' : 'Workshops';
             ) : (
               <span />
             )}
+            {branches.map((branch) => (
+              <a class="branch" href={branch.url}>
+                <span class="pager-label">Camino alternativo</span>
+                <span class="pager-title">{branch.label}</span>
+              </a>
+            ))}
             {next && (
               <a class="next" href={next.url} rel="next">
                 <span class="pager-label">Siguiente</span>

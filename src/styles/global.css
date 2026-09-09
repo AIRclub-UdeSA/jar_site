@@ -1718,6 +1718,10 @@ footer.site-footer {
   text-align: left;
 }
 
+.docs-body .pager > a.branch {
+  text-align: left;
+}
+
 .docs-body .pager-label {
   margin-bottom: 0.3rem;
   color: var(--text-3);
@@ -1826,6 +1830,21 @@ footer.site-footer {
     padding-left: 1.5rem;
     border-left: 1px solid var(--docs-rule);
     text-align: right;
+  }
+
+  .docs-body .pager.has-branch {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .docs-body .pager.has-branch > a.branch {
+    padding-inline: 1.5rem;
+    border-left: 1px solid var(--docs-rule);
+    text-align: center;
+    align-items: center;
+  }
+
+  .docs-body .pager.has-branch > a.next {
+    padding-left: 1.5rem;
   }
 }
 

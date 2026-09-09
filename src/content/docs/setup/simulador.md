@@ -151,4 +151,6 @@ ros2 topic list
 
 ## Próximo paso
 
-Con Donatello funcionando, empezá por [01 · Talkers y listeners](../../workshops/semana-01-talkers-listeners/) para entender cómo se comunican los nodos que después van a controlarlo.
+Con Donatello funcionando, andá directo a [Sobre los workshops](../../workshops/) y empezá por [01 · Talkers y listeners](../../workshops/semana-01-talkers-listeners/) para entender cómo se comunican los nodos que después van a controlarlo.
+
+¿Preferís simular todo dentro de un container en vez de instalar ROS 2 Humble en tu sistema? Es un camino alternativo, no un paso extra: mirá la guía de [Docker (opcional)](../docker/).
