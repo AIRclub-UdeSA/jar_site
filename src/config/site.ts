@@ -34,6 +34,8 @@ export const withBase = (path: string): string => {
 export interface NavItem {
   label: string;
   href: string;
+  /** Alternative paths off this item (e.g. an optional Docker route) shown alongside, not instead of, the linear "Siguiente" link. */
+  branches?: NavItem[];
 }
 
 export interface NavSection {
@@ -54,7 +56,12 @@ export const DOC_SECTIONS: NavSection[] = [
       { label: 'Guía de instalación', href: '/setup/' },
       { label: 'ROS 2 Humble', href: '/setup/ros2-humble/' },
       { label: 'Gazebo y RViz', href: '/setup/gazebo-rviz/' },
-      { label: 'Simulador ROSMASTER', href: '/setup/simulador/' },
+      {
+        label: 'Simulador ROSMASTER',
+        href: '/setup/simulador/',
+        branches: [{ label: 'Docker (opcional)', href: '/setup/docker/' }],
+      },
+      { label: 'Docker (opcional)', href: '/setup/docker/' },
     ],
   },
 ];
