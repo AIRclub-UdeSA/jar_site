@@ -99,25 +99,7 @@ El robot real no arranca sabiendo su posición en el mapa. La herramienta **"2D 
 
 ### Creá tu paquete
 
-Mismo procedimiento que [semana 06](../semana-06-localizacion/)/[semana 07](../semana-07-obstaculos-no-mapeados/): el paquete no viene armado.
-
-```bash
-# Terminal 1
-cd ~/rosmaster_ws/src/jar_workshops/semana-08-cobertura-mapa
-ros2 pkg create --build-type ament_python --dependencies \
-  rclpy numpy nav_msgs sensor_msgs geometry_msgs std_msgs visualization_msgs tf2_ros \
-  cobertura_mapa
-```
-
-1. Copiá los cuatro archivos ([`trazado.py`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-08-cobertura-mapa/trazado.py), [`planificador.py`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-08-cobertura-mapa/planificador.py), [`grilla_cobertura.py`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-08-cobertura-mapa/grilla_cobertura.py), [`explorador.py`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-08-cobertura-mapa/explorador.py)) a `cobertura_mapa/cobertura_mapa/`.
-2. En `setup.py`, agregá los dos ejecutables a `entry_points`: `grilla_cobertura = cobertura_mapa.grilla_cobertura:main` y `explorador = cobertura_mapa.explorador:main`.
-3. En `package.xml`, sumá la misma librería de cálculo científico que ya buscaste en semana 06 para `campo_verosimilitud.py` — acá la usa `explorador.py` para `distance_transform_edt`.
-
-```bash
-cd ~/rosmaster_ws
-colcon build --packages-select cobertura_mapa --symlink-install
-source install/setup.bash
-```
+Creá tu paquete, llamado por ejemplo `cobertura_mapa`, y modificá los archivos correspondientes — mismo procedimiento que en [semana 06](../semana-06-localizacion/)/[semana 07](../semana-07-obstaculos-no-mapeados/). Copiá los cuatro archivos ([`trazado.py`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-08-cobertura-mapa/trazado.py), [`planificador.py`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-08-cobertura-mapa/planificador.py), [`grilla_cobertura.py`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-08-cobertura-mapa/grilla_cobertura.py), [`explorador.py`](https://github.com/AIRclub-UdeSA/jar_workshops/blob/main/semana-08-cobertura-mapa/explorador.py)) al paquete, sumá los ejecutables en `setup.py` y las librerías que necesites en `package.xml`. Por último, hacé `colcon build --symlink-install`, otra vez, porque vas a editar los TODOs muchas veces.
 
 ### El agregado a `localizador.py`
 
@@ -142,7 +124,7 @@ def recibir_pose_inicial(self, msg):
 Toda la plomería está resuelta: parámetros, suscripciones, y `recibir_mapa()`, que arma la grilla gruesa agrupando bloques del mapa original. Quedan **2 funciones con `TODO`**:
 
 1. **`trazar_rayo()`**, en `trazado.py` — Bresenham puro, sin ROS. Se puede probar aislado antes de tocar nada del nodo.
-2. **`recibir_scan()`** — transformar cada rayo del `/scan` a `map` (mismo patrón de semana 04/07) y usar `trazar_rayo()` para marcar como cubiertas las celdas que atraviesa.
+2. **`marcar_cobertura()`** — el corazón de este nodo: transformar cada rayo del último `/scan` a `map` (mismo patrón de semana 04/07) y usar `trazar_rayo()` para marcar como cubiertas las celdas que atraviesa. `recibir_scan()` ya está resuelta y solo guarda el último mensaje (`self.ultimo_scan`) — la lógica corre acá, llamada por un timer a frecuencia fija, no directo desde el callback del sensor (separación sensor/decisión).
 
 | Parámetro | Default | Qué es |
 | --- | --- | --- |
@@ -150,7 +132,7 @@ Toda la plomería está resuelta: parámetros, suscripciones, y `recibir_mapa()`
 | `factor_escala` | 4 | Cuántas celdas del mapa original por lado se agrupan en una celda de cobertura. |
 | `distancia_minima_valida` | 0.25 | Rango mínimo (m) válido — descarta el rebote del lidar contra la propia estructura del robot, igual que en semana 07. |
 
-Probalo antes de meterte con `explorador`: sumá `grilla_cobertura` a tu launch, manejá el robot con teleop, y agregá en RViz un display `Map` apuntando a `/grilla_cobertura` (**Color Scheme: costmap**, mismo QoS *transient local* que `/map`). Una zona pasa de rojo (no cubierta) a verde a medida que el robot la recorre.
+Probalo antes de meterte con `explorador`: sumá `grilla_cobertura` a tu launch, manejá el robot con teleop, y agregá en RViz un display `Map` apuntando a `/grilla_cobertura` (**Color Scheme: costmap**, mismo QoS *transient local* que `/map`). Vas a ver cómo quedan cada vez menos zonas sin cubrir a medida que el robot recorre el laberinto.
 
 ### Parte 2 — `explorador.py`
 
@@ -177,60 +159,20 @@ Completalas en ese orden: `a_estrella()` primero, porque todo lo demás depende 
 
 ## Ejecución
 
-Sumá `grilla_cobertura` y `explorador` a tu propio launch de semana 06, y a tu RViz los displays nuevos: `Map` en `/grilla_cobertura` (Color Scheme: costmap), `Marker` en `/objetivo_actual`, `Path` en `/camino_planificado`, y la herramienta **"2D Pose Estimate"** (agregala con el botón "+" si tu config no la tiene).
+Sumá `grilla_cobertura` y `explorador` a tu propio launch de semana 06 (dos `Node` más en la `LaunchDescription`, mismo patrón que ya usaste para agregar `localizador` y `campo_verosimilitud`). Dos cosas puntuales que cambian esta semana:
 
-```bash
-# Terminal 1 — simulador
-source ~/rosmaster_ws/install/setup.bash
-ros2 launch yahboom_rosmaster_bringup rosmaster_x3_sim.launch.py \
-  world:="$(ros2 pkg prefix yahboom_rosmaster_gazebo)/share/yahboom_rosmaster_gazebo/worlds/laberinto_simple.world" \
-  motion_profile:=ideal rviz:=false
-```
-
-```bash
-# Terminal 2 — mapa
-source ~/rosmaster_ws/install/setup.bash
-ros2 run nav2_map_server map_server --ros-args -p yaml_filename:="$(ros2 pkg prefix yahboom_rosmaster_gazebo)/share/yahboom_rosmaster_gazebo/maps/laberinto_simple.yaml"
-```
-
-```bash
-# Terminal 3 — activar el mapa
-source ~/rosmaster_ws/install/setup.bash
-ros2 run nav2_lifecycle_manager lifecycle_manager --ros-args -p autostart:=true -p node_names:="['map_server']"
-```
-
-```bash
-# Terminal 4 — semana 06
-source ~/rosmaster_ws/install/setup.bash
-ros2 run localizacion campo_verosimilitud &
-ros2 run localizacion localizador
-```
-
-```bash
-# Terminal 5 — este workshop
-source ~/rosmaster_ws/install/setup.bash
-ros2 run cobertura_mapa grilla_cobertura &
-ros2 run cobertura_mapa explorador
-```
-
-```bash
-# Terminal 6 — tu RViz, con los displays nuevos
-source ~/rosmaster_ws/install/setup.bash
-rviz2 -d <ruta a tu config>
-```
+- Usá el mundo `laberinto_simple.world` **sin víctimas**, el mismo que ya venías usando en semana 06 — acá no se detecta nada, así que los cubos de víctimas serían ruido innecesario para la localización (ver Desafío extra si querés probarlo igual con ellas puestas).
+- Agregale a tu config de RViz los displays nuevos: `Map` en `/grilla_cobertura` (**Color Scheme: costmap**), `Marker` en `/objetivo_actual`, `Path` en `/camino_planificado`, y la herramienta **"2D Pose Estimate"** en la barra de arriba — puede que tu config de semanas anteriores no la tenga; agregala con el botón "+" al lado de "Interact" si hace falta.
 
 Con todo levantado: esperá a que `Map` y `LaserScan` se vean estables (el robot todavía no se mueve solo), usá **"2D Pose Estimate"** marcando dónde está Donatello, y esperá `tiempo_asentamiento_s` — recién ahí arranca a explorar.
-
-> [!WARNING]
-> Usá el mundo `laberinto_simple.world` **sin víctimas** — acá no se detecta nada, así que los cubos de víctimas serían ruido innecesario para la localización (ver Desafío extra si querés probarlo igual con ellas puestas).
 
 ## Comprobación
 
 Con el robot explorando solo:
 
-- La grilla de cobertura se va pintando de rojo a verde en vivo, y `camino_planificado` (cian) pasa **centrado** por los pasillos, no pegado a las paredes.
+- La grilla de cobertura se actualiza en vivo, con cada vez menos zonas sin cubrir, y `camino_planificado` pasa **centrado** por los pasillos, no pegado a las paredes.
 - `/estado` transiciona en orden: `inicializando → explorando → terminado` — mirá los logs del nodo para confirmarlo.
-- Cuando la grilla queda completamente verde (en las zonas libres), el robot se detiene: no le queda ninguna celda por cubrir.
+- Cuando ya no queda ninguna zona libre sin cubrir, el robot se detiene.
 - El robot nunca intenta pasar por un hueco más angosto que su propio chasis, aunque geométricamente exista un camino más corto por ahí.
 
 ## Explicación
