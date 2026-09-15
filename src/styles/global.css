@@ -1494,6 +1494,12 @@ footer.site-footer {
   line-height: 1.55;
 }
 
+/* Media más chica que la columna de texto (ej. GIFs a resolución nativa):
+   dejar que la caption use todo el ancho disponible en vez de acotarse a 65ch. */
+.doc-figure figcaption.doc-figcaption-wide {
+  max-width: none;
+}
+
 .doc-media-pair {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
