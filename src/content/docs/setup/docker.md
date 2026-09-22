@@ -140,4 +140,4 @@ Lo mismo que en la instalación nativa: el chasis se mueve y las ruedas mecanum 
 
 ## Próximo paso
 
-Con Donatello funcionando dentro del contenedor, empezá por [01 · Talkers y listeners](../../workshops/semana-01-talkers-listeners/) para entender cómo se comunican los nodos que después van a controlarlo.
+Con Donatello funcionando dentro del contenedor, andá directo a [Sobre los workshops](../../workshops/) y empezá por [01 · Talkers y listeners](../../workshops/semana-01-talkers-listeners/) para entender cómo se comunican los nodos que después van a controlarlo.
