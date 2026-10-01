@@ -171,7 +171,7 @@ El ángulo 0° de un `LaserScan` es relativo al frame del sensor (`laser_link`),
 
 En la [semana 01](../semana-01-talkers-listeners/) las suscripciones se crearon con `create_subscription(String, 'mensaje', self.recibir, 10)`. Ese `10` es el **tamaño de cola**: cuántos mensajes sin procesar guarda ROS 2 antes de descartar los más viejos. Pero pasar solo un número también elige, sin que se note, el resto del perfil de [**QoS**](https://docs.ros.org/en/humble/Concepts/Intermediate/About-Quality-of-Service-Settings.html) (*Quality of Service*): las políticas que publisher y subscriber negocian para poder conectarse. La que importa acá es *reliability*, y el default de rclpy es `Reliable` — reintentar hasta que el mensaje llegue.
 
-Para un `String` a 1 Hz está perfecto. Los sensores no funcionan así: el lidar publica a 5 Hz y no va a parar nunca, así que si un scan se pierde, reintentarlo no tiene sentido — ya viene el próximo, y es más nuevo. Por eso los sensores publican en `Best Effort`, tanto en el simulador como en el ROSMASTER X3 físico.
+Para un `String` a 1 Hz está perfecto. Los sensores no funcionan así: el lidar publica a unos 7 Hz y no va a parar nunca, así que si un scan se pierde, reintentarlo no tiene sentido — ya viene el próximo, y es más nuevo. Por eso los sensores publican en `Best Effort`, tanto en el simulador como en el ROSMASTER X3 físico.
 
 > [!WARNING]
 > **Un subscriber `Reliable` no se conecta a un publisher `Best Effort`.** DDS considera los perfiles incompatibles y directamente no arma la conexión. No es un error, no es una excepción, no se cae nada: el callback simplemente no se llama nunca. El robot se queda quieto y la pantalla no dice nada.
