@@ -144,8 +144,8 @@ ros2 topic list
 
 ## Problemas frecuentes
 
-- Si el launch no encuentra un paquete, volvé a ejecutar `source ~/rosmaster_ws/install/setup.bash`.
-- Si modificaste o actualizaste el repositorio, compilá otra vez con `colcon build --symlink-install`.
+- Si el launch no encuentra un paquete, volvé a ejecutar `source ~/rosmaster_ws/install/setup.bash`. Si después de actualizar el simulador sigue sin encontrarlo, falta una dependencia nueva: corré de nuevo el paso 3 (`rosdep install --from-paths src --ignore-src -r -y --rosdistro humble` desde `~/rosmaster_ws`).
+- Si actualizaste el simulador con `git pull`, corré de nuevo el paso 3 (`rosdep install ...`) por si sumó dependencias, y después compilá otra vez con `colcon build --symlink-install`. Si solo modificaste el código, alcanza con compilar.
 - Si Gazebo abre pero el robot no responde, esperá los mensajes de activación y revisá que `/cmd_vel` aparezca en `ros2 topic list`.
 - Para argumentos como `world`, `rviz`, `headless` o `motion_profile`, consultá el [README del simulador](https://github.com/AIRclub-UdeSA/yahboom_rosmaster).
 
