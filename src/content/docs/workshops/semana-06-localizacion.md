@@ -116,10 +116,12 @@ A diferencia de las semanas 01-05, esta vez no recibís el paquete armado: [`ros
 ```bash
 # Terminal 1
 cd ~/rosmaster_ws/src/jar_workshops/semana-06-localizacion
-ros2 pkg create --build-type ament_python --dependencies \
-  rclpy nav_msgs sensor_msgs geometry_msgs tf2_ros \
-  localizacion
+ros2 pkg create localizacion --build-type ament_python --dependencies \
+  rclpy nav_msgs sensor_msgs geometry_msgs tf2_ros
 ```
+
+> [!WARNING]
+> El nombre del paquete (`localizacion`) va **antes** de `--dependencies`: ese flag se come todo lo que viene después como una dependencia más, así que si el nombre queda al final, `ros2 pkg create` falla con `the following arguments are required: package_name`.
 
 Con el paquete creado:
 
@@ -193,20 +195,22 @@ ros2 launch yahboom_rosmaster_bringup rosmaster_x3_sim.launch.py \
 ```bash
 # Terminal 2 — mapa
 source ~/rosmaster_ws/install/setup.bash
-ros2 run nav2_map_server map_server --ros-args -p yaml_filename:="$(ros2 pkg prefix yahboom_rosmaster_gazebo)/share/yahboom_rosmaster_gazebo/maps/laberinto_simple.yaml"
+ros2 run nav2_map_server map_server --ros-args -p use_sim_time:=true \
+  -p yaml_filename:="$(ros2 pkg prefix yahboom_rosmaster_gazebo)/share/yahboom_rosmaster_gazebo/maps/laberinto_simple.yaml"
 ```
 
 ```bash
 # Terminal 3 — activar el mapa
 source ~/rosmaster_ws/install/setup.bash
-ros2 run nav2_lifecycle_manager lifecycle_manager --ros-args -p autostart:=true -p node_names:="['map_server']"
+ros2 run nav2_lifecycle_manager lifecycle_manager --ros-args -p use_sim_time:=true \
+  -p autostart:=true -p node_names:="['map_server']"
 ```
 
 ```bash
 # Terminal 4 — nuestros nodos
 source ~/rosmaster_ws/install/setup.bash
-ros2 run localizacion campo_verosimilitud &
-ros2 run localizacion localizador
+ros2 run localizacion campo_verosimilitud --ros-args -p use_sim_time:=true &
+ros2 run localizacion localizador --ros-args -p use_sim_time:=true
 ```
 
 ```bash
@@ -218,13 +222,16 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard
 ```bash
 # Terminal 6 — tu RViz de semana 05, con los displays nuevos
 source ~/rosmaster_ws/install/setup.bash
-rviz2 -d <ruta a tu config de semana 05>
+rviz2 -d <ruta a tu config de semana 05> --ros-args -p use_sim_time:=true
 ```
 
-`Ctrl-C` en cada terminal para bajarlo. Una vez que lo tengas probado y andando, es un buen momento para meter estas seis terminales en tu propio launch de semana 05.
+`Ctrl-C` en cada terminal para bajarlo. Una vez que lo tengas probado y andando, es un buen momento para meter estas seis terminales en tu propio launch de semana 05, con `parameters=[{'use_sim_time': True}]` en cada `Node` nuevo.
 
 > [!WARNING]
 > `rviz:=false` en la Terminal 1 es importante: el launch del simulador trae su propio RViz por default, y ese no tiene los displays nuevos que necesitás acá.
+
+> [!WARNING]
+> Todos los nodos que corren junto al simulador llevan `--ros-args -p use_sim_time:=true`: es el problema de los dos relojes de [semana 05](../semana-05-launch-rviz/), ahora por línea de comandos. El más delicado es `localizador`: si estampa `map → odom` con la hora de tu PC mientras el resto usa la del simulador, RViz no puede armar la cadena de tf y no ves ni el robot ni el scan. `teleop_twist_keyboard` no lo necesita (publica `/cmd_vel` sin timestamp), y en el Paso 0 y la Parte 1 no va porque ahí no hay simulador publicando `/clock`. Si algo no aparece, `ros2 param get /localizador use_sim_time` tiene que decir `True`.
 
 ## Comprobación
 
