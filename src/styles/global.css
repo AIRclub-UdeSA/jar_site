@@ -807,11 +807,13 @@ footer.site-footer {
 }
 
 .docs-body .side-link:hover,
+.docs-body .side-link[aria-current='location'],
 .docs-body .side-link.active {
   background: transparent;
   color: var(--text);
 }
 
+.docs-body .side-link[aria-current='location']::before,
 .docs-body .side-link.active::before {
   background: var(--accent);
 }
@@ -823,6 +825,7 @@ footer.site-footer {
   letter-spacing: 0.04em;
 }
 
+.side-link[aria-current='location'] .side-index,
 .side-link.active .side-index {
   color: var(--accent);
 }
@@ -1903,4 +1906,9 @@ footer.site-footer {
     gap: clamp(3rem, 6vw, 5rem);
     align-items: start;
   }
+}
+
+/* Índice sin número propio: el título ya lo trae, así que usa una sola columna. */
+.docs-body .prose .doc-guide-index a.is-plain {
+  grid-template-columns: minmax(0, 1fr);
 }

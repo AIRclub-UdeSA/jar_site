@@ -58,13 +58,14 @@ const currentLabel = normalized[index]?.label ?? title;
 const isSetupIndex = entry.id === 'setup' || entry.id === 'setup/index';
 const isWorkshopIndex = entry.id === 'workshops' || entry.id === 'workshops/index';
 const isSetup = isSetupIndex || entry.id.startsWith('setup/');
-const sectionLabel = isSetup ? 'Setup' : 'Workshops';
+const isReglamento = entry.id === 'reglamento';
+const sectionLabel = isSetup ? 'Setup' : isReglamento ? 'Reglamento' : 'Workshops';
 ---
 
 <Base title={title} description={description} bodyClass="docs-body">
   <div class="doc-shell">
     <aside class="doc-side" aria-label="Secciones de la documentación">
-      <Sidebar />
+      <Sidebar headings={headings} />
     </aside>
 
     <main id="main-content" class="doc-main">
@@ -75,7 +76,7 @@ const sectionLabel = isSetup ? 'Setup' : 'Workshops';
           <span class="doc-switcher-arrow" aria-hidden="true">↓</span>
         </summary>
         <div class="doc-switcher-panel">
-          <Sidebar />
+          <Sidebar headings={headings} />
         </div>
       </details>
 
@@ -108,7 +109,7 @@ const sectionLabel = isSetup ? 'Setup' : 'Workshops';
 
         {isSetupIndex && <SetupPath />}
         {isWorkshopIndex && <WorkshopCatalog />}
-        {!isSetupIndex && !isWorkshopIndex && <DocToc headings={headings} />}
+        {!isSetupIndex && !isWorkshopIndex && <DocToc headings={headings} numbered={!isReglamento} />}
         <slot />
       </article>
 

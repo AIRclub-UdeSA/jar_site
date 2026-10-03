@@ -28,7 +28,7 @@ Ecosistema de 3 repos de la org [AIRclub-UdeSA](https://github.com/AIRclub-UdeSA
 - `src/components/docs/`: tabla de contenidos e índices editoriales generados desde la colección.
 - `src/components/landing/`: capítulos de la landing (`LandingHero`, `DonatelloProfile`, `ChallengeOverview`, `ObservationPlate`, `Roadmap`, `EventDetails`, `Resources`, `ApplicationBand`, `Closing`).
 - `src/config/site.ts`: navegación del sidebar (secciones fijas; los workshops se autogeneran desde archivos `semana-*.md`) y metadatos.
-- `src/content/docs/`: contenido markdown en subcarpetas `setup/`, `workshops/`.
+- `src/content/docs/`: contenido markdown en subcarpetas `setup/`, `workshops/` y la página suelta `reglamento.md`.
 - `src/templates/`: plantillas fuera de la colección (ej.: `plantilla-semana.md` para nuevas semanas).
 - `src/styles/global.css`: tokens, shell y estilos compartidos de documentación.
 - `src/styles/landing.css`: estilos exclusivos de la landing, importados solo desde `index.astro`; prefijo de selectores `landing-`.
@@ -41,7 +41,7 @@ Ecosistema de 3 repos de la org [AIRclub-UdeSA](https://github.com/AIRclub-UdeSA
 
 # Confidencialidad
 
-**No revelar la temática del desafío (búsqueda y rescate, víctimas, conos) en ningún contenido público hasta que el club lo anuncie oficialmente.** Usar lenguaje genérico: "desafío de comportamiento robótico", "una tarea que se revelará en la JAR". La carpeta `src/content/docs/competencia/` se volverá a agregar cuando se revele la temática.
+**No revelar la temática del desafío (búsqueda y rescate, víctimas, conos) en ningún contenido público hasta que el club lo anuncie oficialmente.** Usar lenguaje genérico: "desafío de comportamiento robótico", "una tarea que se revelará en la JAR". El reglamento vive en `src/content/docs/reglamento.md` (`/reglamento/`) y solo se mergea a `main` cuando el club anuncie la temática; su fuente es `REGLAMENTO.md` de `jar_organizacion` (repo privado).
 
 # Convenciones de contenido
 

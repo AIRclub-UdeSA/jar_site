@@ -1,5 +1,5 @@
 ---
-import { SITE } from '../../config/site';
+import { SITE, withBase } from '../../config/site';
 ---
 
 <section class="landing-section landing-closing" id="faq" aria-labelledby="faq-title">
@@ -93,8 +93,9 @@ import { SITE } from '../../config/site';
         </summary>
         <div class="landing-faq-answer">
           <p>
-            La consigna, las métricas de evaluación y el reglamento oficial se publicarán en este
-            sitio con anticipación para que los equipos puedan implementar y ajustar sus soluciones.
+            Ya están publicados. La consigna, las métricas de evaluación y las reglas están en el{' '}
+            <a href={withBase('/reglamento/')}>reglamento oficial</a>, para que los equipos puedan
+            implementar y ajustar sus soluciones.
           </p>
         </div>
       </details>

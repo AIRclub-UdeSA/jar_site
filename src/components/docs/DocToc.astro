@@ -7,9 +7,11 @@ interface Heading {
 
 interface Props {
   headings: Heading[];
+  /** Si los títulos ya traen su propia numeración (ej.: el reglamento), no la duplicamos. */
+  numbered?: boolean;
 }
 
-const { headings } = Astro.props;
+const { headings, numbered = true } = Astro.props;
 const sections = headings.filter((heading) => heading.depth === 2);
 ---
 
@@ -24,8 +26,12 @@ const sections = headings.filter((heading) => heading.depth === 2);
         <ol>
           {sections.map((heading, index) => (
             <li>
-              <a href={`#${heading.slug}`} data-doc-toc-link={heading.slug}>
-                <span>{String(index + 1).padStart(2, '0')}</span>
+              <a
+                href={`#${heading.slug}`}
+                data-doc-toc-link={heading.slug}
+                class:list={[{ 'is-plain': !numbered }]}
+              >
+                {numbered && <span>{String(index + 1).padStart(2, '0')}</span>}
                 {heading.text}
               </a>
             </li>

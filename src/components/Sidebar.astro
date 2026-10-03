@@ -2,6 +2,14 @@
 import { getCollection } from 'astro:content';
 import { DOC_SECTIONS, withBase } from '../config/site';
 
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+const { headings = [] } = Astro.props as { headings?: Heading[] };
+
 const allDocs = await getCollection('docs');
 const weeks = allDocs
   .filter((d) => d.id.startsWith('workshops/semana-'))
@@ -20,6 +28,20 @@ const isActive = (href: string): boolean => {
 // Setup aparezca dentro de Workshops (y viceversa) en la barra lateral.
 const setupBase = withBase('/setup/').replace(/\/+$/, '');
 const isSetupSection = path === setupBase || path.startsWith(`${setupBase}/`);
+
+const isReglamento = path === withBase('/reglamento').replace(/\/+$/, '');
+
+// Los títulos del reglamento ya traen su número ("11. Casos especiales"): lo usamos como índice.
+const reglamentoSections = headings
+  .filter((heading) => heading.depth === 2)
+  .map((heading) => {
+    const match = heading.text.match(/^(\d+)\. (.+)$/);
+    return {
+      slug: heading.slug,
+      number: match ? match[1].padStart(2, '0') : '—',
+      label: match ? match[2] : heading.text,
+    };
+  });
 
 const workshopTitle = (title: string) => {
   const match = title.match(/^(\d{2}) · (.+)$/);
@@ -46,7 +68,20 @@ const workshopTitle = (title: string) => {
     ))
 }
 {
-  !isSetupSection && (
+  isReglamento && (
+    <div class="side-group">
+      <p class="side-label">Reglamento</p>
+      {reglamentoSections.map((section) => (
+        <a class="side-link" href={`#${section.slug}`} data-doc-toc-link={section.slug}>
+          <span class="side-index">{section.number}</span>
+          <span class="side-link-label">{section.label}</span>
+        </a>
+      ))}
+    </div>
+  )
+}
+{
+  !isSetupSection && !isReglamento && (
     <div class="side-group">
       <p class="side-label">Workshops</p>
       <a

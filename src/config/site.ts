@@ -47,6 +47,7 @@ export const NAV_LINKS: NavItem[] = [
   { label: 'Inicio', href: '/' },
   { label: 'Setup', href: '/setup/' },
   { label: 'Workshops', href: '/workshops/' },
+  { label: 'Reglamento', href: '/reglamento/' },
 ];
 
 export const DOC_SECTIONS: NavSection[] = [
