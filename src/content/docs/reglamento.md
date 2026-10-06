@@ -199,8 +199,8 @@ En caso de igualdad de puntos en el puntaje computable, se desempata aplicando e
 
 ### 9.1 Mecanismo de entrega
 - Cada equipo realiza un fork del repositorio template oficial y envía un **Pull Request (PR)** hacia la rama principal del repositorio de la competencia.
-- Todo el software debe iniciar con un **único launch file** oficial.
-- Todas las configuraciones editables deben residir en la carpeta `params/`. La cantidad de víctimas N no va en `params/`: se recibe como argumento del launch ([§2.2](#22-requisitos-del-software)).
+- Todo el software debe iniciar con un **único launch file** oficial: `ros2 launch equipo_jar competencia.launch.py`, que levanta todo y espera `/map`. Acepta la cantidad de víctimas como argumento (`victimas:=N`).
+- Todas las configuraciones editables deben residir en `src/equipo_jar/params/`. La cantidad de víctimas N no va en `params/`: se recibe como argumento del launch ([§2.2](#22-requisitos-del-software)).
 
 ### 9.2 Validación continua (CI)
 Para que una entrega sea admisible, todos los checks del CI del PR deben estar en verde. El CI verifica:
