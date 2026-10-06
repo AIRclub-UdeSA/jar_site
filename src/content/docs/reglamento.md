@@ -15,7 +15,7 @@ Organiza: **AIR Club UdeSA** (Artificial Intelligence & Robotics Club — Univer
 | **Víctimas (N)** | N cajas rojas en posiciones desconocidas. **N es variable** y se comunica antes de largar |
 | **Límite de reportes** | **Exactamente N reportes máximos** a `/victimas` (igual a la cantidad de víctimas de la corrida) |
 | **Punto de largada** | Cerca del origen (0, 0, 0) del mapa, sin ser exacto ([§1](#1-descripción-del-desafío)) |
-| **Formato** | **Clasificación (miércoles 4):** 2 corridas por equipo (cuenta la mejor).<br/>**Final (jueves 5):** 1 corrida por equipo (4 mejores finalistas) |
+| **Formato** | **Clasificación (miércoles 4):** 2 corridas por equipo (cuenta la mejor).<br/>**Final (jueves 5, 17 hs):** 1 corrida por equipo (4 mejores finalistas) |
 | **Arbitraje** | **Nodo de juez oficial** (registro en rosbag) + **Jueces de pista** (evaluación visual de colisiones) |
 | **Entrega** | Fork del repositorio de la competencia y Pull Request con CI en verde |
 
@@ -33,7 +33,7 @@ Este reglamento fija las condiciones de participación, interfaces oficiales, fo
 
 ## 1. Descripción del desafío
 
-El robot arranca en el punto de largada de la arena, cerca del origen **(0, 0, 0)** del mapa. Los jueces lo ubican a mano, así que la posición no es exacta. Por eso conviene que la estimación inicial de la pose le dé más probabilidad a la zona cercana al origen, pero sin descartar el resto del mapa, que puede quedar con menor probabilidad. Así el robot puede corregirse si la largada quedó más lejos de lo esperado. Al iniciarse la corrida, el juez publica el mapa del laberinto en el topic `/map`. El robot no conoce a priori la ubicación de las víctimas.
+El robot arranca en el punto de largada de la arena, cerca del origen **(0, 0, 0)** del mapa. Los jueces lo ubican a mano, así que la posición no es exacta. Al iniciarse la corrida, el juez publica el mapa del laberinto en el topic `/map`. El robot no conoce a priori la ubicación de las víctimas.
 
 La misión comprende las siguientes fases:
 
@@ -71,7 +71,7 @@ El mapa específico, las víctimas, los señuelos y los distractores recién se 
 - **Repositorio template de la competencia:** *(enlace próximamente)* Contiene la arquitectura de paquetes, launch de ejemplo, gestión de parámetros en `params/` y configuración de CI.
 - **Simulador oficial ([`AIRclub-UdeSA/yahboom_rosmaster`](https://github.com/AIRclub-UdeSA/yahboom_rosmaster)):** Modelo fiel del robot ROSMASTER X3 con cinemática mecanum, plugins de sensores y mundos de simulación en Gazebo Fortress. La [guía de instalación](../setup/simulador/) explica cómo compilarlo.
 - **Mundos y mapas de práctica:** Los pares de mundos (ej. `laberinto_simple_victimas.world`) y mapas (`laberinto_simple.yaml`) provistos en el simulador constituyen la **referencia oficial** para calibrar visión, LiDAR y detección de obstáculos no mapeados.
-- **Workshops de formación:** Nueve [workshops](../workshops/) técnicos asincrónicos en el sitio web oficial, que cubren desde cinemática mecanum y detección de color hasta localización y navegación con Nav2.
+- **Workshops de formación:** [Workshops](../workshops/) técnicos asincrónicos en el sitio web oficial, que cubren desde cinemática mecanum y detección de color hasta localización y navegación con Nav2.
 
 ---
 
@@ -84,6 +84,7 @@ El mapa específico, las víctimas, los señuelos y los distractores recién se 
 - Los **cuatro (4) mejores equipos** del ranking avanzan a la Gran Final.
 
 ### 4.2 Gran Final (Jueves 5 de noviembre)
+- La final se disputa a las **17 hs**.
 - Participan exclusivamente los 4 equipos finalistas.
 - En la final se disputa **una única corrida por equipo**.
 - La arena de la final presenta un nuevo layout con posiciones de víctimas y obstáculos modificadas respecto de la clasificación.
@@ -115,7 +116,7 @@ Concluida la corrida, el jurado publica el puntaje oficial.
 ## 6. Víctimas, señuelos y distractores
 
 ### 6.1 Víctimas
-- Cada víctima es una caja de color rojo mate, de base cuadrada de aproximadamente 17 cm de lado y aproximadamente 23 cm de alto, detectable por la cámara RGB frontal y por el sensor LiDAR.
+- Cada víctima es una caja de color rojo, detectable por la cámara RGB frontal y por el sensor LiDAR.
 - En cada layout hay **N víctimas** (N es variable y se anuncia antes de largar).
 - Las víctimas están separadas entre sí a suficiente distancia para que ningún reporte pueda solapar con dos víctimas simultáneamente.
 - La posición de una víctima es el centro geométrico de la caja proyectado sobre el plano del piso, expresado en el marco `map`.
@@ -247,7 +248,7 @@ Desarrollado en el Predio del CUR, "La Siberia", Rosario:
 | Instancia | Fecha | Dinámica |
 | :--- | :--- | :--- |
 | **Clasificación oficial** | Miércoles 4 de noviembre | 2 corridas por equipo (computa la mejor). Clasifican los 4 mejores |
-| **Gran Final** | Jueves 5 de noviembre | 1 única corrida por finalista en arena con nuevo layout |
+| **Gran Final** | Jueves 5 de noviembre, 17 hs | 1 única corrida por finalista en arena con nuevo layout |
 | **Premiación y cierre** | Jueves 5 de noviembre | Ceremonia de cierre de la JAR 2026 |
 
 ---
