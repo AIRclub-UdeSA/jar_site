@@ -7,16 +7,16 @@ interface Heading {
 
 interface Props {
   headings: Heading[];
-  /** Si los títulos ya traen su propia numeración (ej.: el reglamento), no la duplicamos. */
-  numbered?: boolean;
+  /** false: no dibuja el índice (ej.: el reglamento, que ya lo tiene en el sidebar) pero mantiene el scrollspy. */
+  showIndex?: boolean;
 }
 
-const { headings, numbered = true } = Astro.props;
+const { headings, showIndex = true } = Astro.props;
 const sections = headings.filter((heading) => heading.depth === 2);
 ---
 
 {
-  sections.length > 0 && (
+  showIndex && sections.length > 0 && (
     <section class="doc-guide-index" aria-labelledby="doc-guide-index-title">
       <header>
         <p id="doc-guide-index-title">En esta guía</p>
@@ -26,12 +26,8 @@ const sections = headings.filter((heading) => heading.depth === 2);
         <ol>
           {sections.map((heading, index) => (
             <li>
-              <a
-                href={`#${heading.slug}`}
-                data-doc-toc-link={heading.slug}
-                class:list={[{ 'is-plain': !numbered }]}
-              >
-                {numbered && <span>{String(index + 1).padStart(2, '0')}</span>}
+              <a href={`#${heading.slug}`} data-doc-toc-link={heading.slug}>
+                <span>{String(index + 1).padStart(2, '0')}</span>
                 {heading.text}
               </a>
             </li>

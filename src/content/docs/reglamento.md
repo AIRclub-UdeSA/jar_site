@@ -4,9 +4,6 @@ description: "Condiciones de participación, interfaz ROS 2, formato, puntaje y 
 status: listo
 ---
 
-**Búsqueda y rescate · Jornada Argentina de Robótica (JAR) · Rosario · 3 al 6 de noviembre de 2026**  
-Organiza: **AIR Club UdeSA** (Artificial Intelligence & Robotics Club — Universidad de San Andrés).
-
 | Parámetro | Definición Oficial |
 | :--- | :--- |
 | **Robot** | Yahboom ROSMASTER X3, provisto por la organización en pista |

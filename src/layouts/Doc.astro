@@ -80,7 +80,7 @@ const sectionLabel = isSetup ? 'Setup' : isReglamento ? 'Reglamento' : 'Workshop
         </div>
       </details>
 
-      <article class="prose">
+      <article class:list={['prose', { 'prose--own-numbering': isReglamento }]}>
         <header class="doc-head">
           <div class="doc-head-topline">
             <p class="doc-kicker">{sectionLabel}</p>
@@ -109,7 +109,7 @@ const sectionLabel = isSetup ? 'Setup' : isReglamento ? 'Reglamento' : 'Workshop
 
         {isSetupIndex && <SetupPath />}
         {isWorkshopIndex && <WorkshopCatalog />}
-        {!isSetupIndex && !isWorkshopIndex && <DocToc headings={headings} numbered={!isReglamento} />}
+        {!isSetupIndex && !isWorkshopIndex && <DocToc headings={headings} showIndex={!isReglamento} />}
         <slot />
       </article>
 

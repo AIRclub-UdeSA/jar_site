@@ -1908,7 +1908,11 @@ footer.site-footer {
   }
 }
 
-/* Índice sin número propio: el título ya lo trae, así que usa una sola columna. */
-.docs-body .prose .doc-guide-index a.is-plain {
-  grid-template-columns: minmax(0, 1fr);
+/* Los títulos del reglamento ya traen su número ("2.2 Requisitos…"): sin el contador verde. */
+.docs-body .prose--own-numbering > h2 {
+  display: block;
+}
+
+.docs-body .prose--own-numbering > h2::before {
+  content: none;
 }
