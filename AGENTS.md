@@ -41,7 +41,7 @@ Ecosistema de 3 repos de la org [AIRclub-UdeSA](https://github.com/AIRclub-UdeSA
 
 # Confidencialidad
 
-**No revelar la temática del desafío (búsqueda y rescate, víctimas, conos) en ningún contenido público hasta que el club lo anuncie oficialmente.** Usar lenguaje genérico: "desafío de comportamiento robótico", "una tarea que se revelará en la JAR". El reglamento vive en `src/content/docs/reglamento.md` (`/reglamento/`) y solo se mergea a `main` cuando el club anuncie la temática; su fuente es `REGLAMENTO.md` de `jar_organizacion` (repo privado).
+**No revelar la temática del desafío (búsqueda y rescate, víctimas, conos) en ningún contenido público hasta que el club lo anuncie oficialmente.** Usar lenguaje genérico: "desafío de comportamiento robótico", "una tarea que se revelará en la JAR". El reglamento vive en `src/content/docs/reglamento.md` (`/reglamento/`); su fuente es `REGLAMENTO.md` de `jar_organizacion` (repo privado).
 
 # Convenciones de contenido
 
