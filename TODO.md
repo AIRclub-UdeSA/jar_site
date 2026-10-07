@@ -13,7 +13,8 @@ Backlog compartido para quienes sigan trabajando en el sitio. Antes de arrancar:
 - [x] **Reestructurar workshops** — Workshops 01–05 siguen una secuencia práctica común; sidebar y catálogo se generan desde `semana-NN-*` y consumen título, resultado, duración, nivel y estado desde el frontmatter.
 - [x] **Escribir los dos primeros workshops** — talkers/listeners y zigzag mecanum. Hechos y marcados como `listo`; el código vive en [`jar_workshops`](https://github.com/AIRclub-UdeSA/jar_workshops).
 - [ ] **Definir y publicar los próximos workshops** — continuar desde `semana-06-*` usando `src/templates/plantilla-semana.md`; no asignar duración, nivel ni contenido hasta validarlos contra el código de `jar_workshops`.
-- [ ] **Cuando se revele la temática** — volver a agregar `docs/competencia/` (reglas, robot y mapa, puntuación) y conectarlo al landing. Hasta entonces, nada público: ver Confidencialidad en `AGENTS.md`.
+- [x] **Cuando se revele la temática** — reglamento publicado como página única en `docs/reglamento.md` (`/reglamento/`), enlazada desde el nav y la landing. La fuente es `REGLAMENTO.md` de `jar_organizacion`; si cambia, hay que resincronizar la página.
+- [ ] **Link al repo template en `/reglamento/`** — hoy el reglamento dice "(enlace próximamente)" en la sección 3 y hay un comentario `TODO` en `reglamento.md`. Cuando se publique `AIRclub-UdeSA/jar_challenge` (nombre previsto; ver issues #8 y #9 de `jar_organizacion`), reemplazar el texto por el link y borrar el comentario. No bloquea el merge: se completa cuando el repo esté publicado.
 
 ## Diseño
 

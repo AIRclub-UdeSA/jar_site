@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../../config/site';
 import ObservationPlate from './ObservationPlate.astro';
 ---
 
@@ -26,11 +27,11 @@ import ObservationPlate from './ObservationPlate.astro';
         </div>
 
         <aside class="landing-notice" aria-label="Estado de la misión y el reglamento">
-          <p class="landing-meta landing-notice-status">Próximamente</p>
+          <p class="landing-meta landing-notice-status">Publicado</p>
           <p>
-            La misión, las métricas de puntaje y el reglamento oficial del challenge se publicarán
-            en este sitio. Mientras tanto, el setup y los workshops te dan todo lo necesario
-            para empezar a practicar.
+            Ya podés leer el <a href={withBase('/reglamento/')}>reglamento oficial</a>: la misión,
+            las métricas de puntaje y las reglas de cada corrida. El setup y los workshops te dan
+            todo lo necesario para empezar a practicar.
           </p>
         </aside>
       </div>

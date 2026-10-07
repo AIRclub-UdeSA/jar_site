@@ -7,14 +7,16 @@ interface Heading {
 
 interface Props {
   headings: Heading[];
+  /** false: no dibuja el índice (ej.: el reglamento, que ya lo tiene en el sidebar) pero mantiene el scrollspy. */
+  showIndex?: boolean;
 }
 
-const { headings } = Astro.props;
+const { headings, showIndex = true } = Astro.props;
 const sections = headings.filter((heading) => heading.depth === 2);
 ---
 
 {
-  sections.length > 0 && (
+  showIndex && sections.length > 0 && (
     <section class="doc-guide-index" aria-labelledby="doc-guide-index-title">
       <header>
         <p id="doc-guide-index-title">En esta guía</p>
