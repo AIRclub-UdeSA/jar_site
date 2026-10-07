@@ -117,7 +117,6 @@ Concluida la corrida, el jurado publica el puntaje oficial.
 - En cada layout hay **N víctimas** (N es variable y se anuncia antes de largar).
 - Las víctimas están separadas entre sí a suficiente distancia para que ningún reporte pueda solapar con dos víctimas simultáneamente.
 - La posición de una víctima es el centro geométrico de la caja proyectado sobre el plano del piso, expresado en el marco `map`.
-- Las características físicas y de reflectividad toman como referencia los modelos provistos en los mundos del simulador.
 
 ### 6.2 Obstáculos señuelo
 Son objetos volumétricos físicos presentes en la arena pero **ausentes en el mapa `/map`**. El robot debe detectarlos en tiempo real y esquivarlos. Colisionar con ellos computa penalización.
@@ -148,6 +147,10 @@ Son objetos de diversas formas y colores (azul, amarillo, verde, neutro) distrib
 > [!WARNING]
 > **REGLA CRÍTICA DE QOS (BEST EFFORT):**  
 > El sensor LiDAR (`/scan`) y las salidas de la cámara RGB-D publican con política de confiabilidad **Best Effort**. En ROS 2, un subscriber configurado con el default *Reliable* **no se conectará** a un publisher *Best Effort* y no recibirá mensajes, sin arrojar ningún error en terminal. Es mandatorio suscribirse utilizando `qos_profile_sensor_data` (`from rclpy.qos import qos_profile_sensor_data`).
+
+> [!WARNING]
+> **AVISO SOBRE LA NUBE DE PUNTOS:**  
+> El topic `/cam_1/depth/color/points` debe usarse con precaución: si se mantiene activo durante toda la corrida, puede ocasionar alta latencia.
 
 ### 7.2 Reportes de víctimas
 - Cada mensaje en `/victimas` cuenta como un reporte.
