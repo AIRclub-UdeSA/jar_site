@@ -64,8 +64,8 @@ El mapa específico, las víctimas, los señuelos y los distractores recién se 
 
 ## 3. Recursos que provee la organización
 
-<!-- TODO antes de mergear: agregar el link al repo template cuando exista (§3 y §9.1). -->
-- **Repositorio template de la competencia:** *(enlace próximamente)* Contiene la arquitectura de paquetes, launch de ejemplo, gestión de parámetros en `params/` y configuración de CI.
+<!-- TODO: evaluar si §9.1 también linkea al repo template. -->
+- **Repositorio template de la competencia ([`AIRclub-UdeSA/jar_challenge`](https://github.com/AIRclub-UdeSA/jar_challenge)):** Contiene la arquitectura de paquetes, launch de ejemplo, gestión de parámetros en `params/` y configuración de CI.
 - **Simulador oficial ([`AIRclub-UdeSA/yahboom_rosmaster`](https://github.com/AIRclub-UdeSA/yahboom_rosmaster)), versión `jar2026-v1`:** Modelo fiel del robot ROSMASTER X3 con cinemática mecanum, plugins de sensores y mundos de simulación en Gazebo Fortress. La [guía de instalación](../setup/simulador/) explica cómo compilarlo.
 - **Mundos y mapas de práctica:** Los pares de mundos (ej. `laberinto_simple_victimas.world`) y mapas (`laberinto_simple.yaml`) provistos en el simulador constituyen la **referencia oficial** para calibrar visión, LiDAR y detección de obstáculos no mapeados.
 - **Workshops de formación:** [Workshops](../workshops/) técnicos asincrónicos en el sitio web oficial, que cubren desde cinemática mecanum y detección de color hasta localización y navegación con Nav2.
