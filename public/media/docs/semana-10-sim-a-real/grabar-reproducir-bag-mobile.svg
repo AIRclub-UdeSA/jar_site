@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 890" role="img" aria-labelledby="title desc">
+  <title id="title">Grabar un bag en el robot y reproducirlo en tu computadora</title>
+  <desc id="desc">Arriba, en el robot: los sensores publican en sus topics y ros2 bag record guarda cada mensaje, con su hora, en la carpeta laberinto_victimas. Abajo, en tu computadora: ros2 bag play lee esa carpeta y vuelve a publicar los mismos mensajes en los mismos topics, más el reloj de la grabación en /clock. Tus nodos se suscriben igual que si estuviera el robot; el robot ya no hace falta.</desc>
+
+  <g font-family="'JetBrains Mono', 'Courier New', monospace" text-anchor="middle">
+    <!-- ===================== GRABAR ===================== -->
+    <text x="20" y="34" fill="#8d9892" font-size="15" letter-spacing="1.5" text-anchor="start">GRABAR · EN EL ROBOT</text>
+
+    <rect x="20" y="60" width="360" height="70" rx="8" fill="#07100c" stroke="#4ade80" stroke-width="2"/>
+    <text x="200" y="90" fill="#f2f6f1" font-size="15">robot real</text>
+    <text x="200" y="112" fill="#8d9892" font-size="12">lidar · cámara · ruedas · IMU</text>
+
+    <line x1="200" y1="130" x2="200" y2="152" stroke="#f2f6f1" stroke-opacity=".3" stroke-width="1.5"/>
+    <g fill="#8d9892" font-size="13">
+      <text x="200" y="172">/scan  /cam_1/color/...</text>
+      <text x="200" y="192">/odom  /imu/data  /tf  /tf_static</text>
+      <text x="200" y="212">/cmd_vel  ...</text>
+    </g>
+    <line x1="200" y1="222" x2="200" y2="240" stroke="#f2f6f1" stroke-opacity=".3" stroke-width="1.5"/>
+
+    <rect x="20" y="240" width="360" height="50" rx="6" fill="#07100c" stroke="#f2f6f1" stroke-opacity=".35"/>
+    <text x="200" y="270" fill="#f2f6f1" font-size="14">ros2 bag record</text>
+
+    <line x1="200" y1="290" x2="200" y2="310" stroke="#f2f6f1" stroke-opacity=".3" stroke-width="1.5"/>
+
+    <rect x="20" y="310" width="360" height="94" rx="6" fill="#07100c" stroke="#f87171" stroke-width="2"/>
+    <text x="200" y="336" fill="#f2f6f1" font-size="13">laberinto_victimas/</text>
+    <text x="200" y="358" fill="#8d9892" font-size="12">metadata.yaml</text>
+    <text x="200" y="376" fill="#8d9892" font-size="12">laberinto_victimas_0.db3</text>
+    <text x="200" y="394" fill="#8d9892" font-size="12">mensaje + hora</text>
+
+    <g fill="#4ade80">
+      <circle r="5" cx="200" cy="141"/>
+      <circle r="5" cx="200" cy="231"/>
+      <circle r="5" cx="200" cy="300"/>
+    </g>
+
+    <line x1="10" y1="434" x2="390" y2="434" stroke="#f2f6f1" stroke-opacity=".1"/>
+
+    <!-- ===================== REPRODUCIR ===================== -->
+    <text x="20" y="474" fill="#8d9892" font-size="15" letter-spacing="1.5" text-anchor="start">REPRODUCIR · EN TU COMPU</text>
+
+    <rect x="20" y="500" width="360" height="60" rx="6" fill="#07100c" stroke="#f87171" stroke-width="2"/>
+    <text x="200" y="525" fill="#f2f6f1" font-size="13">laberinto_victimas/</text>
+    <text x="200" y="545" fill="#8d9892" font-size="12">los mismos mensajes</text>
+
+    <line x1="200" y1="560" x2="200" y2="580" stroke="#f2f6f1" stroke-opacity=".3" stroke-width="1.5"/>
+
+    <rect x="20" y="580" width="360" height="60" rx="6" fill="#07100c" stroke="#f2f6f1" stroke-opacity=".35"/>
+    <text x="200" y="606" fill="#f2f6f1" font-size="14">ros2 bag play</text>
+    <text x="200" y="626" fill="#8d9892" font-size="12">--clock</text>
+
+    <line x1="200" y1="640" x2="200" y2="660" stroke="#f2f6f1" stroke-opacity=".3" stroke-width="1.5"/>
+    <g fill="#8d9892" font-size="13">
+      <text x="200" y="682">/scan  /cam_1/...  /odom  /tf  ...</text>
+      <text x="200" y="702" fill="#4ade80">/clock</text>
+      <text x="200" y="720" font-size="11">(los mismos topics)</text>
+    </g>
+    <line x1="200" y1="730" x2="200" y2="750" stroke="#f2f6f1" stroke-opacity=".3" stroke-width="1.5"/>
+
+    <rect x="20" y="750" width="360" height="70" rx="8" fill="#07100c" stroke="#4ade80" stroke-width="2"/>
+    <text x="200" y="780" fill="#f2f6f1" font-size="15">tus nodos</text>
+    <text x="200" y="802" fill="#8d9892" font-size="12">use_sim_time = true</text>
+
+    <text x="200" y="852" fill="#8d9892" font-size="12">no saben si los datos</text>
+    <text x="200" y="870" fill="#8d9892" font-size="12">vienen del robot o del bag</text>
+
+    <g fill="#4ade80">
+      <circle r="5" cx="200" cy="570"/>
+      <circle r="5" cx="200" cy="650"/>
+      <circle r="5" cx="200" cy="740"/>
+    </g>
+  </g>
+</svg>
