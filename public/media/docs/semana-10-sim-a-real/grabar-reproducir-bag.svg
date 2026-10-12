@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 500" role="img" aria-labelledby="title desc">
+  <title id="title">Grabar un bag en el robot y reproducirlo en tu computadora</title>
+  <desc id="desc">Arriba, en el robot: los sensores publican en sus topics y ros2 bag record guarda cada mensaje, con su hora, en la carpeta laberinto_victimas. Abajo, en tu computadora: ros2 bag play lee esa carpeta y vuelve a publicar los mismos mensajes en los mismos topics, más el reloj de la grabación en /clock. Tus nodos se suscriben igual que si estuviera el robot; el robot ya no hace falta.</desc>
+
+  <line x1="10" y1="250" x2="850" y2="250" stroke="#f2f6f1" stroke-opacity=".1"/>
+
+  <!-- ===================== FILA DE ARRIBA: GRABAR ===================== -->
+  <g transform="translate(20,20)" font-family="'JetBrains Mono', 'Courier New', monospace">
+    <text x="0" y="14" fill="#8d9892" font-size="17" letter-spacing="1.5">GRABAR · EN EL ROBOT</text>
+
+    <!-- robot -->
+    <rect x="0" y="60" width="150" height="130" rx="8" fill="#07100c" stroke="#4ade80" stroke-width="2"/>
+    <text x="75" y="118" fill="#f2f6f1" font-size="15" text-anchor="middle">robot real</text>
+    <text x="75" y="140" fill="#8d9892" font-size="12" text-anchor="middle">lidar · cámara</text>
+    <text x="75" y="156" fill="#8d9892" font-size="12" text-anchor="middle">ruedas · IMU</text>
+
+    <!-- topics -->
+    <g fill="#8d9892" font-size="13">
+      <text x="200" y="84">/scan</text>
+      <text x="200" y="106">/cam_1/color/...</text>
+      <text x="200" y="152">/odom  /imu/data</text>
+      <text x="200" y="174">/tf  /tf_static</text>
+      <text x="200" y="196">/cmd_vel  ...</text>
+    </g>
+    <line x1="150" y1="125" x2="190" y2="125" stroke="#f2f6f1" stroke-opacity=".3" stroke-width="1.5"/>
+    <line x1="350" y1="125" x2="420" y2="125" stroke="#f2f6f1" stroke-opacity=".3" stroke-width="1.5"/>
+
+    <!-- record -->
+    <rect x="420" y="95" width="170" height="60" rx="6" fill="#07100c" stroke="#f2f6f1" stroke-opacity=".35"/>
+    <text x="505" y="130" fill="#f2f6f1" font-size="14" text-anchor="middle">ros2 bag record</text>
+    <line x1="590" y1="125" x2="640" y2="125" stroke="#f2f6f1" stroke-opacity=".3" stroke-width="1.5"/>
+
+    <!-- carpeta del bag -->
+    <rect x="640" y="70" width="170" height="110" rx="6" fill="#07100c" stroke="#f87171" stroke-width="2"/>
+    <text x="725" y="100" fill="#f2f6f1" font-size="13" text-anchor="middle">laberinto_victimas/</text>
+    <text x="725" y="128" fill="#8d9892" font-size="12" text-anchor="middle">metadata.yaml</text>
+    <text x="725" y="148" fill="#8d9892" font-size="11" text-anchor="middle">laberinto_victimas_0.db3</text>
+    <text x="725" y="168" fill="#8d9892" font-size="11" text-anchor="middle">mensaje + hora</text>
+
+    <!-- mensajes viajando del robot al bag -->
+    <g fill="#4ade80">
+      <circle r="5" cy="125"><animate attributeName="cx" dur="2.4s" repeatCount="indefinite" values="150;640"/><animate attributeName="opacity" dur="2.4s" repeatCount="indefinite" values="0;1;1;0" keyTimes="0;0.1;0.9;1"/></circle>
+      <circle r="5" cy="125"><animate attributeName="cx" dur="2.4s" begin="0.8s" repeatCount="indefinite" values="150;640"/><animate attributeName="opacity" dur="2.4s" begin="0.8s" repeatCount="indefinite" values="0;1;1;0" keyTimes="0;0.1;0.9;1"/></circle>
+      <circle r="5" cy="125"><animate attributeName="cx" dur="2.4s" begin="1.6s" repeatCount="indefinite" values="150;640"/><animate attributeName="opacity" dur="2.4s" begin="1.6s" repeatCount="indefinite" values="0;1;1;0" keyTimes="0;0.1;0.9;1"/></circle>
+    </g>
+  </g>
+
+  <!-- ===================== FILA DE ABAJO: REPRODUCIR ===================== -->
+  <g transform="translate(20,270)" font-family="'JetBrains Mono', 'Courier New', monospace">
+    <text x="0" y="14" fill="#8d9892" font-size="17" letter-spacing="1.5">REPRODUCIR · EN TU COMPU</text>
+
+    <!-- carpeta del bag -->
+    <rect x="0" y="60" width="150" height="110" rx="6" fill="#07100c" stroke="#f87171" stroke-width="2"/>
+    <text x="75" y="105" fill="#f2f6f1" font-size="12" text-anchor="middle">laberinto_victimas/</text>
+    <text x="75" y="130" fill="#8d9892" font-size="12" text-anchor="middle">los mismos</text>
+    <text x="75" y="146" fill="#8d9892" font-size="12" text-anchor="middle">mensajes</text>
+    <line x1="150" y1="115" x2="190" y2="115" stroke="#f2f6f1" stroke-opacity=".3" stroke-width="1.5"/>
+
+    <!-- play -->
+    <rect x="190" y="85" width="200" height="60" rx="6" fill="#07100c" stroke="#f2f6f1" stroke-opacity=".35"/>
+    <text x="290" y="113" fill="#f2f6f1" font-size="14" text-anchor="middle">ros2 bag play</text>
+    <text x="290" y="132" fill="#8d9892" font-size="12" text-anchor="middle">--clock</text>
+    <line x1="390" y1="115" x2="430" y2="115" stroke="#f2f6f1" stroke-opacity=".3" stroke-width="1.5"/>
+
+    <!-- topics -->
+    <g fill="#8d9892" font-size="13">
+      <text x="440" y="76">/scan  /cam_1/...</text>
+      <text x="440" y="98">/odom  /tf  ...</text>
+      <text x="440" y="142" fill="#4ade80">/clock</text>
+      <text x="440" y="164" font-size="11">(los mismos topics)</text>
+    </g>
+    <line x1="600" y1="115" x2="640" y2="115" stroke="#f2f6f1" stroke-opacity=".3" stroke-width="1.5"/>
+
+    <!-- tus nodos -->
+    <rect x="640" y="60" width="170" height="110" rx="8" fill="#07100c" stroke="#4ade80" stroke-width="2"/>
+    <text x="725" y="105" fill="#f2f6f1" font-size="15" text-anchor="middle">tus nodos</text>
+    <text x="725" y="130" fill="#8d9892" font-size="12" text-anchor="middle">use_sim_time</text>
+    <text x="725" y="146" fill="#8d9892" font-size="12" text-anchor="middle">= true</text>
+
+    <!-- el robot ya no hace falta -->
+    <text x="725" y="205" fill="#8d9892" font-size="12" text-anchor="middle">no saben si los datos</text>
+    <text x="725" y="221" fill="#8d9892" font-size="12" text-anchor="middle">vienen del robot o del bag</text>
+
+    <!-- mensajes viajando del bag a tus nodos -->
+    <g fill="#4ade80">
+      <circle r="5" cy="115"><animate attributeName="cx" dur="2.4s" repeatCount="indefinite" values="150;640"/><animate attributeName="opacity" dur="2.4s" repeatCount="indefinite" values="0;1;1;0" keyTimes="0;0.1;0.9;1"/></circle>
+      <circle r="5" cy="115"><animate attributeName="cx" dur="2.4s" begin="0.8s" repeatCount="indefinite" values="150;640"/><animate attributeName="opacity" dur="2.4s" begin="0.8s" repeatCount="indefinite" values="0;1;1;0" keyTimes="0;0.1;0.9;1"/></circle>
+      <circle r="5" cy="115"><animate attributeName="cx" dur="2.4s" begin="1.6s" repeatCount="indefinite" values="150;640"/><animate attributeName="opacity" dur="2.4s" begin="1.6s" repeatCount="indefinite" values="0;1;1;0" keyTimes="0;0.1;0.9;1"/></circle>
+    </g>
+  </g>
+</svg>
