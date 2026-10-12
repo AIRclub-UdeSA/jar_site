@@ -5,7 +5,7 @@ export const SITE = {
     'El AIR Club UdeSA presenta un desafío de comportamiento robótico con robots ROSMASTER X3 en la Jornada Argentina de Robótica 2026. Simulación en Gazebo, workshops asincrónicos y una tarea a revelar.',
   org: 'AIR Club UdeSA',
   orgSubtitle: 'Artificial Intelligence & Robotics Club',
-  orgUrl: 'https://clubroboticaudesa.netlify.app',
+  orgUrl: 'https://airclub.com.ar',
   githubOrg: 'https://github.com/AIRclub-UdeSA',
   simRepo: 'https://github.com/AIRclub-UdeSA/yahboom_rosmaster',
   workshopsRepo: 'https://github.com/AIRclub-UdeSA/jar_workshops',
