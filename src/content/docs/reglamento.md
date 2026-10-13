@@ -256,5 +256,5 @@ Desarrollado en el Predio del CUR, "La Siberia", Rosario:
 ## 14. Contacto oficial
 
 - **Correo institucional:** `airclub@udesa.edu.ar`
-- **Sitio web oficial:** [https://clubroboticaudesa.netlify.app](https://clubroboticaudesa.netlify.app)
+- **Sitio web oficial:** [https://airclub.com.ar](https://airclub.com.ar)
 - **Organización GitHub:** [https://github.com/AIRclub-UdeSA](https://github.com/AIRclub-UdeSA)
