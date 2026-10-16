@@ -71,7 +71,7 @@ groups
 ```bash
 mkdir -p ~/rosmaster_ws/src
 cd ~/rosmaster_ws/src
-git clone https://github.com/AIRclub-UdeSA/yahboom_rosmaster.git
+git clone --branch jar2026-v1 https://github.com/AIRclub-UdeSA/yahboom_rosmaster.git
 ```
 
 ### 4. Levantar el contenedor
