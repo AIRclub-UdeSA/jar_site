@@ -38,7 +38,7 @@ Backlog compartido para quienes sigan trabajando en el sitio. Antes de arrancar:
 
 ## Comunidad e inscripción
 
-- [x] **Convocatoria y postulación de equipos** — formulario de postulación en Google Forms (`https://forms.gle/2zkW6gwJQptUzbXn6`) con proceso de selección por cupos físicos en pista, participación gratuita y sin límite de integrantes.
+- [x] **Convocatoria y postulación de equipos** — formulario de postulación en Google Forms (`https://forms.gle/2zkW6gwJQptUzbXn6`) con proceso de selección por cupos físicos en pista, participación gratuita y sin límite de integrantes. Las postulaciones cerraron el 21/10: el 22/10 se sacaron del sitio todos los enlaces al formulario y la banda de postulación pasó a estado cerrado ([#59](https://github.com/AIRclub-UdeSA/jar_site/issues/59)).
 - [x] **FAQ** — preguntas frecuentes interactivas con acordeón hairline despojado cubriendo requisitos técnicos, proceso de selección, gratuidad, presencia del capitán en Rosario y autonomía de herramientas.
 
 ## Repos e infra
