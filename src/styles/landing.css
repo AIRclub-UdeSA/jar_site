@@ -731,7 +731,7 @@
 }
 
 .landing-application-action a:hover span {
-  transform: translate(0.15rem, -0.15rem);
+  transform: translateX(0.2rem);
 }
 
 /* FAQ and club */

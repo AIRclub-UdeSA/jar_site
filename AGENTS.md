@@ -15,7 +15,7 @@ Ecosistema de 3 repos de la org [AIRclub-UdeSA](https://github.com/AIRclub-UdeSA
 - La landing suma una capa de **journal técnico editorial**: la tipografía lleva la jerarquía y el chrome aparece solo cuando representa una acción o un estado real. Evitar HUDs, terminales decorativas, glows, marcos de visor, cards repetidas y etiquetas ornamentales.
 - Tipografía: Space Grotesk (display a gran escala con tracking ajustado `-0.035em`), Archivo (cuerpo ligero y legible) y JetBrains Mono (etiquetas de sistema, telemetría y terminales).
 - Acentos cromáticos: Verde `#4ade80` como acento funcional primario (color del ROSMASTER, indicador de estados activos y telemetría viva) y Ámbar `#fbbf24` como secundario (callouts de misión y avisos).
-- Dinámica de equipos: Postulación libre y gratuita, sin límite de integrantes por equipo; selección previa por cupos físicos en pista. Al menos un integrante (capitán/representante) debe viajar a Rosario.
+- Dinámica de equipos: Participación libre y gratuita, sin límite de integrantes por equipo; selección previa por cupos físicos en pista. Al menos un integrante (capitán/representante) debe viajar a Rosario. Las postulaciones cerraron el 21 de octubre: el sitio no enlaza más al formulario.
 - Tema único oscuro: no hay toggle ni tema claro. Ver `src/styles/global.css` — los tokens CSS variables están al inicio del archivo.
 - La documentación vive en markdown vía la colección `docs`; la landing usa componentes Astro con copy explícito. El shell (nav, sidebar, footer) son componentes propios en `src/components/`.
 - Solo español rioplatense con voseo. Sin emojis.
@@ -65,13 +65,13 @@ Ecosistema de 3 repos de la org [AIRclub-UdeSA](https://github.com/AIRclub-UdeSA
 
 # Landing actual
 
-- Orden de capítulos: hero/Donatello → desafío/observación → Camino a Rosario → JAR → material abierto → postulación → FAQ/AIR Club.
+- Orden de capítulos: hero/Donatello → desafío/observación → Camino a Rosario → JAR → material abierto → postulación (cerrada) → FAQ/AIR Club.
 - Donatello es el artefacto visual principal. `LandingHero.astro` mantiene un único canvas transparente para hero y “Conocé a Donatello”; en desktop queda sticky a la derecha y crece suavemente con el scroll mientras cambia el contenido editorial de la izquierda. No reintroducir caja negra, marco, círculo HUD, ticks ni traslados de salida/reentrada entre lados.
 - En mobile no hay sticky prolongado: copy, robot y ficha técnica siguen el flujo natural. El robot nunca debe producir overflow, quedar cortado accidentalmente ni superponerse con el texto.
 - La interacción 3D permite giro por drag, gesto horizontal táctil y zoom de rueda solo mientras se mantiene click. El scroll vertical común siempre gana. La autorrotación se pausa durante la interacción y luego vuelve; `prefers-reduced-motion` desactiva autorrotación y damping.
 - `ChallengeOverview` usa `ObservationPlate`: un díptico editorial con grabaciones reales de Gazebo y RViz, sin terminal, placa de topics ni LiDAR 3D decorativo. No tiene botón de pausa visible; carga los videos al acercarse, los pausa fuera de vista/documento oculto y bajo movimiento reducido deja solo los posters.
 - Los medios vigentes son `public/media/donatello-gazebo.webm` y `donatello-rviz.webm` con sus posters. La captura de Gazebo comienza en el segundo 5 de la grabación fuente para evitar el arranque ruidoso y conserva el movimiento mecanum.
-- La postulación es la única banda saturada de conversión. El CTA principal del sitio sigue siendo “Postular equipo” / “Abrir formulario”.
+- La banda de postulación (`#postulacion`) sigue siendo la única banda saturada, ahora en estado cerrado: avisa que las postulaciones cerraron el 21/10 y lleva al reglamento. El CTA principal del sitio es “Leer el reglamento”; no reintroducir “Postular equipo” ni enlaces al formulario.
 
 # Modelo 3D del hero
 
