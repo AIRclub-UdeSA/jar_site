@@ -181,7 +181,7 @@ Bajá el bag y descomprimilo en `~/rosmaster_ws/bags/` (si lo dejás en otro lad
 # Terminal 1 — bajar y descomprimir el bag
 source ~/rosmaster_ws/install/setup.bash
 mkdir -p ~/rosmaster_ws/bags && cd ~/rosmaster_ws/bags
-wget https://github.com/AIRclub-UdeSA/jar_workshops/releases/download/semana-10-datos/laberinto_victimas.tar.gz
+curl -L -O https://github.com/AIRclub-UdeSA/jar_workshops/releases/download/semana-10-datos/laberinto_victimas.tar.gz
 tar xzf laberinto_victimas.tar.gz
 ros2 bag info laberinto_victimas
 ```
