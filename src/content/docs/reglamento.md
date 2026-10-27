@@ -64,7 +64,6 @@ El mapa específico, las víctimas, los señuelos y los distractores recién se 
 
 ## 3. Recursos que provee la organización
 
-<!-- TODO: evaluar si §9.1 también linkea al repo template. -->
 - **Repositorio template de la competencia ([`AIRclub-UdeSA/jar_challenge`](https://github.com/AIRclub-UdeSA/jar_challenge)):** Contiene la arquitectura de paquetes, launch de ejemplo, gestión de parámetros en `params/` y configuración de CI.
 - **Simulador oficial ([`AIRclub-UdeSA/yahboom_rosmaster`](https://github.com/AIRclub-UdeSA/yahboom_rosmaster)), versión `jar2026-v1`:** Modelo fiel del robot ROSMASTER X3 con cinemática mecanum, plugins de sensores y mundos de simulación en Gazebo Fortress. La [guía de instalación](../setup/simulador/) explica cómo compilarlo.
 - **Mundos y mapas de práctica:** Los pares de mundos (ej. `laberinto_simple_victimas.world`) y mapas (`laberinto_simple.yaml`) provistos en el simulador constituyen la **referencia oficial** para calibrar visión, LiDAR y detección de obstáculos no mapeados.
@@ -201,9 +200,10 @@ En caso de igualdad de puntos en el puntaje computable, se desempata aplicando e
 ## 9. Entrega y validación
 
 ### 9.1 Mecanismo de entrega
-- Cada equipo realiza un fork del repositorio template oficial y envía un **Pull Request (PR)** hacia la rama principal del repositorio de la competencia.
+- Cada equipo realiza un fork del [repositorio template oficial](https://github.com/AIRclub-UdeSA/jar_challenge) y envía un **Pull Request (PR)** hacia la rama principal del repositorio de la competencia.
 - Todo el software debe iniciar con un **único launch file** oficial: `ros2 launch equipo_jar competencia.launch.py`, que levanta todo y espera `/map`. Acepta la cantidad de víctimas como argumento (`victimas:=N`).
 - Todas las configuraciones editables deben residir en `src/equipo_jar/params/`. La cantidad de víctimas N no va en `params/`: se recibe como argumento del launch ([§2.2](#22-requisitos-del-software)).
+- La entrega cierra el **martes 3 de noviembre a las 9:00**: el commit vigente de cada PR en ese momento es el que se evalúa ([§13](#13-cronograma-del-evento)).
 
 ### 9.2 Validación continua (CI)
 Para que una entrega sea admisible, todos los checks del CI del PR deben estar en verde. El CI verifica:
@@ -247,6 +247,7 @@ Desarrollado en el Predio del CUR, "La Siberia", Rosario:
 
 | Instancia | Fecha | Dinámica |
 | :--- | :--- | :--- |
+| **Cierre de entregas** | Martes 3 de noviembre, 9:00 | Se toma el commit vigente de cada PR |
 | **Clasificación oficial** | Miércoles 4 de noviembre | 2 corridas por equipo (computa la mejor). Clasifican los 4 mejores |
 | **Gran Final** | Jueves 5 de noviembre, 17 hs | 1 única corrida por finalista en arena con nuevo layout |
 | **Premiación y cierre** | Jueves 5 de noviembre | Ceremonia de cierre de la JAR 2026 |
