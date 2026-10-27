@@ -203,7 +203,7 @@ En caso de igualdad de puntos en el puntaje computable, se desempata aplicando e
 - Cada equipo realiza un fork del [repositorio template oficial](https://github.com/AIRclub-UdeSA/jar_challenge) y envía un **Pull Request (PR)** hacia la rama principal del repositorio de la competencia.
 - Todo el software debe iniciar con un **único launch file** oficial: `ros2 launch equipo_jar competencia.launch.py`, que levanta todo y espera `/map`. Acepta la cantidad de víctimas como argumento (`victimas:=N`).
 - Todas las configuraciones editables deben residir en `src/equipo_jar/params/`. La cantidad de víctimas N no va en `params/`: se recibe como argumento del launch ([§2.2](#22-requisitos-del-software)).
-- La entrega cierra el **lunes 2 de noviembre a las 23:59**: el commit vigente de cada PR en ese momento es el que se evalúa ([§13](#13-cronograma-del-evento)).
+- La entrega cierra el **martes 3 de noviembre a las 9:00**: el commit vigente de cada PR en ese momento es el que se evalúa ([§13](#13-cronograma-del-evento)).
 
 ### 9.2 Validación continua (CI)
 Para que una entrega sea admisible, todos los checks del CI del PR deben estar en verde. El CI verifica:
@@ -247,7 +247,7 @@ Desarrollado en el Predio del CUR, "La Siberia", Rosario:
 
 | Instancia | Fecha | Dinámica |
 | :--- | :--- | :--- |
-| **Cierre de entregas** | Lunes 2 de noviembre, 23:59 | Se toma el commit vigente de cada PR |
+| **Cierre de entregas** | Martes 3 de noviembre, 9:00 | Se toma el commit vigente de cada PR |
 | **Clasificación oficial** | Miércoles 4 de noviembre | 2 corridas por equipo (computa la mejor). Clasifican los 4 mejores |
 | **Gran Final** | Jueves 5 de noviembre, 17 hs | 1 única corrida por finalista en arena con nuevo layout |
 | **Premiación y cierre** | Jueves 5 de noviembre | Ceremonia de cierre de la JAR 2026 |
